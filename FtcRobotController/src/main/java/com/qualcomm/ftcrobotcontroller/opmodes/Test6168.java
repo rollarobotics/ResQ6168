@@ -19,6 +19,7 @@ public class Test6168 extends OpMode {
     DcMotor motorLift;
     DcMotor motorLiftArm;
     DcMotor motorHooks;
+    DcMotor motorSpinner;
 
     public Test6168() {
 
@@ -56,6 +57,7 @@ public class Test6168 extends OpMode {
         motorLift = hardwareMap.dcMotor.get("motor_3");
         motorLiftArm = hardwareMap.dcMotor.get("motor_4");
         motorHooks = hardwareMap.dcMotor.get("motor_5");
+        motorSpinner = hardwareMap.dcMotor.get("motor_6");
 
         // assign the starting position of any servos
 
@@ -87,31 +89,51 @@ public class Test6168 extends OpMode {
         float left = -gamepad1.left_stick_y;
         float lift = -gamepad2.right_stick_y;
         float liftArm = -gamepad2.left_stick_y;
-        boolean hooks = gamepad1.a;
+        //boolean hooks;
+        float spinner = gamepad1.right_trigger;
+
+        //hooks = false;
 
         right = Range.clip(right, -1, 1);//pentagon=hacked
         left = Range.clip(left, -1, 1);//white house=hacked
-        lift = Range.clip(right, -1, 1);//US treasure hacked
-        liftArm = Range.clip(left, -1, 1);
+        lift = Range.clip(lift, -1, 1);//US treasure hacked
+        liftArm = Range.clip(liftArm, -1, 1);
+        //hooks = Range.clip(hooks, -1, 1);
+        spinner = Range.clip(spinner, -1, 1);
 
         right = (float)scaleInput(right);//statue of liberty=hacked
         left =  (float)scaleInput(left);
         lift = (float)scaleInput(lift);
         liftArm = (float)scaleInput(liftArm);
+        //hooks = (float)scaleInput(hooks);
+        spinner = (float)scaleInput(spinner);
+
+        if (gamepad1.a)
+        {
+            motorHooks.setPower(10);
+        }
+        else
+        {
+            motorHooks.setPower(0);
+        }
+
+        if (gamepad1.b) {
+            motorRight.setPower(0);
+            motorLeft.setPower(0);
+            motorLift.setPower(0);
+            motorLiftArm.setPower(0);
+            motorHooks.setPower(0);
+            motorSpinner.setPower(0);
+        }
 
         // write the values to the motors
         motorRight.setPower(right);
         motorLeft.setPower(left);
         motorLift.setPower(lift);
         motorLiftArm.setPower(liftArm);
+        //motorHooks.setPower(hooks);
+        motorSpinner.setPower(spinner);
 
-        if (gamepad1.a)
-        {
-            motorHooks.setPower(100);
-        }
-        if (gamepad1.b) {
-            motorHooks.setPower(0);
-        }
         // update the position of the arm.
 
 		/*
@@ -126,6 +148,7 @@ public class Test6168 extends OpMode {
         telemetry.addData("liftArm tgt pwr",  "liftArm  pwr: " + String.format("%.2f", liftArm));
         telemetry.addData("lift tgt pwr", "lift pwr: " + String.format("%.2f", lift));
         //telemetry.addData("hooks tgt pwr", "hooks pwr: " + String.format("%.2f", hooks));
+        telemetry.addData("spinner tgt pwr", "spinner pwr: " + String.format("%.2f", spinner));
 
     }
 
