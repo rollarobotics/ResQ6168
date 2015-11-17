@@ -3,16 +3,20 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 public class Test6168 extends OpMode {
 
-    /*
-     * Note: the configuration of the servos is such that
-     * as the arm servo approaches 0, the arm position moves up (away from the floor).
-     * Also, as the claw servo approaches 0, the claw opens up (drops the game element).
-     */
     // TETRIX VALUES.
+    final static double ARM_MIN_RANGE  = 0.20;
+    final static double ARM_MAX_RANGE  = 0.90;
+
+    // position of the servo.
+    double armPosition;
+
+    // amount to change the servo position.
+    double armDelta = 0.1;
 
     DcMotor motorRight;
     DcMotor motorLeft;
@@ -20,6 +24,7 @@ public class Test6168 extends OpMode {
     DcMotor motorLiftArm;
     DcMotor motorHooks;
     DcMotor motorSpinner;
+    Servo arm;
 
     public Test6168() {
 
@@ -41,16 +46,6 @@ public class Test6168 extends OpMode {
 		 * configured your robot and created the configuration file.
 		 */
 
-		/*
-		 * For the demo Tetrix K9 bot we assume the following,
-		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot and reversed.
-		 *
-		 * We also assume that there are two servos "servo_1" and "servo_6"
-		 *    "servo_1" controls the arm joint of the manipulator.
-		 *    "servo_6" controls the claw joint of the manipulator.
-		 */
         motorRight = hardwareMap.dcMotor.get("motor_2");
         motorLeft = hardwareMap.dcMotor.get("motor_1");
         motorRight.setDirection(DcMotor.Direction.REVERSE);
@@ -58,8 +53,10 @@ public class Test6168 extends OpMode {
         motorLiftArm = hardwareMap.dcMotor.get("motor_4");
         motorHooks = hardwareMap.dcMotor.get("motor_5");
         motorSpinner = hardwareMap.dcMotor.get("motor_6");
+        arm = hardwareMap.servo.get("servo_1");
 
-        // assign the starting position of any servos
+        // assign the starting position of the servos
+        armPosition = 0.2;
 
     }
 
@@ -71,42 +68,50 @@ public class Test6168 extends OpMode {
     @Override
     public void loop() {
 
-		/*
-		 * Gamepad 1
-		 *
-		 * Gamepad 1 controls the motors via the left stick, and it controls the
-		 * wrist/claw via the a,b, x, y buttons
-		 */
-
-        // throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and
-        // 1 is full down
-        // direction: left_stick_x ranges from -1 to 1, where -1 is full left
-        // and 1 is full right
-
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
+
         float right = -gamepad1.right_stick_y;
         float left = -gamepad1.left_stick_y;
         float lift = -gamepad2.right_stick_y;
         float liftArm = -gamepad2.left_stick_y;
-        //boolean hooks;
         float spinner = gamepad1.right_trigger;
 
-        //hooks = false;
+        // update the position of the arm.
+        if (gamepad1.x) {
+            // if the X button is pushed on gamepad1, increment the position of
+            // the arm servo.
+            armPosition += armDelta;
+        }
 
+        if (gamepad1.y) {
+            // if the Y button is pushed on gamepad1, decrease the position of
+            // the arm servo.
+            armPosition -= armDelta;
+        }
+
+        // clip the position values so that they never exceed their allowed range.
         right = Range.clip(right, -1, 1);//pentagon=hacked
         left = Range.clip(left, -1, 1);//white house=hacked
         lift = Range.clip(lift, -1, 1);//US treasure hacked
         liftArm = Range.clip(liftArm, -1, 1);
-        //hooks = Range.clip(hooks, -1, 1);
         spinner = Range.clip(spinner, -1, 1);
+        armPosition = Range.clip(armPosition, ARM_MIN_RANGE, ARM_MAX_RANGE);
 
         right = (float)scaleInput(right);//statue of liberty=hacked
         left =  (float)scaleInput(left);
         lift = (float)scaleInput(lift);
         liftArm = (float)scaleInput(liftArm);
-        //hooks = (float)scaleInput(hooks);
         spinner = (float)scaleInput(spinner);
+
+        // write the values to the motors
+        motorRight.setPower(right);
+        motorLeft.setPower(left);
+        motorLift.setPower(lift);
+        motorLiftArm.setPower(liftArm);
+        motorSpinner.setPower(spinner);
+        // write position values to the servos
+        arm.setPosition(armPosition);
 
         if (gamepad1.a)
         {
@@ -117,7 +122,7 @@ public class Test6168 extends OpMode {
             motorHooks.setPower(0);
         }
 
-        if (gamepad1.b) {
+        if (gamepad1.b || gamepad2.b) {
             motorRight.setPower(0);
             motorLeft.setPower(0);
             motorLift.setPower(0);
@@ -126,16 +131,6 @@ public class Test6168 extends OpMode {
             motorSpinner.setPower(0);
         }
 
-        // write the values to the motors
-        motorRight.setPower(right);
-        motorLeft.setPower(left);
-        motorLift.setPower(lift);
-        motorLiftArm.setPower(liftArm);
-        //motorHooks.setPower(hooks);
-        motorSpinner.setPower(spinner);
-
-        // update the position of the arm.
-
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using
 		 * a legacy NXT-compatible motor controller, then the getPower() method
@@ -143,6 +138,7 @@ public class Test6168 extends OpMode {
 		 * are currently write only.
 		 */
         telemetry.addData("Text", "*** Robot Data***");
+        telemetry.addData("arm", "arm:  " + String.format("%.2f", armPosition));
         telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
         telemetry.addData("liftArm tgt pwr",  "liftArm  pwr: " + String.format("%.2f", liftArm));
