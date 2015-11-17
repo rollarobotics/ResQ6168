@@ -12,8 +12,8 @@ public class Test6168 extends OpMode {
     final static double ARM_MIN_RANGE  = 0.20;
     final static double ARM_MAX_RANGE  = 0.90;
 
-    // position of the servo.
-    double armPosition;
+    // assign the starting position of the servos
+    double armPosition = 0.0;
 
     // amount to change the servo position.
     double armDelta = 0.1;
@@ -24,7 +24,7 @@ public class Test6168 extends OpMode {
     DcMotor motorLiftArm;
     DcMotor motorHooks;
     DcMotor motorSpinner;
-    Servo arm;
+    Servo servoArm;
 
     public Test6168() {
 
@@ -53,11 +53,7 @@ public class Test6168 extends OpMode {
         motorLiftArm = hardwareMap.dcMotor.get("motor_4");
         motorHooks = hardwareMap.dcMotor.get("motor_5");
         motorSpinner = hardwareMap.dcMotor.get("motor_6");
-        arm = hardwareMap.servo.get("servo_1");
-
-        // assign the starting position of the servos
-        armPosition = 0.2;
-
+        servoArm = hardwareMap.servo.get("servo_1");
     }
 
     /*
