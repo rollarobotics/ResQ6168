@@ -9,14 +9,14 @@ import com.qualcomm.robotcore.util.Range;
 public class Test6168 extends OpMode {
 
     // TETRIX VALUES.
-    final static double ARM_MIN_RANGE  = 0.20;
-    final static double ARM_MAX_RANGE  = 0.90;
+    final static double bucketDoorMinRange  = 0.20;
+    final static double bucketDoorMaxRange  = 0.90;//Hi there
 
     // assign the starting position of the servos
-    double armPosition = 0.0;
+    double bucketDoorPosition = 0.0;
 
     // amount to change the servo position.
-    double armDelta = 0.1;
+    double bucketDoorDelta = 0.1;
 
     DcMotor motorRight;
     DcMotor motorLeft;
@@ -24,13 +24,12 @@ public class Test6168 extends OpMode {
     DcMotor motorLiftArm;
     DcMotor motorHooks;
     DcMotor motorSpinner;
-    Servo servoArm;
+    DcMotor motorBucket;
+    Servo servoBucketDoor;
 
     public Test6168() {
 
-
     }
-
     /*
      * Code to run when the op mode is first enabled goes here
      *
@@ -38,24 +37,21 @@ public class Test6168 extends OpMode {
      */
     @Override
     public void init() {
-
-
 		/*
 		 * Use the hardwareMap to get the dc motors and servos by name. Note
 		 * that the names of the devices must match the names used when you
 		 * configured your robot and created the configuration file.
 		 */
-
-        motorRight = hardwareMap.dcMotor.get("motor_2");
-        motorLeft = hardwareMap.dcMotor.get("motor_1");
+        motorRight = hardwareMap.dcMotor.get("right");
+        motorLeft = hardwareMap.dcMotor.get("left");
         motorRight.setDirection(DcMotor.Direction.REVERSE);
-        motorLift = hardwareMap.dcMotor.get("motor_3");
-        motorLiftArm = hardwareMap.dcMotor.get("motor_4");
-        motorHooks = hardwareMap.dcMotor.get("motor_5");
-        motorSpinner = hardwareMap.dcMotor.get("motor_6");
-        servoArm = hardwareMap.servo.get("servo_1");
+        motorLift = hardwareMap.dcMotor.get("lift");
+        motorLiftArm = hardwareMap.dcMotor.get("liftArm");
+        motorHooks = hardwareMap.dcMotor.get("hooks");
+        motorSpinner = hardwareMap.dcMotor.get("spinner");
+        motorBucket = hardwareMap.dcMotor.get("bucket");
+        servoBucketDoor = hardwareMap.servo.get("bucketDoor");
     }
-
     /*
      * This method will be called repeatedly in a loop
      *
@@ -72,33 +68,36 @@ public class Test6168 extends OpMode {
         float lift = -gamepad2.right_stick_y;
         float liftArm = -gamepad2.left_stick_y;
         float spinner = gamepad1.right_trigger;
+        float bucket = gamepad2.right_trigger;
 
+        if(!(gamepad1.b || gamepad2.b)) {
         // update the position of the arm.
-        if (gamepad1.x) {
-            // if the X button is pushed on gamepad1, increment the position of
-            // the arm servo.
-            armPosition += armDelta;
+            if (gamepad1.x) {
+                // if the X button is pushed on gamepad1, increment the position of
+                // the arm servo.
+                bucketDoorPosition += bucketDoorDelta;
+            }
+            if (gamepad1.y) {
+                // if the Y button is pushed on gamepad1, decrease the position of
+                // the arm servo.
+                bucketDoorPosition -= bucketDoorDelta;
+            }
         }
-
-        if (gamepad1.y) {
-            // if the Y button is pushed on gamepad1, decrease the position of
-            // the arm servo.
-            armPosition -= armDelta;
-        }
-
         // clip the position values so that they never exceed their allowed range.
         right = Range.clip(right, -1, 1);//pentagon=hacked
         left = Range.clip(left, -1, 1);//white house=hacked
         lift = Range.clip(lift, -1, 1);//US treasure hacked
         liftArm = Range.clip(liftArm, -1, 1);
         spinner = Range.clip(spinner, -1, 1);
-        armPosition = Range.clip(armPosition, ARM_MIN_RANGE, ARM_MAX_RANGE);
+        bucket = Range.clip(bucket, -1, 1);
+        bucketDoorPosition = Range.clip(bucketDoorPosition, bucketDoorMinRange, bucketDoorMaxRange);
 
         right = (float)scaleInput(right);//statue of liberty=hacked
         left =  (float)scaleInput(left);
         lift = (float)scaleInput(lift);
         liftArm = (float)scaleInput(liftArm);
         spinner = (float)scaleInput(spinner);
+        bucket = (float)scaleInput(bucket);
 
         // write the values to the motors
         motorRight.setPower(right);
@@ -106,15 +105,13 @@ public class Test6168 extends OpMode {
         motorLift.setPower(lift);
         motorLiftArm.setPower(liftArm);
         motorSpinner.setPower(spinner);
+        motorBucket.setPower(bucket);
         // write position values to the servos
-        arm.setPosition(armPosition);
+        servoBucketDoor.setPosition(bucketDoorPosition);
 
-        if (gamepad1.a)
-        {
+        if (gamepad1.a) {
             motorHooks.setPower(10);
-        }
-        else
-        {
+        } else {
             motorHooks.setPower(0);
         }
 
@@ -125,8 +122,8 @@ public class Test6168 extends OpMode {
             motorLiftArm.setPower(0);
             motorHooks.setPower(0);
             motorSpinner.setPower(0);
+            motorBucket.setPower(0);
         }
-
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using
 		 * a legacy NXT-compatible motor controller, then the getPower() method
@@ -134,16 +131,15 @@ public class Test6168 extends OpMode {
 		 * are currently write only.
 		 */
         telemetry.addData("Text", "*** Robot Data***");
-        telemetry.addData("arm", "arm:  " + String.format("%.2f", armPosition));
+        telemetry.addData("arm", "arm:  " + String.format("%.2f", bucketDoorPosition));
         telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
         telemetry.addData("liftArm tgt pwr",  "liftArm  pwr: " + String.format("%.2f", liftArm));
         telemetry.addData("lift tgt pwr", "lift pwr: " + String.format("%.2f", lift));
         //telemetry.addData("hooks tgt pwr", "hooks pwr: " + String.format("%.2f", hooks));
         telemetry.addData("spinner tgt pwr", "spinner pwr: " + String.format("%.2f", spinner));
-
+        telemetry.addData("bucket tgt pwr", "bucket pwr: " + String.format("%.2f", bucket));
     }
-
     /*
      * Code to run when the op mode is first disabled goes here
      *
@@ -153,8 +149,6 @@ public class Test6168 extends OpMode {
     public void stop() {
 
     }
-
-
     /*
      * This method scales the joystick input so for low joystick values, the
      * scaled value is less than linear.  This is to make it easier to drive
@@ -188,5 +182,4 @@ public class Test6168 extends OpMode {
         // return scaled value.
         return dScale;
     }
-
 }
