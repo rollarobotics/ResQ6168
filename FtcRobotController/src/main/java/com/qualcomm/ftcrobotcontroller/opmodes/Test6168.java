@@ -10,7 +10,7 @@ public class Test6168 extends OpMode {
 
     // TETRIX VALUES.
     final static double bucketDoorMinRange  = 0.20;
-    final static double bucketDoorMaxRange  = 0.90;//Hi there
+    final static double bucketDoorMaxRange  = 0.90;//Hi there, no
 
     // assign the starting position of the servos
     double bucketDoorPosition = 0.0;
