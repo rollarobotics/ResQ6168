@@ -11,21 +11,26 @@ public class Test6168 extends OpMode {
     // TETRIX VALUES.
     final static double bucketDoorMinRange  = 0.20;
     final static double bucketDoorMaxRange  = 0.90;//Hi there, no
+    final static double hookMinRange  = 0.20;
+    final static double hookMaxRange  = 0.90;//Hi there, no
 
     // assign the starting position of the servos
     double bucketDoorPosition = 0.0;
+    double hookPosistion = 0.0;
 
     // amount to change the servo position.
     double bucketDoorDelta = 0.1;
+    double hookDelta = 0.1;
 
     DcMotor motorRight;
     DcMotor motorLeft;
     DcMotor motorLift;
     DcMotor motorLiftArm;
-    DcMotor motorHooks;
+    DcMotor motorChainHooks;
     DcMotor motorSpinner;
     DcMotor motorBucket;
     Servo servoBucketDoor;
+    Servo servoHook;
 
     public Test6168() {
 
@@ -47,10 +52,11 @@ public class Test6168 extends OpMode {
         motorRight.setDirection(DcMotor.Direction.REVERSE);
         motorLift = hardwareMap.dcMotor.get("lift");
         motorLiftArm = hardwareMap.dcMotor.get("liftArm");
-        motorHooks = hardwareMap.dcMotor.get("hooks");
+        motorChainHooks = hardwareMap.dcMotor.get("hooks");
         motorSpinner = hardwareMap.dcMotor.get("spinner");
         motorBucket = hardwareMap.dcMotor.get("bucket");
         servoBucketDoor = hardwareMap.servo.get("bucketDoor");
+        servoHook = hardwareMap.servo.get("hook");
     }
     /*
      * This method will be called repeatedly in a loop
@@ -82,6 +88,9 @@ public class Test6168 extends OpMode {
                 // the arm servo.
                 bucketDoorPosition -= bucketDoorDelta;
             }
+            if (gamepad1.a) {
+                hookPosistion += hookDelta;
+            }
         }
         // clip the position values so that they never exceed their allowed range.
         right = Range.clip(right, -1, 1);//pentagon=hacked
@@ -91,6 +100,7 @@ public class Test6168 extends OpMode {
         spinner = Range.clip(spinner, -1, 1);
         bucket = Range.clip(bucket, -1, 1);
         bucketDoorPosition = Range.clip(bucketDoorPosition, bucketDoorMinRange, bucketDoorMaxRange);
+        hookPosistion = Range.clip(hookPosistion, hookMinRange, hookMaxRange);
 
         right = (float)scaleInput(right);//statue of liberty=hacked
         left =  (float)scaleInput(left);
@@ -108,11 +118,12 @@ public class Test6168 extends OpMode {
         motorBucket.setPower(bucket);
         // write position values to the servos
         servoBucketDoor.setPosition(bucketDoorPosition);
+        servoHook.setPosition(hookPosistion);
 
         if (gamepad1.a) {
-            motorHooks.setPower(10);
+            motorChainHooks.setPower(10);
         } else {
-            motorHooks.setPower(0);
+            motorChainHooks.setPower(0);
         }
 
         if (gamepad1.b || gamepad2.b) {
@@ -120,7 +131,7 @@ public class Test6168 extends OpMode {
             motorLeft.setPower(0);
             motorLift.setPower(0);
             motorLiftArm.setPower(0);
-            motorHooks.setPower(0);
+            motorChainHooks.setPower(0);
             motorSpinner.setPower(0);
             motorBucket.setPower(0);
         }
