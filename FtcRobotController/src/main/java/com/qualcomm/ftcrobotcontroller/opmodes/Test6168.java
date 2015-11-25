@@ -52,7 +52,7 @@ public class Test6168 extends OpMode {
         motorRight.setDirection(DcMotor.Direction.REVERSE);
         motorLift = hardwareMap.dcMotor.get("lift");
         motorLiftArm = hardwareMap.dcMotor.get("liftArm");
-        motorChainHooks = hardwareMap.dcMotor.get("hooks");
+        motorChainHooks = hardwareMap.dcMotor.get("chainHooks");
         motorSpinner = hardwareMap.dcMotor.get("spinner");
         motorBucket = hardwareMap.dcMotor.get("bucket");
         servoBucketDoor = hardwareMap.servo.get("bucketDoor");
@@ -71,13 +71,12 @@ public class Test6168 extends OpMode {
 
         float right = -gamepad1.right_stick_y;
         float left = -gamepad1.left_stick_y;
-        float lift = -gamepad2.right_stick_y;
         float liftArm = -gamepad2.left_stick_y;
         float spinner = gamepad1.right_trigger;
         float bucket = gamepad2.right_trigger;
 
         if(!(gamepad1.b || gamepad2.b)) {
-        // update the position of the arm.
+            // update the position of the arm.
             if (gamepad1.x) {
                 // if the X button is pushed on gamepad1, increment the position of
                 // the arm servo.
@@ -88,15 +87,31 @@ public class Test6168 extends OpMode {
                 // the arm servo.
                 bucketDoorPosition -= bucketDoorDelta;
             }
-            if (gamepad1.a) {
+            if (gamepad1.left_bumper) {
+                // if the left bumper button is pushed on gamepad1, increment the position of
+                // the arm servo.
                 hookPosistion += hookDelta;
             }
+            if (gamepad1.right_bumper) {
+                // if the right bumper button is pushed on gamepad1, decrease the position of
+                // the arm servo.
+                hookPosistion -= hookDelta;
+            }
+
+            if(gamepad2.dpad_up)
+                motorLift.setPower(80);
+            else
+                motorLift.setPower(0);
+
+            if(gamepad2.dpad_down)
+                motorLift.setPower(-80);
+            else
+                motorLift.setPower(0);
         }
         // clip the position values so that they never exceed their allowed range.
         right = Range.clip(right, -1, 1);//pentagon=hacked
         left = Range.clip(left, -1, 1);//white house=hacked
-        lift = Range.clip(lift, -1, 1);//US treasure hacked
-        liftArm = Range.clip(liftArm, -1, 1);
+        liftArm = Range.clip(liftArm, -1, 1);//US treasure hacked
         spinner = Range.clip(spinner, -1, 1);
         bucket = Range.clip(bucket, -1, 1);
         bucketDoorPosition = Range.clip(bucketDoorPosition, bucketDoorMinRange, bucketDoorMaxRange);
@@ -104,7 +119,6 @@ public class Test6168 extends OpMode {
 
         right = (float)scaleInput(right);//statue of liberty=hacked
         left =  (float)scaleInput(left);
-        lift = (float)scaleInput(lift);
         liftArm = (float)scaleInput(liftArm);
         spinner = (float)scaleInput(spinner);
         bucket = (float)scaleInput(bucket);
@@ -112,7 +126,6 @@ public class Test6168 extends OpMode {
         // write the values to the motors
         motorRight.setPower(right);
         motorLeft.setPower(left);
-        motorLift.setPower(lift);
         motorLiftArm.setPower(liftArm);
         motorSpinner.setPower(spinner);
         motorBucket.setPower(bucket);
@@ -121,7 +134,7 @@ public class Test6168 extends OpMode {
         servoHook.setPosition(hookPosistion);
 
         if (gamepad1.a) {
-            motorChainHooks.setPower(10);
+            motorChainHooks.setPower(80);
         } else {
             motorChainHooks.setPower(0);
         }
@@ -146,7 +159,7 @@ public class Test6168 extends OpMode {
         telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
         telemetry.addData("liftArm tgt pwr",  "liftArm  pwr: " + String.format("%.2f", liftArm));
-        telemetry.addData("lift tgt pwr", "lift pwr: " + String.format("%.2f", lift));
+        //telemetry.addData("lift tgt pwr", "lift pwr: " + String.format("%.2f", lift));
         //telemetry.addData("hooks tgt pwr", "hooks pwr: " + String.format("%.2f", hooks));
         telemetry.addData("spinner tgt pwr", "spinner pwr: " + String.format("%.2f", spinner));
         telemetry.addData("bucket tgt pwr", "bucket pwr: " + String.format("%.2f", bucket));
