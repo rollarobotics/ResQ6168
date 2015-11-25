@@ -71,12 +71,13 @@ public class Test6168 extends OpMode {
 
         float right = -gamepad1.right_stick_y;
         float left = -gamepad1.left_stick_y;
-        float liftArm = -gamepad2.left_stick_y;
-        float spinner = gamepad1.right_trigger;
-        float bucket = gamepad2.right_trigger;
+        float liftArm = -gamepad2.right_stick_y;
+        float spinner = gamepad2.right_trigger;
+        float backSpinner = gamepad2.left_trigger;
+        float bucket = gamepad1.right_trigger;
+        float backBucket = gamepad1.left_trigger;
 
-        if(!(gamepad1.b || gamepad2.b)) {
-            // update the position of the arm.
+        if(!(gamepad1.back || gamepad2.back)) {
             if (gamepad1.x) {
                 // if the X button is pushed on gamepad1, increment the position of
                 // the arm servo.
@@ -87,33 +88,25 @@ public class Test6168 extends OpMode {
                 // the arm servo.
                 bucketDoorPosition -= bucketDoorDelta;
             }
-            if (gamepad1.left_bumper) {
+            if (gamepad1.a) {
                 // if the left bumper button is pushed on gamepad1, increment the position of
-                // the arm servo.
+                // the hook servo.
                 hookPosistion += hookDelta;
             }
-            if (gamepad1.right_bumper) {
+            if (gamepad1.b) {
                 // if the right bumper button is pushed on gamepad1, decrease the position of
-                // the arm servo.
+                // the hook servo.
                 hookPosistion -= hookDelta;
             }
-
-            if(gamepad2.dpad_up)
-                motorLift.setPower(80);
-            else
-                motorLift.setPower(0);
-
-            if(gamepad2.dpad_down)
-                motorLift.setPower(-80);
-            else
-                motorLift.setPower(0);
         }
         // clip the position values so that they never exceed their allowed range.
         right = Range.clip(right, -1, 1);//pentagon=hacked
         left = Range.clip(left, -1, 1);//white house=hacked
         liftArm = Range.clip(liftArm, -1, 1);//US treasure hacked
-        spinner = Range.clip(spinner, -1, 1);
-        bucket = Range.clip(bucket, -1, 1);
+        spinner = Range.clip(spinner, 0, 1);
+        backSpinner = Range.clip(backSpinner, -1, 0);
+        bucket = Range.clip(bucket, 0, 1);
+        backBucket = Range.clip(backBucket, -1, 0);
         bucketDoorPosition = Range.clip(bucketDoorPosition, bucketDoorMinRange, bucketDoorMaxRange);
         hookPosistion = Range.clip(hookPosistion, hookMinRange, hookMaxRange);
 
@@ -121,25 +114,47 @@ public class Test6168 extends OpMode {
         left =  (float)scaleInput(left);
         liftArm = (float)scaleInput(liftArm);
         spinner = (float)scaleInput(spinner);
+        backSpinner = (float)scaleInput(-backSpinner);
         bucket = (float)scaleInput(bucket);
+        backBucket = (float)scaleInput(-backBucket);
 
         // write the values to the motors
         motorRight.setPower(right);
         motorLeft.setPower(left);
         motorLiftArm.setPower(liftArm);
-        motorSpinner.setPower(spinner);
-        motorBucket.setPower(bucket);
+        if (spinner > 0)
+            motorSpinner.setPower(spinner);
+        else
+            motorSpinner.setPower(backSpinner);
+        if (bucket > 0)
+            motorBucket.setPower(bucket);
+        else
+            motorBucket.setPower(backBucket);
         // write position values to the servos
         servoBucketDoor.setPosition(bucketDoorPosition);
         servoHook.setPosition(hookPosistion);
 
-        if (gamepad1.a) {
+        if (gamepad1.right_bumper)
             motorChainHooks.setPower(80);
-        } else {
+        else
             motorChainHooks.setPower(0);
-        }
+        
+        if (gamepad1.left_bumper)
+            motorChainHooks.setPower(-80);
+        else
+            motorChainHooks.setPower(0);
 
-        if (gamepad1.b || gamepad2.b) {
+        if (gamepad2.dpad_up)
+            motorLift.setPower(80);
+        else
+            motorLift.setPower(0);
+
+        if (gamepad2.dpad_down)
+            motorLift.setPower(-80);
+        else
+            motorLift.setPower(0);
+
+        if (gamepad1.back || gamepad2.back) {
             motorRight.setPower(0);
             motorLeft.setPower(0);
             motorLift.setPower(0);
