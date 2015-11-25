@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 public class Test6168 extends OpMode {
 
     // TETRIX VALUES.
+    // Name the range of the servos
     final static double bucketDoorMinRange  = 0.20;
     final static double bucketDoorMaxRange  = 0.90;//Hi there, no
     final static double hookMinRange  = 0.20;
@@ -22,6 +23,7 @@ public class Test6168 extends OpMode {
     double bucketDoorDelta = 0.1;
     double hookDelta = 0.1;
 
+    //Declare motor and servo variables
     DcMotor motorRight;
     DcMotor motorLeft;
     DcMotor motorLift;
@@ -32,14 +34,13 @@ public class Test6168 extends OpMode {
     Servo servoBucketDoor;
     Servo servoHook;
 
+    //Constructor
     public Test6168() {
 
     }
-    /*
-     * Code to run when the op mode is first enabled goes here
-     *
-     * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#start()
-     */
+
+     //Code to run when the op mode is first enabled goes here
+     //@see com.qualcomm.robotcore.eventloop.opmode.OpMode#start()
     @Override
     public void init() {
 		/*
@@ -58,47 +59,45 @@ public class Test6168 extends OpMode {
         servoBucketDoor = hardwareMap.servo.get("bucketDoor");
         servoHook = hardwareMap.servo.get("hook");
     }
-    /*
-     * This method will be called repeatedly in a loop
-     *
-     * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#run()
-     */
+
+    //This method will be called repeatedly in a loop
+    //@see com.qualcomm.robotcore.eventloop.opmode.OpMode#run()
     @Override
     public void loop() {
 
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
-
         float right = -gamepad1.right_stick_y;
         float left = -gamepad1.left_stick_y;
         float liftArm = -gamepad2.right_stick_y;
         float spinner = gamepad2.right_trigger;
-        float backSpinner = gamepad2.left_trigger;
+        float backSpinner = -gamepad2.left_trigger;
         float bucket = gamepad1.right_trigger;
-        float backBucket = gamepad1.left_trigger;
+        float backBucket = -gamepad1.left_trigger;
 
-        if(!(gamepad1.back || gamepad2.back)) {
-            if (gamepad1.x) {
-                // if the X button is pushed on gamepad1, increment the position of
-                // the arm servo.
+        if(!(gamepad1.back || gamepad2.back)) {  //The back button is used as an all stop button
+
+            // if the Y button is pushed on gamepad1, increment the position of
+            // the arm servo.
+            if (gamepad1.y)
                 bucketDoorPosition += bucketDoorDelta;
-            }
-            if (gamepad1.y) {
-                // if the Y button is pushed on gamepad1, decrease the position of
-                // the arm servo.
+
+            // if the X button is pushed on gamepad1, decrease the position of
+            // the arm servo.
+            if (gamepad1.x)
                 bucketDoorPosition -= bucketDoorDelta;
-            }
-            if (gamepad1.a) {
-                // if the left bumper button is pushed on gamepad1, increment the position of
-                // the hook servo.
+
+            // if the b button is pushed on gamepad1, increment the position of
+            // the hook servo.
+            if (gamepad1.b)
                 hookPosistion += hookDelta;
-            }
-            if (gamepad1.b) {
-                // if the right bumper button is pushed on gamepad1, decrease the position of
-                // the hook servo.
+
+            // if the a button is pushed on gamepad1, decrease the position of
+            // the hook servo.
+            if (gamepad1.a)
                 hookPosistion -= hookDelta;
-            }
         }
+
         // clip the position values so that they never exceed their allowed range.
         right = Range.clip(right, -1, 1);//pentagon=hacked
         left = Range.clip(left, -1, 1);//white house=hacked
@@ -118,18 +117,23 @@ public class Test6168 extends OpMode {
         bucket = (float)scaleInput(bucket);
         backBucket = (float)scaleInput(-backBucket);
 
+        if (spinner == 0)           //If the forward spinner trigger is not pressed,
+            spinner = backSpinner;  //then is uses the backwards spinner trigger
+        if (bucket == 0)            //if the forward bucket trigger is not pressed,
+            bucket = backBucket;    //then is uses the backwards bucket trigger
+
         // write the values to the motors
         motorRight.setPower(right);
         motorLeft.setPower(left);
         motorLiftArm.setPower(liftArm);
-        if (spinner > 0)
+        //if (spinner > 0)
             motorSpinner.setPower(spinner);
-        else
-            motorSpinner.setPower(backSpinner);
-        if (bucket > 0)
+        //else
+            //motorSpinner.setPower(backSpinner);
+        //if (bucket > 0)
             motorBucket.setPower(bucket);
-        else
-            motorBucket.setPower(backBucket);
+        //else
+            //motorBucket.setPower(backBucket);
         // write position values to the servos
         servoBucketDoor.setPosition(bucketDoorPosition);
         servoHook.setPosition(hookPosistion);
