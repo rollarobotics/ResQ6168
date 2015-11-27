@@ -20,7 +20,7 @@ public class Test6168 extends OpMode {
     double hookPosistion = 0.0;
 
     // amount to change the servo position.
-    double bucketDoorDelta = 0.1;
+    double bucketDoorDelta = 0.90;
     double hookDelta = 0.1;
 
     //Declare motor and servo variables
@@ -118,9 +118,9 @@ public class Test6168 extends OpMode {
         backBucket = (float)scaleInput(-backBucket);
 
         if (spinner == 0)           //If the forward spinner trigger is not pressed,
-            spinner = backSpinner;  //then is uses the backwards spinner trigger
+            spinner = -backSpinner;  //then is uses the backwards spinner trigger
         if (bucket == 0)            //if the forward bucket trigger is not pressed,
-            bucket = backBucket;    //then is uses the backwards bucket trigger
+            bucket = -backBucket;    //then is uses the backwards bucket trigger
 
         // write the values to the motors
         motorRight.setPower(right);
@@ -138,23 +138,27 @@ public class Test6168 extends OpMode {
         servoBucketDoor.setPosition(bucketDoorPosition);
         servoHook.setPosition(hookPosistion);
 
+        double chainHooks = 0.80;
+        double lift = 0.80;
+        System.out.println(gamepad1.right_bumper);
+        System.out.println(gamepad1.left_bumper);
         if (gamepad1.right_bumper)
-            motorChainHooks.setPower(80);
+            motorChainHooks.setPower(chainHooks);
         else
             motorChainHooks.setPower(0);
 
         if (gamepad1.left_bumper)
-            motorChainHooks.setPower(-80);
+            motorChainHooks.setPower(-chainHooks);
         else
             motorChainHooks.setPower(0);
 
         if (gamepad2.dpad_up)
-            motorLift.setPower(80);
+            motorLift.setPower(lift);
         else
             motorLift.setPower(0);
 
         if (gamepad2.dpad_down)
-            motorLift.setPower(-80);
+            motorLift.setPower(-lift);
         else
             motorLift.setPower(0);
 
@@ -174,12 +178,13 @@ public class Test6168 extends OpMode {
 		 * are currently write only.
 		 */
         telemetry.addData("Text", "*** Robot Data***");
-        telemetry.addData("arm", "arm:  " + String.format("%.2f", bucketDoorPosition));
+        telemetry.addData("bucket door", "bucket door:  " + String.format("%.2f", bucketDoorPosition));
+        telemetry.addData("hook", "hook:  " + String.format("%.2f", hookPosistion));
         telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
         telemetry.addData("liftArm tgt pwr",  "liftArm  pwr: " + String.format("%.2f", liftArm));
-        //telemetry.addData("lift tgt pwr", "lift pwr: " + String.format("%.2f", lift));
-        //telemetry.addData("hooks tgt pwr", "hooks pwr: " + String.format("%.2f", hooks));
+        telemetry.addData("lift tgt pwr", "lift pwr: " + String.format("%.2f", lift));
+        telemetry.addData("hooks tgt pwr", "hooks pwr: " + String.format("%.2f", chainHooks));
         telemetry.addData("spinner tgt pwr", "spinner pwr: " + String.format("%.2f", spinner));
         telemetry.addData("bucket tgt pwr", "bucket pwr: " + String.format("%.2f", bucket));
     }
