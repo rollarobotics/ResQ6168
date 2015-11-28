@@ -140,7 +140,7 @@ public class Test6168 extends OpMode {
 
         double chainHooks = 0.80;
         double lift = 0.80;
-        
+
         if (gamepad1.right_bumper)
             motorChainHooks.setPower(chainHooks);
         else if (gamepad1.left_bumper)
