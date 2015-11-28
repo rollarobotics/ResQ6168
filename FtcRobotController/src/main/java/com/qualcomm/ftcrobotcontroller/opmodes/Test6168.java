@@ -17,7 +17,7 @@ public class Test6168 extends OpMode {
 
     // assign the starting position of the servos
     double bucketDoorPosition = 0.0;
-    double hookPosistion = 0.0;
+    double hookPosition = 0.0;
 
     // amount to change the servo position.
     double bucketDoorDelta = 0.90;
@@ -75,7 +75,7 @@ public class Test6168 extends OpMode {
         float bucket = gamepad1.right_trigger;
         float backBucket = -gamepad1.left_trigger;
 
-        if(!(gamepad1.back || gamepad2.back)) {  //The back button is used as an all stop button
+        //if(!(gamepad1.back || gamepad2.back)) {  //The back button is used as an all stop button
 
             // if the Y button is pushed on gamepad1, increment the position of
             // the arm servo.
@@ -90,13 +90,13 @@ public class Test6168 extends OpMode {
             // if the b button is pushed on gamepad1, increment the position of
             // the hook servo.
             if (gamepad1.b)
-                hookPosistion += hookDelta;
+                hookPosition += hookDelta;
 
             // if the a button is pushed on gamepad1, decrease the position of
             // the hook servo.
             if (gamepad1.a)
-                hookPosistion -= hookDelta;
-        }
+                hookPosition -= hookDelta;
+        //}
 
         // clip the position values so that they never exceed their allowed range.
         right = Range.clip(right, -1, 1);//pentagon=hacked
@@ -107,7 +107,7 @@ public class Test6168 extends OpMode {
         bucket = Range.clip(bucket, 0, 1);
         backBucket = Range.clip(backBucket, -1, 0);
         bucketDoorPosition = Range.clip(bucketDoorPosition, bucketDoorMinRange, bucketDoorMaxRange);
-        hookPosistion = Range.clip(hookPosistion, hookMinRange, hookMaxRange);
+        hookPosition = Range.clip(hookPosition, hookMinRange, hookMaxRange);
 
         right = (float)scaleInput(right);//statue of liberty=hacked
         left =  (float)scaleInput(left);
@@ -136,28 +136,21 @@ public class Test6168 extends OpMode {
             //motorBucket.setPower(backBucket);
         // write position values to the servos
         servoBucketDoor.setPosition(bucketDoorPosition);
-        servoHook.setPosition(hookPosistion);
+        servoHook.setPosition(hookPosition);
 
         double chainHooks = 0.80;
         double lift = 0.80;
-        System.out.println(gamepad1.right_bumper);
-        System.out.println(gamepad1.left_bumper);
+        
         if (gamepad1.right_bumper)
             motorChainHooks.setPower(chainHooks);
-        else
-            motorChainHooks.setPower(0);
-
-        if (gamepad1.left_bumper)
+        else if (gamepad1.left_bumper)
             motorChainHooks.setPower(-chainHooks);
         else
             motorChainHooks.setPower(0);
 
         if (gamepad2.dpad_up)
             motorLift.setPower(lift);
-        else
-            motorLift.setPower(0);
-
-        if (gamepad2.dpad_down)
+        else if (gamepad2.dpad_down)
             motorLift.setPower(-lift);
         else
             motorLift.setPower(0);
@@ -179,7 +172,7 @@ public class Test6168 extends OpMode {
 		 */
         telemetry.addData("Text", "*** Robot Data***");
         telemetry.addData("bucket door", "bucket door:  " + String.format("%.2f", bucketDoorPosition));
-        telemetry.addData("hook", "hook:  " + String.format("%.2f", hookPosistion));
+        telemetry.addData("hook", "hook:  " + String.format("%.2f", hookPosition));
         telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
         telemetry.addData("liftArm tgt pwr",  "liftArm  pwr: " + String.format("%.2f", liftArm));
