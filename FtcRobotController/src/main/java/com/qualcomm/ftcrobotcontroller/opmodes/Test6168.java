@@ -31,6 +31,7 @@ public class Test6168 extends OpMode {
     DcMotor motorChainHooks;
     DcMotor motorSpinner;
     DcMotor motorBucket;
+    DcMotor motorSweeper;
     Servo servoBucketDoor;
     Servo servoHook;
 
@@ -56,6 +57,7 @@ public class Test6168 extends OpMode {
         motorChainHooks = hardwareMap.dcMotor.get("chainHooks");
         motorSpinner = hardwareMap.dcMotor.get("spinner");
         motorBucket = hardwareMap.dcMotor.get("bucket");
+        motorSweeper = hardwarMap.dcMotor.get("sweeper")
         servoBucketDoor = hardwareMap.servo.get("bucketDoor");
         servoHook = hardwareMap.servo.get("hook");
     }
@@ -74,6 +76,7 @@ public class Test6168 extends OpMode {
         float backSpinner = -gamepad2.left_trigger;
         float bucket = gamepad1.right_trigger;
         float backBucket = -gamepad1.left_trigger;
+        float sweeper = -gamepad2.left_stick_y;
 
         //if(!(gamepad1.back || gamepad2.back)) {  //The back button is used as an all stop button
 
@@ -106,6 +109,7 @@ public class Test6168 extends OpMode {
         backSpinner = Range.clip(backSpinner, -1, 0);
         bucket = Range.clip(bucket, 0, 1);
         backBucket = Range.clip(backBucket, -1, 0);
+        sweeper = Range.clip(sweeper, -1, 1)
         bucketDoorPosition = Range.clip(bucketDoorPosition, bucketDoorMinRange, bucketDoorMaxRange);
         hookPosition = Range.clip(hookPosition, hookMinRange, hookMaxRange);
 
@@ -116,6 +120,7 @@ public class Test6168 extends OpMode {
         backSpinner = (float)scaleInput(-backSpinner);
         bucket = (float)scaleInput(bucket);
         backBucket = (float)scaleInput(-backBucket);
+        sweeper = (float)scaleInput(sweeper)
 
         if (spinner == 0)           //If the forward spinner trigger is not pressed,
             spinner = -backSpinner;  //then is uses the backwards spinner trigger
@@ -134,6 +139,7 @@ public class Test6168 extends OpMode {
             motorBucket.setPower(bucket);
         //else
             //motorBucket.setPower(backBucket);
+         motorSweeper.setPower(sweeper);
         // write position values to the servos
         servoBucketDoor.setPosition(bucketDoorPosition);
         servoHook.setPosition(hookPosition);
@@ -163,6 +169,7 @@ public class Test6168 extends OpMode {
             motorChainHooks.setPower(0);
             motorSpinner.setPower(0);
             motorBucket.setPower(0);
+            motorSweeper.setPower(0);
         }
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using
@@ -180,6 +187,7 @@ public class Test6168 extends OpMode {
         telemetry.addData("hooks tgt pwr", "hooks pwr: " + String.format("%.2f", chainHooks));
         telemetry.addData("spinner tgt pwr", "spinner pwr: " + String.format("%.2f", spinner));
         telemetry.addData("bucket tgt pwr", "bucket pwr: " + String.format("%.2f", bucket));
+        telemetry.addData("sweeper tgt pwr", "sweeper pwr: " + String.format("%.2f", sweeper));
     }
     /*
      * Code to run when the op mode is first disabled goes here
