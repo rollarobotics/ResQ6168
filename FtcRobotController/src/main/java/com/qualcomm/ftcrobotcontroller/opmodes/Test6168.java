@@ -1,4 +1,3 @@
-
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -57,7 +56,7 @@ public class Test6168 extends OpMode {
         motorChainHooks = hardwareMap.dcMotor.get("chainHooks");
         motorSpinner = hardwareMap.dcMotor.get("spinner");
         motorBucket = hardwareMap.dcMotor.get("bucket");
-        motorSweeper = hardwarMap.dcMotor.get("sweeper")
+        motorSweeper = hardwareMap.dcMotor.get("sweeper");
         servoBucketDoor = hardwareMap.servo.get("bucketDoor");
         servoHook = hardwareMap.servo.get("hook");
     }
@@ -109,7 +108,7 @@ public class Test6168 extends OpMode {
         backSpinner = Range.clip(backSpinner, -1, 0);
         bucket = Range.clip(bucket, 0, 1);
         backBucket = Range.clip(backBucket, -1, 0);
-        sweeper = Range.clip(sweeper, -1, 1)
+        sweeper = Range.clip(sweeper, -1, 1);
         bucketDoorPosition = Range.clip(bucketDoorPosition, bucketDoorMinRange, bucketDoorMaxRange);
         hookPosition = Range.clip(hookPosition, hookMinRange, hookMaxRange);
 
@@ -120,7 +119,7 @@ public class Test6168 extends OpMode {
         backSpinner = (float)scaleInput(-backSpinner);
         bucket = (float)scaleInput(bucket);
         backBucket = (float)scaleInput(-backBucket);
-        sweeper = (float)scaleInput(sweeper)
+        sweeper = (float)scaleInput(sweeper);
 
         if (spinner == 0)           //If the forward spinner trigger is not pressed,
             spinner = -backSpinner;  //then is uses the backwards spinner trigger
