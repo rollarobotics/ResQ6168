@@ -139,7 +139,7 @@ public class Test6168 extends OpMode {
             motorBucket.setPower(bucket);
         //else
             //motorBucket.setPower(backBucket);
-         motorSweeper.setPower(sweeper);
+        motorSweeper.setPower(sweeper);
         // write position values to the servos
         servoBucketDoor.setPosition(bucketDoorPosition);
         servoHook.setPosition(hookPosition);
