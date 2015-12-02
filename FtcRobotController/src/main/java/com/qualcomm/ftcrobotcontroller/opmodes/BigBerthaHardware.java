@@ -756,6 +756,18 @@ public class BigBerthaHardware extends OpMode {
         return l_return;
     } // a_right_encoder_count
     //--------------------------------------------------------------------------
+    /**
+     * Access the left encoder's count.
+     */
+    int a_left_encoder_count () {
+        int l_return = 0;
+
+        if (v_motor_left_drive != null)
+            l_return = v_motor_left_drive.getCurrentPosition ();
+
+        return l_return;
+    } // a_left_encoder_count
+    //--------------------------------------------------------------------------
     //
     // has_left_drive_encoder_reached
     //
