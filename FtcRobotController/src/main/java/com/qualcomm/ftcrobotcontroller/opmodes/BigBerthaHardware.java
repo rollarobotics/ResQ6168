@@ -757,92 +757,113 @@ public class BigBerthaHardware extends OpMode {
     } // a_right_encoder_count
     //--------------------------------------------------------------------------
     /**
-     * Access the left encoder's count.
+     * Access the lift encoder's count.
      */
-    int a_left_encoder_count () {
+    int a_lift_encoder_count () {
         int l_return = 0;
 
-        if (v_motor_left_drive != null)
-            l_return = v_motor_left_drive.getCurrentPosition ();
+        if (v_motor_lift != null)
+            l_return = v_motor_lift.getCurrentPosition ();
 
         return l_return;
-    } // a_left_encoder_count
+    } // a_lift_encoder_count
     //--------------------------------------------------------------------------
-    //
-    // has_left_drive_encoder_reached
-    //
+    /**
+     * Access the lift_arm encoder's count.
+     */
+    int a_lift_arm_encoder_count () {
+        int l_return = 0;
+
+        if (v_motor_lift_arm != null)
+            l_return = v_motor_lift_arm.getCurrentPosition ();
+
+        return l_return;
+    } // a_lift_arm_encoder_count
+    //--------------------------------------------------------------------------
+    /**
+     * Access the chain_hooks encoder's count.
+     */
+    int a_chain_hooks_encoder_count () {
+        int l_return = 0;
+
+        if (v_motor_chain_hooks != null)
+            l_return = v_motor_chain_hooks.getCurrentPosition ();
+
+        return l_return;
+    } // a_chain_hooks_encoder_count
+    //--------------------------------------------------------------------------
+    /**
+     * Access the spinner encoder's count.
+     */
+    int a_spinner_encoder_count () {
+        int l_return = 0;
+
+        if (v_motor_spinner != null)
+            l_return = v_motor_spinner.getCurrentPosition ();
+
+        return l_return;
+    } // a_spinner_encoder_count
+    //--------------------------------------------------------------------------
+    /**
+     * Access the bucket encoder's count.
+     */
+    int a_bucket_encoder_count () {
+        int l_return = 0;
+
+        if (v_motor_bucket != null)
+            l_return = v_motor_bucket.getCurrentPosition ();
+
+        return l_return;
+    } // a_bucket_encoder_count
+    //--------------------------------------------------------------------------
+    /**
+     * Access the sweeper encoder's count.
+     */
+    int a_sweeper_encoder_count () {
+        int l_return = 0;
+
+        if (v_motor_sweeper != null)
+            l_return = v_motor_sweeper.getCurrentPosition ();
+
+        return l_return;
+    } // a_sweeper_encoder_count
+    //--------------------------------------------------------------------------
     /**
      * Indicate whether the left drive motor's encoder has reached a value.
      */
-    boolean has_left_drive_encoder_reached (double p_count)
-
-    {
-        //
+    boolean has_left_drive_encoder_reached (double p_count) {
         // Assume failure.
-        //
         boolean l_return = false;
 
-        if (v_motor_left_drive != null)
-        {
-            //
+        if (v_motor_left_drive != null) {
             // Has the encoder reached the specified values?
-            //
             // TODO Implement stall code using these variables.
-            //
-            if (Math.abs (v_motor_left_drive.getCurrentPosition ()) > p_count)
-            {
-                //
+            if (Math.abs (v_motor_left_drive.getCurrentPosition ()) > p_count) {
                 // Set the status to a positive indication.
-                //
                 l_return = true;
             }
         }
-
-        //
         // Return the status.
-        //
         return l_return;
-
     } // has_left_drive_encoder_reached
-
     //--------------------------------------------------------------------------
-    //
-    // has_right_drive_encoder_reached
-    //
     /**
      * Indicate whether the right drive motor's encoder has reached a value.
      */
-    boolean has_right_drive_encoder_reached (double p_count)
-
-    {
-        //
+    boolean has_right_drive_encoder_reached (double p_count) {
         // Assume failure.
-        //
         boolean l_return = false;
-
-        if (v_motor_right_drive != null)
-        {
-            //
+        if (v_motor_right_drive != null) {
             // Have the encoders reached the specified values?
-            //
             // TODO Implement stall code using these variables.
-            //
-            if (Math.abs (v_motor_right_drive.getCurrentPosition ()) > p_count)
-            {
-                //
+            if (Math.abs (v_motor_right_drive.getCurrentPosition ()) > p_count) {
                 // Set the status to a positive indication.
-                //
                 l_return = true;
             }
         }
-
-        //
         // Return the status.
-        //
         return l_return;
-
     } // has_right_drive_encoder_reached
-
     //--------------------------------------------------------------------------
     //
     // have_drive_encoders_reached
