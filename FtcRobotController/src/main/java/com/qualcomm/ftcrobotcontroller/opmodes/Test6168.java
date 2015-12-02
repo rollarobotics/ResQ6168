@@ -9,18 +9,18 @@ public class Test6168 extends OpMode {
 
     // TETRIX VALUES.
     // Name the range of the servos
-    final static double bucketDoorMinRange  = 0.20;
-    final static double bucketDoorMaxRange  = 0.90;//Hi there, no
-    final static double hookMinRange  = 0.20;
-    final static double hookMaxRange  = 0.90;//Hi there, no
+    //final static double bucketDoorMinRange  = 0.20;
+    //final static double bucketDoorMaxRange  = 0.90;//Hi there, no
+    //final static double hookMinRange  = 0.20;
+    //final static double hookMaxRange  = 0.90;//Hi there, no
 
     // assign the starting position of the servos
     double bucketDoorPosition = 0.0;
     double hookPosition = 0.0;
 
     // amount to change the servo position.
-    double bucketDoorDelta = 0.90;
-    double hookDelta = 0.1;
+    //double bucketDoorDelta = 0.90;
+    //double hookDelta = 0.1;
 
     //Declare motor and servo variables
     DcMotor motorRight;
@@ -59,13 +59,15 @@ public class Test6168 extends OpMode {
         motorSweeper = hardwareMap.dcMotor.get("sweeper");
         servoBucketDoor = hardwareMap.servo.get("bucketDoor");
         servoHook = hardwareMap.servo.get("hook");
+
+        motorSpinner.setPower(0);
+        motorBucket.setPower(0);
     }
 
     //This method will be called repeatedly in a loop
     //@see com.qualcomm.robotcore.eventloop.opmode.OpMode#run()
     @Override
     public void loop() {
-
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
         float right = -gamepad1.right_stick_y;
@@ -82,22 +84,28 @@ public class Test6168 extends OpMode {
             // if the Y button is pushed on gamepad1, increment the position of
             // the arm servo.
             if (gamepad1.y)
-                bucketDoorPosition += bucketDoorDelta;
+                bucketDoorPosition = 1;
+
+            else if (gamepad1.x)
+                bucketDoorPosition = 0;
+
+            else
+                bucketDoorPosition = 0.5;
 
             // if the X button is pushed on gamepad1, decrease the position of
             // the arm servo.
-            if (gamepad1.x)
-                bucketDoorPosition -= bucketDoorDelta;
+
 
             // if the b button is pushed on gamepad1, increment the position of
             // the hook servo.
             if (gamepad1.b)
-                hookPosition += hookDelta;
-
+                hookPosition = 1;
+            else if (gamepad1.a)
+                hookPosition = 0;
+            else
+                hookPosition = 0.5;
             // if the a button is pushed on gamepad1, decrease the position of
-            // the hook servo.
-            if (gamepad1.a)
-                hookPosition -= hookDelta;
+
         //}
 
         // clip the position values so that they never exceed their allowed range.
@@ -109,8 +117,8 @@ public class Test6168 extends OpMode {
         bucket = Range.clip(bucket, 0, 1);
         backBucket = Range.clip(backBucket, -1, 0);
         sweeper = Range.clip(sweeper, -1, 1);
-        bucketDoorPosition = Range.clip(bucketDoorPosition, bucketDoorMinRange, bucketDoorMaxRange);
-        hookPosition = Range.clip(hookPosition, hookMinRange, hookMaxRange);
+        bucketDoorPosition = Range.clip(bucketDoorPosition, 0, 1);
+        hookPosition = Range.clip(hookPosition, 0, 1);
 
         right = (float)scaleInput(right);//statue of liberty=hacked
         left =  (float)scaleInput(left);
@@ -121,11 +129,14 @@ public class Test6168 extends OpMode {
         backBucket = (float)scaleInput(-backBucket);
         sweeper = (float)scaleInput(sweeper);
 
-        if (spinner == 0)           //If the forward spinner trigger is not pressed,
-            spinner = -backSpinner;  //then is uses the backwards spinner trigger
-        if (bucket == 0)            //if the forward bucket trigger is not pressed,
-            bucket = -backBucket;    //then is uses the backwards bucket trigger
-
+        if (spinner == 0) {          //If the forward spinner trigger is not pressed,
+            if (backSpinner != 0)
+                spinner = -backSpinner;  //then is uses the backwards spinner trigger
+        }
+        if (bucket == 0) {           //if the forward bucket trigger is not pressed,
+            if (backBucket != 0)
+                bucket = -backBucket;    //then is uses the backwards bucket trigger
+        }
         // write the values to the motors
         motorRight.setPower(right);
         motorLeft.setPower(left);

@@ -466,7 +466,24 @@ public class BigBerthaHardware extends OpMode
         }
 
     } // run_using_right_drive_encoder
+//--------------------------------------------------------------------------
+    //
+    // run_using_lift_arm_encoder
+    //
+    /**
+     * Set the lift arm wheel encoder to run, if the mode is appropriate.
+     */
+    public void run_using_lift_arm_encoder ()
 
+    {
+        if (v_motor_lift_arm != null)
+        {
+            v_motor_lift_arm.setChannelMode
+                    ( DcMotorController.RunMode.RUN_USING_ENCODERS
+                    );
+        }
+
+    } // run_using_left_drive_encoder
     //--------------------------------------------------------------------------
     //
     // run_using_encoders
