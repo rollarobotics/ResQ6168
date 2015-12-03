@@ -28,7 +28,7 @@ public class BigBerthaTelemetry extends BigBerthaHardware
      */
     public void update_telemetry () {
         if (a_warning_generated ())
-            set_first_message (a_warning_message ());
+             set_first_message (a_warning_message ());
         // Send telemetry data to the driver station.
         telemetry.addData("Text", "*** Robot Data***");
         telemetry.addData("bucket door", "bucket door:  " + a_bucket_door_position());
