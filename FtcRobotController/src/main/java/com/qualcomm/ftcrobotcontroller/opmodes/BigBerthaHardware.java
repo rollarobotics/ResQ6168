@@ -31,10 +31,6 @@ public class BigBerthaHardware extends OpMode {
         // Initialize base classes and class members.
         // All via self-construction.
     } // BigBerthaHardware
-    public BigBerthaHardware(double l_bucket_door_position, double l_hook_position) {
-        l_bucket_door_position = 0.5;
-        l_hook_position = 0.5;
-    }
     //--------------------------------------------------------------------------
     /**
      * Perform any actions that are necessary when the OpMode is enabled.
@@ -139,7 +135,6 @@ public class BigBerthaHardware extends OpMode {
         //0.5 is off, 1 is forwards, and 0 is backwards
         double l_bucket_door_position = 0.5;
         double l_hook_position = 0.5;
-        new BigBerthaHardware(l_bucket_door_position,l_hook_position);
         //bucket_door
         try {
             v_servo_bucket_door = hardwareMap.servo.get ("bucket_door");
@@ -1307,7 +1302,6 @@ public class BigBerthaHardware extends OpMode {
     void all_servos_starting_position () {
         double bucketDoorPosition = 0.5;
         double hookPosition = 0.5;
-        new BigBerthaHardware(bucketDoorPosition, hookPosition);
         // Set the value.
         if (v_servo_bucket_door != null)
             v_servo_bucket_door.setPosition (bucketDoorPosition);
