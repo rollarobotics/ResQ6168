@@ -155,7 +155,7 @@ public class Test6168 extends OpMode {
         servoHook.setPosition(hookPosition);
 
         double chainHooks = 0.80;
-        double lift = 0.80;
+        double lift = 1.0;
 
         if (gamepad1.right_bumper)
             motorChainHooks.setPower(chainHooks);

@@ -103,22 +103,6 @@ public class PushBotHardware extends OpMode
 
             v_motor_right_drive = null;
         }
-
-        //
-        // Connect the arm motor.
-        //
-        try
-        {
-            v_motor_left_arm = hardwareMap.dcMotor.get ("left_arm");
-        }
-        catch (Exception p_exeception)
-        {
-            m_warning_message ("left_arm");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
-
-            v_motor_left_arm = null;
-        }
-
         //
         // Connect the servo motors.
         //

@@ -162,6 +162,8 @@ public class BigBerthaHardware extends OpMode {
 
             v_servo_hook = null;
         }
+        v_motor_spinner.setPower(0);
+        v_motor_bucket.setPower(0);
     } // init
     //--------------------------------------------------------------------------
     /**
@@ -362,9 +364,12 @@ public class BigBerthaHardware extends OpMode {
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    void set_spinner_power (double p_spinner_power) {
-        if (v_motor_spinner != null)
+    void set_spinner_power (double p_spinner_power, double p_back_spinner_power) {
+        if (v_motor_spinner != null) {
+            if (p_spinner_power == 0)
+                p_spinner_power = -p_back_spinner_power;
             v_motor_spinner.setPower(p_spinner_power);
+        }
     } // set_spinner_power
     // --------------------------------------------------------------------------
     /**
@@ -382,9 +387,12 @@ public class BigBerthaHardware extends OpMode {
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    void set_bucket_power (double p_bucket_power) {
-        if (v_motor_bucket != null)
+    void set_bucket_power (double p_bucket_power, double p_back_bucket_power) {
+        if (v_motor_bucket != null) {
+            if (p_bucket_power == 0)
+                p_bucket_power = -p_back_bucket_power;
             v_motor_bucket.setPower(p_bucket_power);
+        }
     } // set_bucket_power
     //--------------------------------------------------------------------------
     /**
@@ -1040,13 +1048,13 @@ public class BigBerthaHardware extends OpMode {
     /**
      * Indicate whether the spinner motor's encoder has reached a value.
      */
-    boolean spinner_using_encoder (double p_spinner_power, double p_spinner_count) {
+    boolean spinner_using_encoder (double p_spinner_power, double p_back_spinner_power, double p_spinner_count) {
         // Assume the encoder has not reached the limit.
         boolean l_return = false;
         // Tell the system that motor encoder will be used.
         run_using_encoders ();
         // Start the spinner wheel motor at full power.
-        set_spinner_power(p_spinner_power);
+        set_spinner_power(p_spinner_power, p_back_spinner_power);
         // Has the motor shaft turned the required amount?
         // If it hasn't, then the op-mode remains in this state (i.e this
         // block will be executed the next time this method is called).
@@ -1054,7 +1062,7 @@ public class BigBerthaHardware extends OpMode {
             // Reset the encoder to ensure it is at a known good value.
             reset_spinner_encoder();
             // Stop the motor.
-            set_spinner_power(0.0f);
+            set_spinner_power(0.0f, 0.0f);
             // Transition to the next state when this method is called again.
             l_return = true;
         }
@@ -1065,13 +1073,13 @@ public class BigBerthaHardware extends OpMode {
     /**
      * Indicate whether the bucket motor's encoder has reached a value.
      */
-    boolean bucket_using_encoder (double p_bucket_power, double p_bucket_count) {
+    boolean bucket_using_encoder (double p_bucket_power, double p_back_bucket_power, double p_bucket_count) {
         // Assume the encoder has not reached the limit.
         boolean l_return = false;
         // Tell the system that motor encoder will be used.
         run_using_encoders ();
         // Start the bucket wheel motor at full power.
-        set_bucket_power(p_bucket_power);
+        set_bucket_power(p_bucket_power,p_back_bucket_power);
         // Has the motor shaft turned the required amount?
         // If it hasn't, then the op-mode remains in this state (i.e this
         // block will be executed the next time this method is called).
@@ -1079,7 +1087,7 @@ public class BigBerthaHardware extends OpMode {
             // Reset the encoder to ensure it is at a known good value.
             reset_bucket_encoder();
             // Stop the motor.
-            set_bucket_power(0.0f);
+            set_bucket_power(0.0f, 0.0f);
             // Transition to the next state when this method is called again.
             l_return = true;
         }
@@ -1272,31 +1280,39 @@ public class BigBerthaHardware extends OpMode {
     } // a_servo_bucket_door_position
     //--------------------------------------------------------------------------
     /**
-     * Mutate all_servos position.
+     * Mutate bucket_door position.
      */
-    void m_set_all_servos_position (double p_bucket_door_position, double p_hook_position) {
+    void m_bucket_door_position (double p_bucket_door_position) {
         // Ensure the specific value is legal.
-        double l_bucket_door_position = Range.clip( p_bucket_door_position, Servo.MIN_POSITION
-                , Servo.MAX_POSITION);
-        double l_hook_position = Range.clip( p_hook_position, Servo.MIN_POSITION, Servo.MAX_POSITION);
+        double l_bucket_door_position = Range.clip (p_bucket_door_position, Servo.MIN_POSITION, Servo.MAX_POSITION);
         // Set the value.
         if (v_servo_bucket_door != null)
             v_servo_bucket_door.setPosition (l_bucket_door_position);
-
+    } // m_bucket_door_position
+    //--------------------------------------------------------------------------
+    /**
+     * Mutate hook position.
+     */
+    void m_hook_position (double p_hook_position) {
+        // Ensure the specific value is legal.
+        double l_hook_position = Range.clip( p_hook_position, Servo.MIN_POSITION, Servo.MAX_POSITION);
+        // Set the value.
         if (v_servo_hook != null)
             v_servo_hook.setPosition (l_hook_position);
-    } // m_set_all_servos_position
+    } // m_hook_position
     //--------------------------------------------------------------------------
     /**
      * Set all servos to starting position
      */
     void all_servos_starting_position () {
-        double startingPosition = 0.5;
+        double bucketDoorPosition = 0.5;
+        double hookPosition = 0.5;
+        new BigBerthaHardware(bucketDoorPosition, hookPosition);
         // Set the value.
         if (v_servo_bucket_door != null)
-            v_servo_bucket_door.setPosition (startingPosition);
+            v_servo_bucket_door.setPosition (bucketDoorPosition);
         if (v_servo_hook != null)
-            v_servo_hook.setPosition (startingPosition);
+            v_servo_hook.setPosition (hookPosition);
     } // all_servos_starting_position
     //--------------------------------------------------------------------------
     /**
