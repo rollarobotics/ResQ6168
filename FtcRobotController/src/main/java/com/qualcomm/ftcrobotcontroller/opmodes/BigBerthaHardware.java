@@ -1,1371 +1,1040 @@
-package com.qualcomm.ftcrobotcontroller.opmodes;
 /**
  * Created by spmce on 12/1/2015.
  */
+package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-//--------------------------------------------------------------------------
 /**
- * Provides a single hardware access point between custom op-modes and the
- * OpMode class for the Push Bot.
- *
- * This class prevents the custom op-mode from throwing an exception at runtime.
- * If any hardware fails to map, a warning will be shown via telemetry data,
- * calls to methods will fail, but will not cause the application to crash.
- *
+ * Provides a single hardware access point between custom op-modes and the OpMode class for BigBertha.
  * @author SSI Robotics and revised by Shane McEnaney
- * @version 2015-08-01-06-01-----2015-12-01
+ * @version 2015-08-13-20-04-----2015-12-01
  */
 public class BigBerthaHardware extends OpMode {
-    //--------------------------------------------------------------------------
     /**
      * Construct the class.
-     *
      * The system calls this member when the class is instantiated.
      */
     public BigBerthaHardware () {
         // Initialize base classes and class members.
         // All via self-construction.
-    } // BigBerthaHardware
-    //--------------------------------------------------------------------------
+    } //--------------------------------------------------------------------------BigBerthaHardware
     /**
      * Perform any actions that are necessary when the OpMode is enabled.
-     *
      * The system calls this member once when the OpMode is enabled.
      */
     @Override public void init () {
         // Use the hardwareMap to associate class members to hardware ports.
-        //
-        // Note that the names of the devices (i.e. arguments to the get method)
-        // must match the names specified in the configuration file created by
-        // the FTC Robot Controller (Settings-->Configure Robot).
-        //
         // The variable below is used to provide telemetry data to a class user.
-        v_warning_generated = false;
-        v_warning_message = "Can't map; ";
+        warningGenerated = false;
+        warningMessage = "Can't map; ";
+        // This class prevents the custom op-mode from throwing an exception at runtime.
+        // If any hardware fails to map, a warning will be shown via telemetry data,
+        // calls to methods will fail, but will not cause the application to crash.
         //------------DcMotors------------
-        //left_drive
+        try {motorLeftDrive = hardwareMap.dcMotor.get ("left");}
+        catch (Exception opModeException) {
+            setWarningMessage("leftDrive");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            motorLeftDrive = null;
+        } //------------------------------------------------------------leftDrive
         try {
-            v_motor_left_drive = hardwareMap.dcMotor.get ("left");
-        }
-        catch (Exception p_exeception) {
-            m_warning_message ("left_drive");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
-
-            v_motor_left_drive = null;
-        }
-        //right_drive
-        try {
-            v_motor_right_drive = hardwareMap.dcMotor.get ("right");
-            v_motor_right_drive.setDirection (DcMotor.Direction.REVERSE);
+            motorRightDrive = hardwareMap.dcMotor.get ("right");
+            motorRightDrive.setDirection (DcMotor.Direction.REVERSE);
             // The direction of the right motor is reversed, so joystick inputs can
             // be more generically applied.
-        }
-        catch (Exception p_exeception) {
-            m_warning_message ("right_drive");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
-
-            v_motor_right_drive = null;
-        }
-        //lift_arm
-        try {
-            v_motor_lift_arm = hardwareMap.dcMotor.get ("liftArm");
-        }
-        catch (Exception p_exeception) {
-            m_warning_message ("left_arm");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
-
-            v_motor_lift_arm = null;
-        }
-        //lift
-        try {
-            v_motor_lift = hardwareMap.dcMotor.get ("lift");
-        }
-        catch (Exception p_exeception) {
-            m_warning_message ("lift");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
-
-            v_motor_lift = null;
-        }
-        //chain_hooks
-        try {
-            v_motor_chain_hooks = hardwareMap.dcMotor.get ("chainHooks");
-        }
-        catch (Exception p_exeception) {
-            m_warning_message ("chain_hooks");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
-
-            v_motor_chain_hooks = null;
-        }
-        //spinner
-        try {
-            v_motor_spinner = hardwareMap.dcMotor.get ("spinner");
-        }
-        catch (Exception p_exeception) {
-            m_warning_message ("spinner");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
-
-            v_motor_spinner = null;
-        }
-        //bucket
-        try {
-            v_motor_bucket = hardwareMap.dcMotor.get ("bucket");
-        }
-        catch (Exception p_exeception) {
-            m_warning_message ("bucket");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
-
-            v_motor_bucket = null;
-        }//sweeper
-        try {
-            v_motor_sweeper = hardwareMap.dcMotor.get ("sweeper");
-        }
-        catch (Exception p_exeception) {
-            m_warning_message ("sweeper");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
-
-            v_motor_sweeper = null;
-        }
+        } catch (Exception opModeException) {
+            setWarningMessage("rightDrive");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            motorRightDrive = null;
+        } //------------------------------------------------------------rightDrive
+        try {motorLiftArm = hardwareMap.dcMotor.get ("liftArm");}
+        catch (Exception opModeException) {
+            setWarningMessage("leftArm");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            motorLiftArm = null;
+        } //------------------------------------------------------------liftArm
+        try {motorLift = hardwareMap.dcMotor.get ("lift");}
+        catch (Exception opModeException) {
+            setWarningMessage("lift");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            motorLift = null;
+        } //------------------------------------------------------------lift
+        try {motorChainHooks = hardwareMap.dcMotor.get ("chainHooks");}
+        catch (Exception opModeException) {
+            setWarningMessage("chainHooks");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            motorChainHooks = null;
+        } //------------------------------------------------------------chainHooks
+        try {motorSpinner = hardwareMap.dcMotor.get ("spinner");}
+        catch (Exception opModeException) {
+            setWarningMessage("spinner");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            motorSpinner = null;
+        } //------------------------------------------------------------spinner
+        try {motorBucket = hardwareMap.dcMotor.get ("bucket");}
+        catch (Exception opModeException) {
+            setWarningMessage("bucket");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            motorBucket = null;
+        } //------------------------------------------------------------bucket
+        try {motorSweeper = hardwareMap.dcMotor.get ("sweeper");}
+        catch (Exception opModeException) {
+            setWarningMessage("sweeper");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            motorSweeper = null;
+        } //------------------------------------------------------------sweeper
+        motorRightDrive.setPower(0);
+        motorLeftDrive.setPower(0);
+        motorLift.setPower(0);
+        motorLiftArm.setPower(0);
+        motorChainHooks.setPower(0);
+        motorSpinner.setPower(0);
+        motorBucket.setPower(0);
+        motorSweeper.setPower(0);
         //------------Servos------------
-        //position of servos
+        //starting position of servos
         //0.5 is off, 1 is forwards, and 0 is backwards
-        double l_bucket_door_position = 0.5;
-        double l_hook_position = 0.5;
-        //bucket_door
+        double startBucketDoorPosition = 0.5;
+        double startHookPosition = 0.5;
         try {
-            v_servo_bucket_door = hardwareMap.servo.get ("bucket_door");
-            v_servo_bucket_door.setPosition (l_bucket_door_position);
-        }
-        catch (Exception p_exeception) {
-            m_warning_message ("bucket_door");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
-
-            v_servo_bucket_door = null;
-        }
-        //hook
+            servoBucketDoor = hardwareMap.servo.get ("bucketDoor");
+            servoBucketDoor.setPosition (startBucketDoorPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("bucketDoor");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            servoBucketDoor = null;
+        } //------------------------------------------------------------bucketDoor
         try {
-            v_servo_hook = hardwareMap.servo.get ("hook");
-            v_servo_hook.setPosition (l_hook_position);
-        }
-        catch (Exception p_exeception) {
-            m_warning_message ("hook");
-            DbgLog.msg (p_exeception.getLocalizedMessage ());
-
-            v_servo_hook = null;
-        }
-        v_motor_spinner.setPower(0);
-        v_motor_bucket.setPower(0);
-    } // init
-    //--------------------------------------------------------------------------
+            servoHook = hardwareMap.servo.get ("hook");
+            servoHook.setPosition (startHookPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("hook");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            servoHook = null;
+        } //------------------------------------------------------------hook
+    } //--------------------------------------------------------------------------init
     /**
      * Access whether a warning has been generated.
      */
-    boolean a_warning_generated () {return v_warning_generated;}
-    //--------------------------------------------------------------------------
+    boolean getWarningGenerated () {return warningGenerated;} //-------------------
     /**
      * Access the warning message.
      */
-    String a_warning_message () {return v_warning_message;}
-    //--------------------------------------------------------------------------
+    String getWarningMessage () {return warningMessage;} //------------------------
     /**
-     * Mutate the warning message by ADDING the specified message to the current
-     * message; set the warning indicator to true.
-     *
-     * A comma will be added before the specified message if the message isn't
-     * empty.
+     * Mutate the warning message by ADDING the specified message to the current message; set the warning indicator to true.
+     * A comma will be added before the specified message if the message isn't empty.
      */
-    void m_warning_message (String p_exception_message) {
-        if (v_warning_generated)
-            v_warning_message += ", ";
-        v_warning_generated = true;
-        v_warning_message += p_exception_message;
-    } // m_warning_message
-    //--------------------------------------------------------------------------
+    void setWarningMessage (String opModeExceptionMessage) {
+        if (warningGenerated)
+            warningMessage += ", ";
+        warningGenerated = true;
+        warningMessage += opModeExceptionMessage;
+    } //--------------------------------------------------------------------------setWarningMessage
     /**
      * Perform any actions that are necessary when the OpMode is enabled.
-     *
      * The system calls this member once when the OpMode is enabled.
      */
     @Override public void start () {
-        // Only actions that are common to all Op-Modes (i.e. both automatic and
-        // manual) should be implemented here.
-        //
+        // Only actions that are common to all OpModes (i.e. both auto and tele) should be implemented here.
         // This method is designed to be overridden.
-    } // start
-    //--------------------------------------------------------------------------
+    } //--------------------------------------------------------------------------start
     /**
      * Perform any actions that are necessary while the OpMode is running.
-     *
      * The system calls this member repeatedly while the OpMode is running.
      */
     @Override public void loop () {
-        // Only actions that are common to all OpModes (i.e. both auto and\
-        // manual) should be implemented here.
-        //
+        // Only actions that are common to all OpModes (i.e. both auto and tele) should be implemented here.
         // This method is designed to be overridden.
-    } // loop
-    //--------------------------------------------------------------------------
+    } //--------------------------------------------------------------------------loop
     /**
      * Perform any actions that are necessary when the OpMode is disabled.
-     *
      * The system calls this member once when the OpMode is disabled.
      */
     @Override public void stop () {
         // Nothing needs to be done for this method.
-    } // stop
-    //--------------------------------------------------------------------------
+    } //--------------------------------------------------------------------------stop
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    float scale_motor_power (float p_power) {
-        // Assume no scaling.
-        float l_scale = 0.0f;
-        // Ensure the values are legal.
-        float l_power = Range.clip (p_power, -1, 1);
+    float clipMotor(float power) {return Range.clip (power, -1, 1);} // Ensure the values are legal.
+    double clipMotor(double power) {return Range.clip (power, -1, 1);} // Ensure the values are legal.
+    double clipServo(double position) {return Range.clip (position, 0, 1);} // Ensure the values are legal.
 
-        float[] l_array =
-                { 0.00f, 0.05f, 0.09f, 0.10f, 0.12f
-                        , 0.15f, 0.18f, 0.24f, 0.30f, 0.36f
-                        , 0.43f, 0.50f, 0.60f, 0.72f, 0.85f
-                        , 1.00f, 1.00f
-                };
-        // Get the corresponding index for the specified argument/parameter.
-        int l_index = (int)(l_power * 16.0);
-
-        if (l_index < 0)
-            l_index = -l_index;
-        else if (l_index > 16)
-            l_index = 16;
-
-        if (l_power < 0)
-            l_scale = -l_array[l_index];
+    float scaleMotorPower (float power) {
+        power = clipMotor(power);
+        float scale = 0.0f; // Assume no scaling.
+        float[] array = {0.00f, 0.05f, 0.09f, 0.10f, 0.12f, 0.15f, 0.18f, 0.24f
+                , 0.30f, 0.36f, 0.43f, 0.50f, 0.60f, 0.72f, 0.85f, 1.00f, 1.00f};
+        int index = (int)(power * 16.0); // Get the corresponding index for the specified argument/parameter.
+        if (index < 0)
+            index = -index;
+        else if (index > 16)
+            index = 16;
+        if (power < 0)
+            scale = -array[index];
         else
-            l_scale = l_array[l_index];
-
-        return l_scale;
-    } // scale_motor_power
-    //--------------------------------------------------------------------------
+            scale = array[index];
+        return scale;
+    } //--------------------------------------------------------------------------scaleMotorPower
+    //------------Get and Set Methods------------
+    //------------Dc Motors------------
     /**
-     * Access the left_drive motor's power level.
+     * Access the leftDrive motor's power level.
      */
-    double a_left_drive_power () {
-        double l_return = 0.0;
-
-        if (v_motor_left_drive != null)
-            l_return = v_motor_left_drive.getPower ();
-
-        return l_return;
-    } // a_left_drive_power
-    //--------------------------------------------------------------------------
+    double getLeftDrivePower () {
+        double returnLevel = 0.0;
+        if (motorLeftDrive != null)
+            returnLevel = motorLeftDrive.getPower ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getLeftDrivePower
     /**
-     * Access the right_drive motor's power level.
+     * Access the rightDrive motor's power level.
      */
-    double a_right_drive_power () {
-        double l_return = 0.0;
-
-        if (v_motor_right_drive != null)
-            l_return = v_motor_right_drive.getPower ();
-
-        return l_return;
-    } // a_right_drive_power
-    //--------------------------------------------------------------------------
+    double getRightDrivePower () {
+        double returnLevel = 0.0;
+        if (motorRightDrive != null)
+            returnLevel = motorRightDrive.getPower ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getRightDrivePower
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    void set_drive_power (double p_left_power, double p_right_power) {
-        if (v_motor_left_drive != null)
-            v_motor_left_drive.setPower (p_left_power);
-
-        if (v_motor_right_drive != null)
-            v_motor_right_drive.setPower (p_right_power);
-    } // set_drive_power
-    //--------------------------------------------------------------------------
+    void setDrivePower (double leftPower, double rightPower) {
+        if (motorLeftDrive != null)
+            motorLeftDrive.setPower (leftPower);
+        if (motorRightDrive != null)
+            motorRightDrive.setPower (rightPower);
+    } //--------------------------------------------------------------------------setDrivePower
     /**
-     * Access the lift_arm motor's power level.
+     * Access the liftArm motor's power level.
      */
-    double a_lift_arm_power () {
-        double l_return = 0.0;
-
-        if (v_motor_lift_arm != null)
-            l_return = v_motor_lift_arm.getPower ();
-
-        return l_return;
-    } // a_lift_arm_power
-    //--------------------------------------------------------------------------
+    double getLiftArmPower () {
+        double returnLevel = 0.0;
+        if (motorLiftArm != null)
+            returnLevel = motorLiftArm.getPower ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getLiftArmPower
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    void set_lift_arm_power (double p_lift_arm_power) {
-        if (v_motor_lift_arm != null)
-            v_motor_lift_arm.setPower(p_lift_arm_power);
-    } // set_lift_arm_power
-    //--------------------------------------------------------------------------
+    void setLiftArmPower (double liftArmPower) {
+        if (motorLiftArm != null)
+            motorLiftArm.setPower(liftArmPower);
+    } //--------------------------------------------------------------------------setLiftArmPower
     /**
      * Access the lift motor's power level.
      */
-    double a_lift_power () {
-        double l_return = 0.0;
-
-        if (v_motor_lift != null)
-            l_return = v_motor_lift.getPower ();
-
-        return l_return;
-    } // a_lift_power
-    //--------------------------------------------------------------------------
+    double getLiftPower () {
+        double returnLevel = 0.0;
+        if (motorLift != null)
+            returnLevel = motorLift.getPower ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getLiftPower
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    void set_lift_power (double p_lift_power) {
-        if (v_motor_lift != null)
-            v_motor_lift.setPower(p_lift_power);
-    } // set_lift_power
-    //--------------------------------------------------------------------------
+    void setLiftPower (double liftPower) {
+        liftPower = clipMotor(liftPower);
+        if (motorLift != null)
+            motorLift.setPower(liftPower);
+    } //--------------------------------------------------------------------------setLiftPower
     /**
-     * Access the chain_hooks motor's power level.
+     * Access the chainHooks motor's power level.
      */
-    double a_chain_hooks_power () {
-        double l_return = 0.0;
-
-        if (v_motor_chain_hooks != null)
-            l_return = v_motor_chain_hooks.getPower ();
-
-        return l_return;
-    } // a_chain_hooks_power
-    //--------------------------------------------------------------------------
+    double getChainHooksPower () {
+        double returnLevel = 0.0;
+        if (motorChainHooks != null)
+            returnLevel = motorChainHooks.getPower ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getChainHooksPower
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    void set_chain_hooks_power (double p_chain_hooks_power) {
-        if (v_motor_chain_hooks != null)
-            v_motor_chain_hooks.setPower(p_chain_hooks_power);
-    } // set_lift_power
-    //--------------------------------------------------------------------------
+    void setChainHooksPower (double chainHooksPower) {
+        chainHooksPower = clipMotor(chainHooksPower);
+        if (motorChainHooks != null)
+            motorChainHooks.setPower(chainHooksPower);
+    } //--------------------------------------------------------------------------setChainHooksPower
     /**
      * Access the spinner motor's power level.
      */
-    double a_spinner_power () {
-        double l_return = 0.0;
-
-        if (v_motor_spinner != null)
-            l_return = v_motor_spinner.getPower ();
-
-        return l_return;
-    } // a_spinner_power
-    //--------------------------------------------------------------------------
+    double getSpinnerPower () {
+        double returnLevel = 0.0;
+        if (motorSpinner != null)
+            returnLevel = motorSpinner.getPower ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getSpinnerPower
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    void set_spinner_power (double p_spinner_power, double p_back_spinner_power) {
-        if (v_motor_spinner != null) {
-            if (p_spinner_power == 0)
-                p_spinner_power = -p_back_spinner_power;
-            v_motor_spinner.setPower(p_spinner_power);
+    void setSpinnerPower (double spinnerPower, double backSpinnerPower) {
+        if (motorSpinner != null) {
+            if (spinnerPower == 0)
+                spinnerPower = -backSpinnerPower;
+            motorSpinner.setPower(spinnerPower);
         }
-    } // set_spinner_power
-    // --------------------------------------------------------------------------
+    } //--------------------------------------------------------------------------setSpinnerPower
     /**
      * Access the bucket motor's power level.
      */
-    double a_bucket_power () {
-        double l_return = 0.0;
-
-        if (v_motor_bucket != null)
-            l_return = v_motor_bucket.getPower ();
-
-        return l_return;
-    } // a_bucket_power
-    //--------------------------------------------------------------------------
+    double getBucketPower () {
+        double returnLevel = 0.0;
+        if (motorBucket != null)
+            returnLevel = motorBucket.getPower ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getBucketPower
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    void set_bucket_power (double p_bucket_power, double p_back_bucket_power) {
-        if (v_motor_bucket != null) {
-            if (p_bucket_power == 0)
-                p_bucket_power = -p_back_bucket_power;
-            v_motor_bucket.setPower(p_bucket_power);
+    void setBucketPower (double bucketPower, double backBucketPower) {
+        if (motorBucket != null) {
+            if (bucketPower == 0)
+                bucketPower = -backBucketPower;
+            motorBucket.setPower(bucketPower);
         }
-    } // set_bucket_power
-    //--------------------------------------------------------------------------
+    } //--------------------------------------------------------------------------setBucketPower
     /**
      * Access the sweeper motor's power level.
      */
-    double a_sweeper_power () {
-        double l_return = 0.0;
-
-        if (v_motor_sweeper != null)
-            l_return = v_motor_sweeper.getPower ();
-
-        return l_return;
-    } // a_sweeper_power
-    //--------------------------------------------------------------------------
+    double getSweeperPower () {
+        double returnLevel = 0.0;
+        if (motorSweeper != null)
+            returnLevel = motorSweeper.getPower ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getSweeperPower
     /**
      * Scale the joystick input using a nonlinear algorithm.
      */
-    void set_sweeper_power (double p_sweeper_power) {
-        if (v_motor_sweeper != null)
-            v_motor_sweeper.setPower(p_sweeper_power);
-    } // set_sweeper_power
-    //--------------------------------------------------------------------------
+    void setSweeperPower (double sweeperPower) {
+        if (motorSweeper != null)
+            motorSweeper.setPower(sweeperPower);
+    } //--------------------------------------------------------------------------setSweeperPower
+    //------------Servos------------
     /**
-     * Set the left_drive wheel encoder to run, if the mode is appropriate.
+     * Access the bucketDoor position.
      */
-    public void run_using_left_drive_encoder () {
-        if (v_motor_left_drive != null) {
-            v_motor_left_drive.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        }
-    } // run_using_left_drive_encoder
-    //--------------------------------------------------------------------------
+    double getBucketDoorPosition () {
+        double returnLevel = 0.5;
+        if (servoBucketDoor != null)
+            returnLevel = servoBucketDoor.getPosition();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getBucketDoorPosition
     /**
-     * Set the right_drive wheel encoder to run, if the mode is appropriate.
+     * Mutate bucketDoor position.
      */
-    public void run_using_right_drive_encoder () {
-        if (v_motor_right_drive != null) {
-            v_motor_right_drive.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        }
-    } // run_using_right_drive_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set the lift_arm wheel encoder to run, if the mode is appropriate.
-     */
-    public void run_using_lift_arm_encoder () {
-        if (v_motor_lift_arm != null) {
-            v_motor_lift_arm.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        }
-    } // run_using_lift_arm_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set the lift wheel encoder to run, if the mode is appropriate.
-     */
-    public void run_using_lift_encoder () {
-        if (v_motor_lift != null) {
-            v_motor_lift.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        }
-    } // run_using_lift_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set the chain_hooks wheel encoder to run, if the mode is appropriate.
-     */
-    public void run_using_chain_hooks_encoder () {
-        if (v_motor_chain_hooks != null) {
-            v_motor_chain_hooks.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        }
-    } // run_using_chain_hooks_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set the spinner wheel encoder to run, if the mode is appropriate.
-     */
-    public void run_using_spinner_encoder () {
-        if (v_motor_spinner != null) {
-            v_motor_spinner.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        }
-    } // run_using_spinner_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set the bucket wheel encoder to run, if the mode is appropriate.
-     */
-    public void run_using_bucket_encoder () {
-        if (v_motor_bucket != null) {
-            v_motor_bucket.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        }
-    } // run_using_bucket_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set the sweeper wheel encoder to run, if the mode is appropriate.
-     */
-    public void run_using_sweeper_encoder () {
-        if (v_motor_sweeper != null) {
-            v_motor_sweeper.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        }
-    } // run_using_sweeper_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set both drive wheel encoders to run, if the mode is appropriate.
-     */
-    public void run_using_encoders () {
-        // Call other members to perform the action on both motors.
-        run_using_left_drive_encoder ();
-        run_using_right_drive_encoder();
-        run_using_lift_arm_encoder();
-        run_using_lift_encoder ();
-        run_using_chain_hooks_encoder();
-        run_using_spinner_encoder ();
-        run_using_bucket_encoder();
-        run_using_sweeper_encoder();
-    } // run_using_encoders
-    //--------------------------------------------------------------------------
-    /**
-     * Set the left_drive wheel encoder to not run, if the mode is appropriate.
-     */
-    public void run_without_left_drive_encoder () {
-        if (v_motor_left_drive != null) {
-            if (v_motor_left_drive.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS) {
-                v_motor_left_drive.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-            }
-        }
-    } // run_without_left_drive_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set the right_drive wheel encoder to not run, if the mode is appropriate.
-     */
-    public void run_without_right_drive_encoder () {
-        if (v_motor_right_drive != null) {
-            if (v_motor_right_drive.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS) {
-                v_motor_right_drive.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-            }
-        }
-    } // run_without_right_drive_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set both drive wheel encoders to not run, if the mode is appropriate.
-     */
-    public void run_without_drive_encoders () {
-        // Call other members to perform the action on both motors.
-        run_without_left_drive_encoder();
-        run_without_right_drive_encoder();
-    } // run_without_drive_encoders
-    //--------------------------------------------------------------------------
-    /**
-     * Set the lift wheel encoder to not run, if the mode is appropriate.
-     */
-    public void run_without_lift_encoder () {
-        if (v_motor_lift != null) {
-            if (v_motor_lift.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS) {
-                v_motor_lift.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-            }
-        }
-    } // run_without_lift_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set the lift_arm wheel encoder to not run, if the mode is appropriate.
-     */
-    public void run_without_lift_arm_encoder () {
-        if (v_motor_lift_arm != null) {
-            if (v_motor_lift_arm.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS) {
-                v_motor_lift_arm.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-            }
-        }
-    } // run_without_lift_arm_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set the chain_hooks wheel encoder to not run, if the mode is appropriate.
-     */
-    public void run_without_chain_hooks_encoder () {
-        if (v_motor_chain_hooks != null) {
-            if (v_motor_chain_hooks.getChannelMode () ==
-                    DcMotorController.RunMode.RESET_ENCODERS) {
-                v_motor_chain_hooks.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-            }
-        }
-    } // run_without_chain_hooks_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set the spinner wheel encoder to not run, if the mode is appropriate.
-     */
-    public void run_without_spinner_encoder () {
-        if (v_motor_spinner != null) {
-            if (v_motor_spinner.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS) {
-                v_motor_spinner.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-            }
-        }
-    } // run_without_spinner_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set the bucket wheel encoder to not run, if the mode is appropriate.
-     */
-    public void run_without_bucket_encoder () {
-        if (v_motor_bucket != null) {
-            if (v_motor_bucket.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS) {
-                v_motor_bucket.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-            }
-        }
-    } // run_without_bucket_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Set the sweeper wheel encoder to not run, if the mode is appropriate.
-     */
-    public void run_without_sweeper_encoder () {
-        if (v_motor_sweeper != null) {
-            if (v_motor_sweeper.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS) {
-                v_motor_sweeper.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-            }
-        }
-    } // run_without_sweeper_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Reset the left_drive wheel encoder.
-     */
-    public void reset_left_drive_encoder () {
-        if (v_motor_left_drive != null) {
-            v_motor_left_drive.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        }
-    } // reset_left_drive_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Reset the right_drive wheel encoder.
-     */
-    public void reset_right_drive_encoder () {
-        if (v_motor_right_drive != null) {
-            v_motor_right_drive.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        }
-    } // reset_right_drive_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Reset both drive wheel encoders.
-     */
-    public void reset_drive_encoders () {
-        // Reset the motor encoders on the drive wheels.
-        reset_left_drive_encoder ();
-        reset_right_drive_encoder ();
-    } // reset_drive_encoders
-    //--------------------------------------------------------------------------
-    /**
-     * Reset the lift wheel encoder.
-     */
-    public void reset_lift_encoder () {
-        if (v_motor_lift != null) {
-            v_motor_lift.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        }
-    } // reset_lift_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Reset the lift_arm wheel encoder.
-     */
-    public void reset_lift_arm_encoder () {
-        if (v_motor_lift_arm != null) {
-            v_motor_lift_arm.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        }
-    } // reset_lift_arm_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Reset the chain_hooks wheel encoder.
-     */
-    public void reset_chain_hooks_encoder () {
-        if (v_motor_chain_hooks != null) {
-            v_motor_chain_hooks.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        }
-    } // reset_chain_hooks_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Reset the spinner wheel encoder.
-     */
-    public void reset_spinner_encoder () {
-        if (v_motor_spinner != null) {
-            v_motor_spinner.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        }
-    } // reset_spinner_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Reset the bucket wheel encoder.
-     */
-    public void reset_bucket_encoder () {
-        if (v_motor_bucket != null) {
-            v_motor_bucket.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        }
-    } // reset_bucket_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Reset the sweeper wheel encoder.
-     */
-    public void reset_sweeper_encoder () {
-        if (v_motor_sweeper != null) {
-            v_motor_sweeper.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        }
-    } // reset_sweeper_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Access the left encoder's count.
-     */
-    int a_left_encoder_count () {
-        int l_return = 0;
-
-        if (v_motor_left_drive != null)
-            l_return = v_motor_left_drive.getCurrentPosition ();
-
-        return l_return;
-    } // a_left_encoder_count
-    //--------------------------------------------------------------------------
-    /**
-     * Access the right encoder's count.
-     */
-    int a_right_encoder_count () {
-        int l_return = 0;
-
-        if (v_motor_right_drive != null)
-            l_return = v_motor_right_drive.getCurrentPosition ();
-
-        return l_return;
-    } // a_right_encoder_count
-    //--------------------------------------------------------------------------
-    /**
-     * Access the lift encoder's count.
-     */
-    int a_lift_encoder_count () {
-        int l_return = 0;
-
-        if (v_motor_lift != null)
-            l_return = v_motor_lift.getCurrentPosition ();
-
-        return l_return;
-    } // a_lift_encoder_count
-    //--------------------------------------------------------------------------
-    /**
-     * Access the lift_arm encoder's count.
-     */
-    int a_lift_arm_encoder_count () {
-        int l_return = 0;
-
-        if (v_motor_lift_arm != null)
-            l_return = v_motor_lift_arm.getCurrentPosition ();
-
-        return l_return;
-    } // a_lift_arm_encoder_count
-    //--------------------------------------------------------------------------
-    /**
-     * Access the chain_hooks encoder's count.
-     */
-    int a_chain_hooks_encoder_count () {
-        int l_return = 0;
-
-        if (v_motor_chain_hooks != null)
-            l_return = v_motor_chain_hooks.getCurrentPosition ();
-
-        return l_return;
-    } // a_chain_hooks_encoder_count
-    //--------------------------------------------------------------------------
-    /**
-     * Access the spinner encoder's count.
-     */
-    int a_spinner_encoder_count () {
-        int l_return = 0;
-
-        if (v_motor_spinner != null)
-            l_return = v_motor_spinner.getCurrentPosition ();
-
-        return l_return;
-    } // a_spinner_encoder_count
-    //--------------------------------------------------------------------------
-    /**
-     * Access the bucket encoder's count.
-     */
-    int a_bucket_encoder_count () {
-        int l_return = 0;
-
-        if (v_motor_bucket != null)
-            l_return = v_motor_bucket.getCurrentPosition ();
-
-        return l_return;
-    } // a_bucket_encoder_count
-    //--------------------------------------------------------------------------
-    /**
-     * Access the sweeper encoder's count.
-     */
-    int a_sweeper_encoder_count () {
-        int l_return = 0;
-
-        if (v_motor_sweeper != null)
-            l_return = v_motor_sweeper.getCurrentPosition ();
-
-        return l_return;
-    } // a_sweeper_encoder_count
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the left_drive motor's encoder has reached a value.
-     */
-    boolean has_left_drive_encoder_reached (double p_count) {
-        // Assume failure.
-        boolean l_return = false;
-
-        if (v_motor_left_drive != null) {
-            // Has the encoder reached the specified values?
-            // TODO Implement stall code using these variables.
-            if (Math.abs (v_motor_left_drive.getCurrentPosition ()) > p_count) {
-                // Set the status to a positive indication.
-                l_return = true;
-            }
-        }
-        // Return the status.
-        return l_return;
-    } // has_left_drive_encoder_reached
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the right_drive motor's encoder has reached a value.
-     */
-    boolean has_right_drive_encoder_reached (double p_count) {
-        // Assume failure.
-        boolean l_return = false;
-        if (v_motor_right_drive != null) {
-            // Have the encoders reached the specified values?
-            // TODO Implement stall code using these variables.
-            if (Math.abs (v_motor_right_drive.getCurrentPosition ()) > p_count) {
-                // Set the status to a positive indication.
-                l_return = true;
-            }
-        }
-        // Return the status.
-        return l_return;
-    } // has_right_drive_encoder_reached
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the drive motors' encoders have reached a value.
-     */
-    boolean have_drive_encoders_reached (double p_left_count, double p_right_count) {
-        // Assume failure.
-        boolean l_return = false;
-        // Have the encoders reached the specified values?
-        if (has_left_drive_encoder_reached (p_left_count) &&
-                has_right_drive_encoder_reached (p_right_count)) {
-            // Set the status to a positive indication.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // have_encoders_reached
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the lift motor's encoder has reached a value.
-     */
-    boolean has_lift_encoder_reached (double p_count) {
-        // Assume failure.
-        boolean l_return = false;
-
-        if (v_motor_lift != null) {
-            // Has the encoder reached the specified values?
-            // TODO Implement stall code using these variables.
-            if (Math.abs (v_motor_lift.getCurrentPosition ()) > p_count) {
-                // Set the status to a positive indication.
-                l_return = true;
-            }
-        }
-        // Return the status.
-        return l_return;
-    } // has_lift_encoder_reached
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the lift_arm motor's encoder has reached a value.
-     */
-    boolean has_lift_arm_encoder_reached (double p_count) {
-        // Assume failure.
-        boolean l_return = false;
-
-        if (v_motor_lift_arm != null) {
-            // Has the encoder reached the specified values?
-            // TODO Implement stall code using these variables.
-            if (Math.abs (v_motor_lift_arm.getCurrentPosition ()) > p_count) {
-                // Set the status to a positive indication.
-                l_return = true;
-            }
-        }
-        // Return the status.
-        return l_return;
-    } // has_lift_arm_encoder_reached
-//--------------------------------------------------------------------------
-    /**
-     * Indicate whether the chain_hooks motor's encoder has reached a value.
-     */
-    boolean has_chain_hooks_encoder_reached (double p_count) {
-        // Assume failure.
-        boolean l_return = false;
-
-        if (v_motor_chain_hooks != null) {
-            // Has the encoder reached the specified values?
-            // TODO Implement stall code using these variables.
-            if (Math.abs (v_motor_chain_hooks.getCurrentPosition ()) > p_count) {
-                // Set the status to a positive indication.
-                l_return = true;
-            }
-        }
-        // Return the status.
-        return l_return;
-    } // has_chain_hooks_encoder_reached
-//--------------------------------------------------------------------------
-    /**
-     * Indicate whether the spinner motor's encoder has reached a value.
-     */
-    boolean has_spinner_encoder_reached (double p_count) {
-        // Assume failure.
-        boolean l_return = false;
-
-        if (v_motor_spinner != null) {
-            // Has the encoder reached the specified values?
-            // TODO Implement stall code using these variables.
-            if (Math.abs (v_motor_spinner.getCurrentPosition ()) > p_count) {
-                // Set the status to a positive indication.
-                l_return = true;
-            }
-        }
-        // Return the status.
-        return l_return;
-    } // has_spinner_encoder_reached
-//--------------------------------------------------------------------------
-    /**
-     * Indicate whether the bucket motor's encoder has reached a value.
-     */
-    boolean has_bucket_encoder_reached (double p_count) {
-        // Assume failure.
-        boolean l_return = false;
-
-        if (v_motor_bucket != null) {
-            // Has the encoder reached the specified values?
-            // TODO Implement stall code using these variables.
-            if (Math.abs (v_motor_bucket.getCurrentPosition ()) > p_count) {
-                // Set the status to a positive indication.
-                l_return = true;
-            }
-        }
-        // Return the status.
-        return l_return;
-    } // has_bucket_encoder_reached
-//--------------------------------------------------------------------------
-    /**
-     * Indicate whether the sweeper motor's encoder has reached a value.
-     */
-    boolean has_sweeper_encoder_reached (double p_count) {
-        // Assume failure.
-        boolean l_return = false;
-
-        if (v_motor_sweeper != null) {
-            // Has the encoder reached the specified values?
-            // TODO Implement stall code using these variables.
-            if (Math.abs (v_motor_sweeper.getCurrentPosition ()) > p_count) {
-                // Set the status to a positive indication.
-                l_return = true;
-            }
-        }
-        // Return the status.
-        return l_return;
-    } // has_sweeper_encoder_reached
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the drive motors' encoders have reached a value.
-     */
-    boolean drive_using_encoders (double p_left_power, double p_right_power, double p_left_count
-            , double p_right_count) {
-        // Assume the encoders have not reached the limit.
-        boolean l_return = false;
-        // Tell the system that motor encoders will be used.
-        run_using_encoders ();
-        // Start the drive wheel motors at full power.
-        set_drive_power(p_left_power, p_right_power);
-        // Have the motor shafts turned the required amount?
-        // If they haven't, then the op-mode remains in this state (i.e this
-        // block will be executed the next time this method is called).
-        if (have_drive_encoders_reached(p_left_count, p_right_count)) {
-            // Reset the encoders to ensure they are at a known good value.
-            reset_drive_encoders();
-            // Stop the motors.
-            set_drive_power(0.0f, 0.0f);
-            // Transition to the next state when this method is called again.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // drive_using_encoders
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the lift motor's encoder has reached a value.
-     */
-    boolean lift_using_encoder (double p_lift_power, double p_lift_count) {
-        // Assume the encoder has not reached the limit.
-        boolean l_return = false;
-        // Tell the system that motor encoder will be used.
-        run_using_encoders ();
-        // Start the lift wheel motor at full power.
-        set_lift_power(p_lift_power);
-        // Has the motor shaft turned the required amount?
-        // If it hasn't, then the op-mode remains in this state (i.e this
-        // block will be executed the next time this method is called).
-        if (has_lift_encoder_reached(p_lift_count)) {
-            // Reset the encoder to ensure it is at a known good value.
-            reset_lift_encoder();
-            // Stop the motor.
-            set_lift_power(0.0f);
-            // Transition to the next state when this method is called again.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // lift_using_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the lift_arm motor's encoder has reached a value.
-     */
-    boolean lift_arm_using_encoder (double p_lift_arm_power, double p_lift_arm_count) {
-        // Assume the encoder has not reached the limit.
-        boolean l_return = false;
-        // Tell the system that motor encoder will be used.
-        run_using_encoders ();
-        // Start the lift_arm wheel motor at full power.
-        set_lift_arm_power(p_lift_arm_power);
-        // Has the motor shaft turned the required amount?
-        // If it hasn't, then the op-mode remains in this state (i.e this
-        // block will be executed the next time this method is called).
-        if (has_lift_arm_encoder_reached(p_lift_arm_count)) {
-            // Reset the encoder to ensure it is at a known good value.
-            reset_lift_arm_encoder();
-            // Stop the motor.
-            set_lift_arm_power(0.0f);
-            // Transition to the next state when this method is called again.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // lift_arm_using_encoder
-    // --------------------------------------------------------------------------
-    /**
-     * Indicate whether the chain_hooks motor's encoder has reached a value.
-     */
-    boolean chain_hooks_using_encoder (double p_chain_hooks_power, double p_chain_hooks_count) {
-        // Assume the encoder has not reached the limit.
-        boolean l_return = false;
-        // Tell the system that motor encoder will be used.
-        run_using_encoders ();
-        // Start the chain_hooks wheel motor at full power.
-        set_chain_hooks_power(p_chain_hooks_power);
-        // Has the motor shaft turned the required amount?
-        // If it hasn't, then the op-mode remains in this state (i.e this
-        // block will be executed the next time this method is called).
-        if (has_chain_hooks_encoder_reached(p_chain_hooks_count)) {
-            // Reset the encoder to ensure it is at a known good value.
-            reset_chain_hooks_encoder();
-            // Stop the motor.
-            set_chain_hooks_power(0.0f);
-            // Transition to the next state when this method is called again.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // chain_hooks_using_encoder
-    // --------------------------------------------------------------------------
-    /**
-     * Indicate whether the spinner motor's encoder has reached a value.
-     */
-    boolean spinner_using_encoder (double p_spinner_power, double p_back_spinner_power, double p_spinner_count) {
-        // Assume the encoder has not reached the limit.
-        boolean l_return = false;
-        // Tell the system that motor encoder will be used.
-        run_using_encoders ();
-        // Start the spinner wheel motor at full power.
-        set_spinner_power(p_spinner_power, p_back_spinner_power);
-        // Has the motor shaft turned the required amount?
-        // If it hasn't, then the op-mode remains in this state (i.e this
-        // block will be executed the next time this method is called).
-        if (has_spinner_encoder_reached(p_spinner_count)) {
-            // Reset the encoder to ensure it is at a known good value.
-            reset_spinner_encoder();
-            // Stop the motor.
-            set_spinner_power(0.0f, 0.0f);
-            // Transition to the next state when this method is called again.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // spinner_using_encoder
-    // --------------------------------------------------------------------------
-    /**
-     * Indicate whether the bucket motor's encoder has reached a value.
-     */
-    boolean bucket_using_encoder (double p_bucket_power, double p_back_bucket_power, double p_bucket_count) {
-        // Assume the encoder has not reached the limit.
-        boolean l_return = false;
-        // Tell the system that motor encoder will be used.
-        run_using_encoders ();
-        // Start the bucket wheel motor at full power.
-        set_bucket_power(p_bucket_power,p_back_bucket_power);
-        // Has the motor shaft turned the required amount?
-        // If it hasn't, then the op-mode remains in this state (i.e this
-        // block will be executed the next time this method is called).
-        if (has_bucket_encoder_reached(p_bucket_count)) {
-            // Reset the encoder to ensure it is at a known good value.
-            reset_bucket_encoder();
-            // Stop the motor.
-            set_bucket_power(0.0f, 0.0f);
-            // Transition to the next state when this method is called again.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // bucket_using_encoder
-    // --------------------------------------------------------------------------
-    /**
-     * Indicate whether the sweeper motor's encoder has reached a value.
-     */
-    boolean sweeper_using_encoder (double p_sweeper_power, double p_sweeper_count) {
-        // Assume the encoder has not reached the limit.
-        boolean l_return = false;
-        // Tell the system that motor encoder will be used.
-        run_using_encoders ();
-        // Start the sweeper wheel motor at full power.
-        set_sweeper_power(p_sweeper_power);
-        // Has the motor shaft turned the required amount?
-        // If it hasn't, then the op-mode remains in this state (i.e this
-        // block will be executed the next time this method is called).
-        if (has_sweeper_encoder_reached(p_sweeper_count)) {
-            // Reset the encoder to ensure it is at a known good value.
-            reset_sweeper_encoder();
-            // Stop the motor.
-            set_sweeper_power(0.0f);
-            // Transition to the next state when this method is called again.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // sweeper_using_encoder
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the left_drive encoder has been completely reset.
-     */
-    boolean has_left_drive_encoder_reset () {
-        // Assume failure.
-        boolean l_return = false;
-        // Has the left encoder reached zero?
-        if (a_left_encoder_count() == 0) {
-            // Set the status to a positive indication.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // has_left_drive_encoder_reset
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the right_drive encoder has been completely reset.
-     */
-    boolean has_right_drive_encoder_reset () {
-        // Assume failure.
-        boolean l_return = false;
-        // Has the right encoder reached zero?
-        if (a_right_encoder_count() == 0) {
-            // Set the status to a positive indication.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // has_right_drive_encoder_reset
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the encoders have been completely reset.
-     */
-    boolean have_drive_encoders_reset () {
-        // Assume failure.
-        boolean l_return = false;
-        // Have the encoders reached zero?
-        if (has_left_drive_encoder_reset() && has_right_drive_encoder_reset ()) {
-            // Set the status to a positive indication.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // have_drive_encoders_reset
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the lift encoder has been completely reset.
-     */
-    boolean has_lift_encoder_reset () {
-        // Assume failure.
-        boolean l_return = false;
-        // Has the lift encoder reached zero?
-        if (a_lift_encoder_count() == 0) {
-            // Set the status to a positive indication.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // has_lift_encoder_reset
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the lift_arm encoder has been completely reset.
-     */
-    boolean has_lift_arm_encoder_reset () {
-        // Assume failure.
-        boolean l_return = false;
-        // Has the lift_arm encoder reached zero?
-        if (a_lift_arm_encoder_count() == 0) {
-            // Set the status to a positive indication.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // has_lift_arm_encoder_reset
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the chain_hooks encoder has been completely reset.
-     */
-    boolean has_chain_hooks_encoder_reset () {
-        // Assume failure.
-        boolean l_return = false;
-        // Has the chain_hooks encoder reached zero?
-        if (a_chain_hooks_encoder_count() == 0) {
-            // Set the status to a positive indication.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // has_chain_hooks_encoder_reset
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the spinner encoder has been completely reset.
-     */
-    boolean has_spinner_encoder_reset () {
-        // Assume failure.
-        boolean l_return = false;
-        // Has the spinner encoder reached zero?
-        if (a_spinner_encoder_count() == 0) {
-            // Set the status to a positive indication.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // has_spinner_encoder_reset
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the bucket encoder has been completely reset.
-     */
-    boolean has_bucket_encoder_reset () {
-        // Assume failure.
-        boolean l_return = false;
-        // Has the bucket encoder reached zero?
-        if (a_bucket_encoder_count() == 0) {
-            // Set the status to a positive indication.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // has_bucket_encoder_reset
-    //--------------------------------------------------------------------------
-    /**
-     * Indicate whether the sweeper encoder has been completely reset.
-     */
-    boolean has_sweeper_encoder_reset () {
-        // Assume failure.
-        boolean l_return = false;
-        // Has the sweeper encoder reached zero?
-        if (a_sweeper_encoder_count() == 0) {
-            // Set the status to a positive indication.
-            l_return = true;
-        }
-        // Return the status.
-        return l_return;
-    } // has_sweeper_encoder_reset
-    //--------------------------------------------------------------------------
-    /**
-     * Access the bucket_door position.
-     */
-    double a_bucket_door_position () {
-        double l_return = 0.5;
-
-        if (v_servo_bucket_door != null)
-            l_return = v_servo_bucket_door.getPosition ();
-
-        return l_return;
-    } // a_bucket_door_position
-    //--------------------------------------------------------------------------
+    void setBucketDoorPosition (double bucketDoorPosition) {
+        bucketDoorPosition = clipServo(bucketDoorPosition); // Ensure the specific value is legal.
+        if (servoBucketDoor != null)
+            servoBucketDoor.setPosition(bucketDoorPosition); // Set the Position.
+    } //--------------------------------------------------------------------------setBucketDoorPosition
     /**
      * Access the hook position.
      */
-    double a_hook_position () {
-        double l_return = 0.5;
-
-        if (v_servo_hook != null)
-            l_return = v_servo_hook.getPosition ();
-
-        return l_return;
-    } // a_servo_bucket_door_position
-    //--------------------------------------------------------------------------
-    /**
-     * Mutate bucket_door position.
-     */
-    void m_bucket_door_position (double p_bucket_door_position) {
-        // Ensure the specific value is legal.
-        double l_bucket_door_position = Range.clip (p_bucket_door_position, Servo.MIN_POSITION, Servo.MAX_POSITION);
-        // Set the value.
-        if (v_servo_bucket_door != null)
-            v_servo_bucket_door.setPosition (l_bucket_door_position);
-    } // m_bucket_door_position
-    //--------------------------------------------------------------------------
+    double getHookPosition () {
+        double returnLevel = 0.5;
+        if (servoHook != null)
+            returnLevel = servoHook.getPosition();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getHookPosition
     /**
      * Mutate hook position.
      */
-    void m_hook_position (double p_hook_position) {
-        // Ensure the specific value is legal.
-        double l_hook_position = Range.clip( p_hook_position, Servo.MIN_POSITION, Servo.MAX_POSITION);
-        // Set the value.
-        if (v_servo_hook != null)
-            v_servo_hook.setPosition (l_hook_position);
-    } // m_hook_position
-    //--------------------------------------------------------------------------
+    void setHookPosition (double hookPosition) {
+        hookPosition = clipServo(hookPosition); // Ensure the specific value is legal.
+        if (servoHook != null)
+            servoHook.setPosition (hookPosition); // Set the Position.
+    } //--------------------------------------------------------------------------setHookPosition
     /**
      * Set all servos to starting position
      */
-    void all_servos_starting_position () {
+    void allServosStartingPosition () {
         double bucketDoorPosition = 0.5;
         double hookPosition = 0.5;
-        // Set the value.
-        if (v_servo_bucket_door != null)
-            v_servo_bucket_door.setPosition (bucketDoorPosition);
-        if (v_servo_hook != null)
-            v_servo_hook.setPosition (hookPosition);
-    } // all_servos_starting_position
-    //--------------------------------------------------------------------------
+        if (servoBucketDoor != null)
+            servoBucketDoor.setPosition (bucketDoorPosition); // Set the Position.
+        if (servoHook != null)
+            servoHook.setPosition (hookPosition); // Set the Position.
+    } //--------------------------------------------------------------------------allServosStartingPosition
+    //------------ Motor Wheel Encoders------------
+    /**
+     * Set the leftDrive wheel encoder to run, if the mode is appropriate.
+     */
+    public void runUsingLeftDriveEncoder () {
+        if (motorLeftDrive != null) {
+            motorLeftDrive.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runUsingLeftDriveEncoder
+    /**
+     * Set the rightDrive wheel encoder to run, if the mode is appropriate.
+     */
+    public void runUsingRightDriveEncoder () {
+        if (motorRightDrive != null) {
+            motorRightDrive.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runUsingRightDriveEncoder
+    /**
+     * Set the liftArm wheel encoder to run, if the mode is appropriate.
+     */
+    public void runUsingLiftArmEncoder () {
+        if (motorLiftArm != null) {
+            motorLiftArm.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runUsingLiftArmEncoder
+    /**
+     * Set the lift wheel encoder to run, if the mode is appropriate.
+     */
+    public void runUsingLiftEncoder () {
+        if (motorLift != null) {
+            motorLift.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runUsingLiftEncoder
+    /**
+     * Set the chainHooks wheel encoder to run, if the mode is appropriate.
+     */
+    public void runUsingChainHooksEncoder () {
+        if (motorChainHooks != null) {
+            motorChainHooks.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runUsingChainHooksEncoder
+    /**
+     * Set the spinner wheel encoder to run, if the mode is appropriate.
+     */
+    public void runUsingSpinnerEncoder () {
+        if (motorSpinner != null) {
+            motorSpinner.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runUsingSpinnerEncoder
+    /**
+     * Set the bucket wheel encoder to run, if the mode is appropriate.
+     */
+    public void runUsingBucketEncoder () {
+        if (motorBucket != null) {
+            motorBucket.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runUsingBucketEncoder
+    /**
+     * Set the sweeper wheel encoder to run, if the mode is appropriate.
+     */
+    public void runUsingSweeperEncoder () {
+        if (motorSweeper != null) {
+            motorSweeper.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runUsingSweeperEncoder
+    /**
+     * Set both drive wheel encoders to run, if the mode is appropriate.
+     */
+    public void RUN_USING_ENCODERS () {
+        // Call other members to perform the action on both motors.
+        runUsingLeftDriveEncoder();
+        runUsingRightDriveEncoder();
+        runUsingLiftArmEncoder();
+        runUsingLiftEncoder();
+        runUsingChainHooksEncoder();
+        runUsingSpinnerEncoder();
+        runUsingBucketEncoder();
+        runUsingSweeperEncoder();
+    } //--------------------------------------------------------------------------RUN_USING_ENCODERS
+    //------------Set Motor Wheel Encoders------------
+    /**
+     * Set the leftDrive wheel encoder to not run, if the mode is appropriate.
+     */
+    public void runWithoutLeftDriveEncoder () {
+        if (motorLeftDrive != null) {
+            if (motorLeftDrive.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS)
+                motorLeftDrive.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runWithoutLeftDriveEncoder
+    /**
+     * Set the rightDrive wheel encoder to not run, if the mode is appropriate.
+     */
+    public void runWithoutRightDriveEncoder () {
+        if (motorRightDrive != null) {
+            if (motorRightDrive.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS)
+                motorRightDrive.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runWithoutRightDriveEncoder
+    /**
+     * Set both drive wheel encoders to not run, if the mode is appropriate.
+     */
+    public void runWithoutDriveEncoders () {
+        // Call other members to perform the action on both motors.
+        runWithoutLeftDriveEncoder();
+        runWithoutRightDriveEncoder();
+    } //--------------------------------------------------------------------------runWithoutDriveEncoders
+    /**
+     * Set the liftArm wheel encoder to not run, if the mode is appropriate.
+     */
+    public void runWithoutLiftArmEncoder () {
+        if (motorLiftArm != null) {
+            if (motorLiftArm.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS)
+                motorLiftArm.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runWithoutLiftArmEncoder
+    /**
+     * Set the lift wheel encoder to not run, if the mode is appropriate.
+     */
+    public void runWithoutLiftEncoder () {
+        if (motorLift != null) {
+            if (motorLift.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS)
+                motorLift.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runWithoutLiftEncoder
+    /**
+     * Set the chainHooks wheel encoder to not run, if the mode is appropriate.
+     */
+    public void runWithoutChainHooksEncoder () {
+        if (motorChainHooks != null) {
+            if (motorChainHooks.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS)
+                motorChainHooks.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runWithoutChainHooksEncoder
+    /**
+     * Set the spinner wheel encoder to not run, if the mode is appropriate.
+     */
+    public void runWithoutSpinnerEncoder () {
+        if (motorSpinner != null) {
+            if (motorSpinner.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS)
+                motorSpinner.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runWithoutSpinnerEncoder
+    /**
+     * Set the bucket wheel encoder to not run, if the mode is appropriate.
+     */
+    public void runWithoutBucketEncoder () {
+        if (motorBucket != null) {
+            if (motorBucket.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS)
+                motorBucket.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runWithoutBucketEncoder
+    /**
+     * Set the sweeper wheel encoder to not run, if the mode is appropriate.
+     */
+    public void runWithoutSweeperEncoder () {
+        if (motorSweeper != null) {
+            if (motorSweeper.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS)
+                motorSweeper.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        }
+    } //--------------------------------------------------------------------------runWithoutSweeperEncoder
+    //------------Reset Motor Wheel Encoders------------
+    /**
+     * Reset the leftDrive wheel encoder.
+     */
+    public void resetLeftDriveEncoder () {
+        if (motorLeftDrive != null)
+            motorLeftDrive.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    } //--------------------------------------------------------------------------resetLeftDriveEncoder
+    /**
+     * Reset the rightDrive wheel encoder.
+     */
+    public void resetRightDriveEncoder () {
+        if (motorRightDrive != null)
+            motorRightDrive.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    } //--------------------------------------------------------------------------resetRightDriveEncoder
+    /**
+     * Reset both drive wheel encoders.
+     */
+    public void resetDriveEncoders () {
+        // Reset the motor encoders on the drive wheels.
+        resetLeftDriveEncoder();
+        resetRightDriveEncoder();
+    } //--------------------------------------------------------------------------resetDriveEncoders
+    /**
+     * Reset the liftArm wheel encoder.
+     */
+    public void resetLiftArmEncoder () {
+        if (motorLiftArm != null)
+            motorLiftArm.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    } //--------------------------------------------------------------------------resetLiftArmEncoder
+    /**
+     * Reset the lift wheel encoder.
+     */
+    public void resetLiftEncoder () {
+        if (motorLift != null)
+            motorLift.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    } //--------------------------------------------------------------------------resetLiftEncoder
+    /**
+     * Reset the chainHooks wheel encoder.
+     */
+    public void resetChainHooksEncoder () {
+        if (motorChainHooks != null)
+            motorChainHooks.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    } //--------------------------------------------------------------------------resetChainHooksEncoder
+    /**
+     * Reset the spinner wheel encoder.
+     */
+    public void resetSpinnerEncoder () {
+        if (motorSpinner != null)
+            motorSpinner.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    } //--------------------------------------------------------------------------resetSpinnerEncoder
+    /**
+     * Reset the bucket wheel encoder.
+     */
+    public void resetBucketEncoder () {
+        if (motorBucket != null)
+            motorBucket.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    } //--------------------------------------------------------------------------resetBucketEncoder
+     /**
+     * Reset the sweeper wheel encoder.
+     */
+    public void resetSweeperEncoder () {
+        if (motorSweeper != null)
+            motorSweeper.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    } //--------------------------------------------------------------------------resetSweeperEncoder
+    //------------Get Motor Wheel Encoder Count------------
+    /**
+     * Access the left encoder's count.
+     */
+    int getLeftEncoderCount () {
+        int returnLevel = 0;
+        if (motorLeftDrive != null)
+            returnLevel = motorLeftDrive.getCurrentPosition ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getLeftEncoderCount
+    /**
+     * Access the right encoder's count.
+     */
+    int getRightEncoderCount () {
+        int returnLevel = 0;
+        if (motorRightDrive != null)
+            returnLevel = motorRightDrive.getCurrentPosition ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getRightEncoderCount
+    /**
+     * Access the liftArm encoder's count.
+     */
+    int getLiftArmEncoderCount () {
+        int returnLevel = 0;
+        if (motorLiftArm != null)
+            returnLevel = motorLiftArm.getCurrentPosition ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getLiftArmEncoderCount
+    /**
+     * Access the lift encoder's count.
+     */
+    int getLiftEncoderCount () {
+        int returnLevel = 0;
+        if (motorLift != null)
+            returnLevel = motorLift.getCurrentPosition ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getLiftEncoderCount
+    /**
+     * Access the chainHooks encoder's count.
+     */
+    int getChainHooksEncoderCount () {
+        int returnLevel = 0;
+        if (motorChainHooks != null)
+            returnLevel = motorChainHooks.getCurrentPosition ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getChainHooksEncoderCount
+    /**
+     * Access the spinner encoder's count.
+     */
+    int getSpinnerEncoderCount () {
+        int returnLevel = 0;
+        if (motorSpinner != null)
+            returnLevel = motorSpinner.getCurrentPosition ();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getSpinnerEncoderCount
+    /**
+     * Access the bucket encoder's count.
+     */
+    int getBucketEncoderCount () {
+        int returnLevel = 0;
+        if (motorBucket != null)
+            returnLevel = motorBucket.getCurrentPosition();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getBucketEncoderCount
+    /**
+     * Access the sweeper encoder's count.
+     */
+    int getSweeperEncoderCount () {
+        int returnLevel = 0;
+        if (motorSweeper != null)
+            returnLevel = motorSweeper.getCurrentPosition();
+        return returnLevel;
+    } //--------------------------------------------------------------------------getSweeperEncoderCount
+    //------------Indicate Motor Wheel Encoders Value------------
+    /**
+     * Indicate whether the leftDrive motor's encoder has reached a value.
+     */
+    boolean hasLeftDriveEncoderReached (double count) {
+        boolean returnLevel = false; // Assume failure.
+        if (motorLeftDrive != null) {
+            // Has the encoder reached the specified values?
+            // TODO Implement stall code using these variables.
+            if (Math.abs (motorLeftDrive.getCurrentPosition ()) > count)
+                returnLevel = true; // Set the status to a positive indication.
+        }
+        return returnLevel;  // Return the status.
+    } //--------------------------------------------------------------------------hasLeftDriveEncoderReached
+    /**
+     * Indicate whether the rightDrive motor's encoder has reached a value.
+     */
+    boolean hasRightDriveEncoderReached (double count) {
+        boolean returnLevel = false; // Assume failure.
+        if (motorRightDrive != null) {
+            // Have the encoders reached the specified values?
+            // TODO Implement stall code using these variables.
+            if (Math.abs (motorRightDrive.getCurrentPosition ()) > count)
+                returnLevel = true; // Set the status to a positive indication.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasRightDriveEncoderReached
+    /**
+     * Indicate whether the drive motors' encoders have reached a value.
+     */
+    boolean haveDriveEncodersReached (double leftCount, double rightCount) {
+        boolean returnLevel = false; // Assume failure.
+        // Have the encoders reached the specified values?
+        if (hasLeftDriveEncoderReached(leftCount) && hasRightDriveEncoderReached(rightCount))
+            returnLevel = true; // Set the status to a positive indication.
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------haveDriveEncodersReached
+    /**
+     * Indicate whether the liftArm motor's encoder has reached a value.
+     */
+    boolean hasLiftArmEncoderReached (double count) {
+        boolean returnLevel = false; // Assume failure.
+        if (motorLiftArm != null) {
+            // Has the encoder reached the specified values?
+            // TODO Implement stall code using these variables.
+            if (Math.abs (motorLiftArm.getCurrentPosition ()) > count)
+                returnLevel = true; // Set the status to a positive indication.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasLiftArmEncoderReached
+    /**
+     * Indicate whether the lift motor's encoder has reached a value.
+     */
+    boolean hasLiftEncoderReached (double count) {
+        boolean returnLevel = false; // Assume failure.
+        if (motorLift != null) {
+            // Has the encoder reached the specified values?
+            // TODO Implement stall code using these variables.
+            if (Math.abs (motorLift.getCurrentPosition ()) > count)
+                returnLevel = true; // Set the status to a positive indication.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasLiftEncoderReached
+    /**
+     * Indicate whether the chainHooks motor's encoder has reached a value.
+     */
+    boolean hasChainHooksEncoderReached (double count) {
+        boolean returnLevel = false; // Assume failure.
+        if (motorChainHooks != null) {
+            // Has the encoder reached the specified values?
+            // TODO Implement stall code using these variables.
+            if (Math.abs (motorChainHooks.getCurrentPosition ()) > count)
+                returnLevel = true; // Set the status to a positive indication.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasChainHooksEncoderReached
+    /**
+     * Indicate whether the spinner motor's encoder has reached a value.
+     */
+    boolean hasSpinnerEncoderReached (double count) {
+        boolean returnLevel = false; // Assume failure.
+        if (motorSpinner != null) {
+            // Has the encoder reached the specified values?
+            // TODO Implement stall code using these variables.
+            if (Math.abs (motorSpinner.getCurrentPosition ()) > count)
+                returnLevel = true; // Set the status to a positive indication.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasSpinnerEncoderReached
+    /**
+     * Indicate whether the bucket motor's encoder has reached a value.
+     */
+    boolean hasBucketEncoderReached (double count) {
+        boolean returnLevel = false; // Assume failure.
+        if (motorBucket != null) {
+            // Has the encoder reached the specified values?
+            // TODO Implement stall code using these variables.
+            if (Math.abs (motorBucket.getCurrentPosition ()) > count)
+                returnLevel = true; // Set the status to a positive indication.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasBucketEncoderReached
+    /**
+     * Indicate whether the sweeper motor's encoder has reached a value.
+     */
+    boolean hasSweeperEncoderReached (double count) {
+        boolean returnLevel = false; // Assume failure.
+        if (motorSweeper != null) {
+            // Has the encoder reached the specified values?
+            // TODO Implement stall code using these variables.
+            if (Math.abs (motorSweeper.getCurrentPosition ()) > count)
+                returnLevel = true; // Set the status to a positive indication.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasSweeperEncoderReached
+    //------------Use Motor Wheel Encoders------------
+    /**
+     * Indicate whether the drive motors' encoders have reached a value.
+     */
+    boolean driveUsingEncoders (double leftPower, double rightPower, double leftCount, double rightCount) {
+        boolean returnLevel = false; // Assume the encoders have not reached the limit.
+        RUN_USING_ENCODERS(); // Tell the system that motor encoders will be used.
+        setDrivePower(leftPower, rightPower); // Start the drive wheel motors at full power.
+        // Have the motor shafts turned the required amount?
+        // If they haven't, then the op-mode remains in this state (i.e this block will be executed the next time this method is called).
+        if (haveDriveEncodersReached(leftCount, rightCount)) {
+            resetDriveEncoders(); // Reset the encoders to ensure they are at a known good value.
+            setDrivePower(0.0f, 0.0f); // Stop the motors.
+            returnLevel = true; // Transition to the next state when this method is called again.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------driveUsingEncoders
+    /**
+     * Indicate whether the liftArm motor's encoder has reached a value.
+     */
+    boolean runLiftArmUsingEncoder (double liftArmPower, double liftArmCount) {
+        boolean returnLevel = false; // Assume the encoder has not reached the limit.
+        RUN_USING_ENCODERS(); // Tell the system that motor encoder will be used.
+        setLiftArmPower(liftArmPower); // Start the lift wheel motor at full power.
+        // Has the motor shaft turned the required amount?
+        // If it hasn't, then the op-mode remains in this state (i.e this block will be executed the next time this method is called).
+        if (hasLiftArmEncoderReached(liftArmCount)) {
+            resetLiftArmEncoder(); // Reset the encoder to ensure it is at a known good value.
+            setLiftArmPower(0.0f); // Stop the motor.
+            returnLevel = true; // Transition to the next state when this method is called again.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------runLiftArmUsingEncoder
+    /**
+     * Indicate whether the lift motor's encoder has reached a value.
+     */
+    boolean runLiftUsingEncoder (double liftPower, double liftCount) {
+        boolean returnLevel = false; // Assume the encoder has not reached the limit.
+        RUN_USING_ENCODERS(); // Tell the system that motor encoder will be used.
+        setLiftPower(liftPower); // Start the lift wheel motor at full power.
+        // Has the motor shaft turned the required amount?
+        // If it hasn't, then the op-mode remains in this state (i.e this block will be executed the next time this method is called).
+        if (hasLiftEncoderReached(liftCount)) {
+            resetLiftEncoder(); // Reset the encoder to ensure it is at a known good value.
+            setLiftPower(0.0f); // Stop the motor.
+            returnLevel = true; // Transition to the next state when this method is called again.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------runLiftUsingEncoder
+    /**
+     * Indicate whether the chainHooks motor's encoder has reached a value.
+     */
+    boolean runChainHooksUsingEncoder (double chainHooksPower, double chainHooksCount) {
+        boolean returnLevel = false; // Assume the encoder has not reached the limit.
+        RUN_USING_ENCODERS(); // Tell the system that motor encoder will be used.
+        setChainHooksPower(chainHooksPower); // Start the lift wheel motor at full power.
+        // Has the motor shaft turned the required amount?
+        // If it hasn't, then the op-mode remains in this state (i.e this block will be executed the next time this method is called).
+        if (hasChainHooksEncoderReached(chainHooksCount)) {
+            resetChainHooksEncoder(); // Reset the encoder to ensure it is at a known good value.
+            setChainHooksPower(0.0f); // Stop the motor.
+            returnLevel = true; // Transition to the next state when this method is called again.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------runChainHooksUsingEncoder
+    /**
+     * Indicate whether the spinner motor's encoder has reached a value.
+     */
+    boolean runSpinnerUsingEncoder (double spinnerPower, double backSpinnerPower, double spinnerCount) {
+        boolean returnLevel = false; // Assume the encoder has not reached the limit.
+        RUN_USING_ENCODERS(); // Tell the system that motor encoder will be used.
+        setSpinnerPower(spinnerPower, backSpinnerPower); // Start the lift wheel motor at full power.
+        // Has the motor shaft turned the required amount?
+        // If it hasn't, then the op-mode remains in this state (i.e this block will be executed the next time this method is called).
+        if (hasSpinnerEncoderReached(spinnerCount)) {
+            resetSpinnerEncoder(); // Reset the encoder to ensure it is at a known good value.
+            setSpinnerPower(0.0f, 0.0f); // Stop the motor.
+            returnLevel = true; // Transition to the next state when this method is called again.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------runSpinnerUsingEncoder
+    /**
+     * Indicate whether the bucket motor's encoder has reached a value.
+     */
+    boolean runBucketUsingEncoder (double bucketPower, double backBucketPower, double bucketCount) {
+        boolean returnLevel = false; // Assume the encoder has not reached the limit.
+        RUN_USING_ENCODERS(); // Tell the system that motor encoder will be used.
+        setBucketPower(bucketPower, backBucketPower); // Start the lift wheel motor at full power.
+        // Has the motor shaft turned the required amount?
+        // If it hasn't, then the op-mode remains in this state (i.e this block will be executed the next time this method is called).
+        if (hasBucketEncoderReached(bucketCount)) {
+            resetBucketEncoder(); // Reset the encoder to ensure it is at a known good value.
+            setBucketPower(0.0f, 0.0f); // Stop the motor.
+            returnLevel = true; // Transition to the next state when this method is called again.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------runBucketUsingEncoder
+    /**
+     * Indicate whether the sweeper motor's encoder has reached a value.
+     */
+    boolean runSweeperUsingEncoder (double sweeperPower, double sweeperCount) {
+        boolean returnLevel = false; // Assume the encoder has not reached the limit.
+        RUN_USING_ENCODERS(); // Tell the system that motor encoder will be used.
+        setSweeperPower(sweeperPower); // Start the lift wheel motor at full power.
+        // Has the motor shaft turned the required amount?
+        // If it hasn't, then the op-mode remains in this state (i.e this block will be executed the next time this method is called).
+        if (hasSweeperEncoderReached(sweeperCount)) {
+            resetSweeperEncoder(); // Reset the encoder to ensure it is at a known good value.
+            setSweeperPower(0.0f); // Stop the motor.
+            returnLevel = true; // Transition to the next state when this method is called again.
+        }
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------runSweeperUsingEncoder
+    //------------Indicate If Motor Wheel Encoder Has Reset------------
+    /**
+     * Indicate whether the leftDrive encoder has been completely reset.
+     */
+    boolean hasLeftDriveEncoderReset () {
+        boolean returnLevel = false; // Assume failure.
+        // Has the left encoder reached zero?
+        if (getLeftEncoderCount() == 0)
+            returnLevel = true; // Set the status to a positive indication.
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasLeftDriveEncoderReset
+    /**
+     * Indicate whether the rightDrive encoder has been completely reset.
+     */
+    boolean hasRightDriveEncoderReset () {
+        boolean returnLevel = false; // Assume failure.
+        // Has the right encoder reached zero?
+        if (getRightEncoderCount() == 0)
+            returnLevel = true; // Set the status to a positive indication.
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasRightDriveEncoderReset
+    /**
+     * Indicate whether the encoders have been completely reset.
+     */
+    boolean haveDriveEncodersReset () {
+        boolean returnLevel = false; // Assume failure.
+        // Have the encoders reached zero?
+        if (hasLeftDriveEncoderReset() && hasRightDriveEncoderReset())
+            returnLevel = true; // Set the status to a positive indication.
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------haveDriveEncodersReset
+    /**
+     * Indicate whether the liftArm encoder has been completely reset.
+     */
+    boolean hasLiftArmEncoderReset () {
+        boolean returnLevel = false; // Assume failure.
+        // Has the liftArm encoder reached zero?
+        if (getLiftArmEncoderCount() == 0)
+            returnLevel = true; // Set the status to a positive indication.
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasLiftArmEncoderReset
+    /**
+     * Indicate whether the lift encoder has been completely reset.
+     */
+    boolean hasLiftEncoderReset () {
+        boolean returnLevel = false; // Assume failure.
+        // Has the lift encoder reached zero?
+        if (getLiftEncoderCount() == 0)
+            returnLevel = true; // Set the status to a positive indication.
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasLiftEncoderReset
+    /**
+     * Indicate whether the chainHooks encoder has been completely reset.
+     */
+    boolean hasChainHooksEncoderReset () {
+        boolean returnLevel = false; // Assume failure.
+        // Has the chainHooks encoder reached zero?
+        if (getChainHooksEncoderCount() == 0)
+            returnLevel = true; // Set the status to a positive indication.
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasChainHooksEncoderReset
+    /**
+     * Indicate whether the spinner encoder has been completely reset.
+     */
+    boolean hasSpinnerEncoderReset () {
+        boolean returnLevel = false; // Assume failure.
+        // Has the spinner encoder reached zero?
+        if (getSpinnerEncoderCount() == 0)
+            returnLevel = true; // Set the status to a positive indication.
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasSpinnerEncoderReset
+    /**
+     * Indicate whether the bucket encoder has been completely reset.
+     */
+    boolean hasBucketEncoderReset () {
+        boolean returnLevel = false; // Assume failure.
+        // Has the bucket encoder reached zero?
+        if (getBucketEncoderCount() == 0)
+            returnLevel = true; // Set the status to a positive indication.
+        return returnLevel; // Return the status.
+    } //--------------------------------------------------------------------------hasBucketEncoderReset
+    /**
+     * Indicate whether the sweeper encoder has been completely reset.
+     */
+    boolean hasSweeperEncoderReset () {
+        boolean returnLevel = false; // Assume failure.
+        // Has the sweeper encoder reached zero?
+        if (getSweeperEncoderCount() == 0)
+            returnLevel = true; // Set the status to a positive indication.
+        return returnLevel; // Return the status.
+} //--------------------------------------------------------------------------hasSweeperEncoderReset
+    //------------Private Variables------------
     /**
      * Indicate whether a message is a available to the class user.
      */
-    private boolean v_warning_generated = false;
+    private boolean warningGenerated = false;
     //--------------------------------------------------------------------------
     /**
      * Store a message to the user if one has been generated.
      */
-    private String v_warning_message;
+    private String warningMessage;
     //--------------------------------------------------------------------------
     /**
-     * Manage the aspects of the left_drive motor.
+     * Manage the aspects of the leftDrive motor.
      */
-    private DcMotor v_motor_left_drive;
+    private DcMotor motorLeftDrive;
     //--------------------------------------------------------------------------
     /**
-     * Manage the aspects of the right_drive motor.
+     * Manage the aspects of the rightDrive motor.
      */
-    private DcMotor v_motor_right_drive;
+    private DcMotor motorRightDrive;
     //--------------------------------------------------------------------------
     /**
-     * Manage the aspects of the lift_arm motor.
+     * Manage the aspects of the liftArm motor.
      */
-    private DcMotor v_motor_lift_arm;
+    private DcMotor motorLiftArm;
     //--------------------------------------------------------------------------
     /**
      * Manage the aspects of the lift motor.
      */
-    private DcMotor v_motor_lift;
+    private DcMotor motorLift;
     //--------------------------------------------------------------------------
     /**
-     * Manage the aspects of the chain_hooks motor.
+     * Manage the aspects of the chainHooks motor.
      */
-    private DcMotor v_motor_chain_hooks;
+    private DcMotor motorChainHooks;
     //--------------------------------------------------------------------------
     /**
      * Manage the aspects of the spinner motor.
      */
-    private DcMotor v_motor_spinner;
+    private DcMotor motorSpinner;
     //--------------------------------------------------------------------------
     /**
      * Manage the aspects of the bucket motor.
      */
-    private DcMotor v_motor_bucket;
+    private DcMotor motorBucket;
     //--------------------------------------------------------------------------
     /**
      * Manage the aspects of the sweeper motor.
      */
-    private DcMotor v_motor_sweeper;
+    private DcMotor motorSweeper;
     //--------------------------------------------------------------------------
     /**
-     * Manage the aspects of the bucket_door servo.
+     * Manage the aspects of the bucketDoor servo.
      */
-    private Servo v_servo_bucket_door;
+    private Servo servoBucketDoor;
     //--------------------------------------------------------------------------
     /**
      * Manage the aspects of the hook servo.
      */
-    private Servo v_servo_hook;
-} // BigBerthaHardware
+    private Servo servoHook;
+} //------------------------------------------------------------------------------BigBerthaHardware
