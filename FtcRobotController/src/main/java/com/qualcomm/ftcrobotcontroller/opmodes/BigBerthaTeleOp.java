@@ -22,7 +22,7 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
     @Override public void loop () {
         // ------------DC Motors------------
         double chainHooks = 0.80;
-        double lift = 1.0;
+        double lift = 0.8;
         // Obtain the current values of the joystick controllers.
         // The DC motors are scaled to make it easier to control them at slower speeds.
         // Note that x and y equal -1 when the joystick is pushed all of the way forward.
@@ -38,8 +38,8 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         // class, but the power levels aren't applied until this method ends.
         setDrivePower (leftDrivePower, rightDrivePower);
         setLiftArmPower(liftArmPower);
-        setSpinnerPower(spinnerPower, backSpinnerPower);
-        setBucketPower(bucketPower, backBucketPower);
+        setSpinnerPower(spinnerPower, -backSpinnerPower);
+        setBucketPower(bucketPower, -backBucketPower);
         setSweeperPower(sweeperPower);
 
         if (gamepad1.right_bumper)
@@ -59,18 +59,18 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         // The mPosition methods write the motor power values to the Servo
         // class, but the positions aren't applied until this method ends.
         if (gamepad1.y)
-            setBucketDoorPosition (getBucketDoorPosition() + 0.5);
+            setBucketDoorPosition (1.0);
         else if (gamepad1.x)
-            setBucketDoorPosition (getBucketDoorPosition() - 0.5);
+            setBucketDoorPosition (0.0);
         else
-            setBucketDoorPosition (getBucketDoorPosition());
+            setBucketDoorPosition (0.5);
 
         if (gamepad1.b)
-            setHookPosition (getHookPosition() + 0.5);
+            setHookPosition (1.0);
         else if (gamepad1.a)
-            setHookPosition (getHookPosition() - 0.5);
+            setHookPosition (0.0);
         else
-            setHookPosition (getHookPosition());
+            setHookPosition (0.5);
         //------------Telemetry------------
         // Send telemetry data to the driver station.
         updateTelemetry (); // Update common telemetry
