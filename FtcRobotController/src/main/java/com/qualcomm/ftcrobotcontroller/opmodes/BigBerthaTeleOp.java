@@ -28,7 +28,7 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         // Note that x and y equal -1 when the joystick is pushed all of the way forward.
         float leftDrivePower = scaleMotorPower (-gamepad1.left_stick_y);
         float rightDrivePower = scaleMotorPower (-gamepad1.right_stick_y);
-        float liftArmPower = scaleMotorPower (-gamepad2.right_stick_y);
+        float liftArmPower = scaleMotorPower (gamepad2.right_stick_y);
         float spinnerPower = scaleMotorPower (gamepad2.right_trigger);
         float backSpinnerPower = scaleMotorPower (-gamepad2.left_trigger);
         float bucketPower = scaleMotorPower (gamepad1.right_trigger);
