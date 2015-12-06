@@ -87,14 +87,22 @@ public class BigBerthaHardware extends OpMode {
             DbgLog.msg (opModeException.getLocalizedMessage ());
             motorSweeper = null;
         } //------------------------------------------------------------sweeper
-        motorRightDrive.setPower(0);
-        motorLeftDrive.setPower(0);
-        motorLift.setPower(0);
-        motorLiftArm.setPower(0);
-        motorChainHooks.setPower(0);
-        motorSpinner.setPower(0);
-        motorBucket.setPower(0);
-        motorSweeper.setPower(0);
+        if (motorLeftDrive != null)
+            motorRightDrive.setPower(0);
+        if (motorRightDrive != null)
+            motorLeftDrive.setPower(0);
+        if (motorLift != null)
+            motorLift.setPower(0);
+        if (motorLiftArm != null)
+            motorLiftArm.setPower(0);
+        if (motorLeftDrive != null)
+            motorChainHooks.setPower(0);
+        if (motorLeftDrive != null)
+            motorSpinner.setPower(0);
+        if (motorLeftDrive != null)
+            motorBucket.setPower(0);
+        if (motorLeftDrive != null)
+            motorSweeper.setPower(0);
         //------------Servos------------
         //starting position of servos
         //0.5 is off, 1 is forwards, and 0 is backwards
