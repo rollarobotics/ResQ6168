@@ -59,11 +59,11 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         // The mPosition methods write the motor power values to the Servo
         // class, but the positions aren't applied until this method ends.
         if (gamepad1.y)
-            setBucketDoorPosition (1.0);
+            setBucketDoorPosition (1.0); //1.0 is forward at full speed
         else if (gamepad1.x)
-            setBucketDoorPosition (0.0);
+            setBucketDoorPosition (0.0); //0.0 is backward at full speed
         else
-            setBucketDoorPosition (0.5);
+            setBucketDoorPosition (0.5); //0.5 is stopped
 
         if (gamepad1.b)
             setHookPosition (1.0);

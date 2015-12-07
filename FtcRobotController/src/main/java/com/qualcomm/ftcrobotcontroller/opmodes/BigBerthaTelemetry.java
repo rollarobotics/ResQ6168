@@ -43,19 +43,19 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         // Send telemetry data concerning gamepads to the driver station.
         telemetry.addData ("01", "Bucket Door GP1 Y: " + gamepad1.y);
         telemetry.addData ("02", "Bucket Door GP1 X: " + gamepad1.x);
-        telemetry.addData ("03", "Hook GP2 B: " + gamepad1.b);
-        telemetry.addData ("04", "Hook GP2 A: " + gamepad2.a);
-        telemetry.addData ("05", "Left Drive GP1 Left Stick: " + -gamepad1.left_stick_y);
-        telemetry.addData ("06", "Right Drive GP1 Right Stick: " + -gamepad1.right_stick_y);
-        telemetry.addData ("07", "Lift Arm GP2 Left: " + -gamepad2.left_stick_y);
-        telemetry.addData ("08", "Lift GP2 Dpad Up: " + gamepad2.dpad_up);
-        telemetry.addData ("09", "Lift GP2 Dpad Down: " + gamepad2.dpad_down);
-        telemetry.addData ("10", "Chain Hooks GP1 Left Bumper: " + gamepad1.left_bumper);
-        telemetry.addData ("11", "Chain Hooks GP1 Right Bumper: " + gamepad1.right_bumper);
-        telemetry.addData ("12", "Spinner GP2 Left Trigger: " + gamepad2.left_trigger);
-        telemetry.addData ("13", "Reverse Spinner GP2 Right Trigger: " + -gamepad2.right_trigger);
-        telemetry.addData ("14", "Bucket GP1 Left Trigger: " + gamepad1.left_trigger);
-        telemetry.addData ("15", "Reverse Bucket GP1 Right Trigger: " + -gamepad1.right_trigger);
+        telemetry.addData ("03", "Hook GP2 B: "        + gamepad1.b);
+        telemetry.addData ("04", "Hook GP2 A: "        + gamepad2.a);
+        telemetry.addData ("05", "Left Drive GP1 Left Stick: "        +-gamepad1.left_stick_y);
+        telemetry.addData ("06", "Right Drive GP1 Right Stick: "      +-gamepad1.right_stick_y);
+        telemetry.addData ("07", "Lift Arm GP2 Left: "                + gamepad2.left_stick_y);
+        telemetry.addData ("08", "Lift GP2 Dpad Up: "                 + gamepad2.dpad_up);
+        telemetry.addData ("09", "Lift GP2 Dpad Down: "               + gamepad2.dpad_down);
+        telemetry.addData ("10", "Chain Hooks GP1 Left Bumper: "      + gamepad1.left_bumper);
+        telemetry.addData ("11", "Chain Hooks GP1 Right Bumper: "     + gamepad1.right_bumper);
+        telemetry.addData ("12", "Spinner GP2 Left Trigger: "         + gamepad2.left_trigger);
+        telemetry.addData ("13", "Reverse Spinner GP2 Right Trigger: "+-gamepad2.right_trigger);
+        telemetry.addData ("14", "Bucket GP1 Left Trigger: "          + gamepad1.left_trigger);
+        telemetry.addData ("15", "Reverse Bucket GP1 Right Trigger: " +-gamepad1.right_trigger);
         telemetry.addData ("16", "Sweeper GP2 Left Stick: " + -gamepad2.left_stick_y);
     } //--------------------------------------------------------------------------updateGamepadTelemetry
     /**
