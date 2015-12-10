@@ -14,13 +14,21 @@ import com.qualcomm.robotcore.util.Range;
  * @version 2015-08-13-20-04-----2015-12-01
  */
 public class BigBerthaHardware extends OpMode {
-    /**
-     * Construct the class.
-     * The system calls this member when the class is instantiated.
-     */
+    //------------Private Variables------------
+    private boolean warningGenerated = false;
+    private String warningMessage;
+    private DcMotor motorLeftDrive;
+    private DcMotor motorRightDrive;
+    private DcMotor motorLiftArm;
+    private DcMotor motorLift;
+    private DcMotor motorChainHooks;
+    private DcMotor motorSpinner;
+    private DcMotor motorBucket;
+    private DcMotor motorSweeper;
+    private Servo servoBucketDoor;
+    private Servo servoHook;
+    
     public BigBerthaHardware () {
-        // Initialize base classes and class members.
-        // All via self-construction.
     } //--------------------------------------------------------------------------BigBerthaHardware
     /**
      * Perform any actions that are necessary when the OpMode is enabled.
@@ -895,9 +903,6 @@ public class BigBerthaHardware extends OpMode {
         return returnLevel; // Return the status.
     } //--------------------------------------------------------------------------runSweeperUsingEncoder
     //------------Indicate If Motor Wheel Encoder Has Reset------------
-    /**
-     * Indicate whether the leftDrive encoder has been completely reset.
-     */
     boolean hasLeftDriveEncoderReset () {
         boolean returnLevel = false; // Assume failure.
         // Has the left encoder reached zero?
@@ -905,9 +910,6 @@ public class BigBerthaHardware extends OpMode {
             returnLevel = true; // Set the status to a positive indication.
         return returnLevel; // Return the status.
     } //--------------------------------------------------------------------------hasLeftDriveEncoderReset
-    /**
-     * Indicate whether the rightDrive encoder has been completely reset.
-     */
     boolean hasRightDriveEncoderReset () {
         boolean returnLevel = false; // Assume failure.
         // Has the right encoder reached zero?
@@ -915,9 +917,6 @@ public class BigBerthaHardware extends OpMode {
             returnLevel = true; // Set the status to a positive indication.
         return returnLevel; // Return the status.
     } //--------------------------------------------------------------------------hasRightDriveEncoderReset
-    /**
-     * Indicate whether the encoders have been completely reset.
-     */
     boolean haveDriveEncodersReset () {
         boolean returnLevel = false; // Assume failure.
         // Have the encoders reached zero?
@@ -925,9 +924,6 @@ public class BigBerthaHardware extends OpMode {
             returnLevel = true; // Set the status to a positive indication.
         return returnLevel; // Return the status.
     } //--------------------------------------------------------------------------haveDriveEncodersReset
-    /**
-     * Indicate whether the liftArm encoder has been completely reset.
-     */
     boolean hasLiftArmEncoderReset () {
         boolean returnLevel = false; // Assume failure.
         // Has the liftArm encoder reached zero?
@@ -935,9 +931,6 @@ public class BigBerthaHardware extends OpMode {
             returnLevel = true; // Set the status to a positive indication.
         return returnLevel; // Return the status.
     } //--------------------------------------------------------------------------hasLiftArmEncoderReset
-    /**
-     * Indicate whether the lift encoder has been completely reset.
-     */
     boolean hasLiftEncoderReset () {
         boolean returnLevel = false; // Assume failure.
         // Has the lift encoder reached zero?
@@ -945,9 +938,6 @@ public class BigBerthaHardware extends OpMode {
             returnLevel = true; // Set the status to a positive indication.
         return returnLevel; // Return the status.
     } //--------------------------------------------------------------------------hasLiftEncoderReset
-    /**
-     * Indicate whether the chainHooks encoder has been completely reset.
-     */
     boolean hasChainHooksEncoderReset () {
         boolean returnLevel = false; // Assume failure.
         // Has the chainHooks encoder reached zero?
@@ -955,9 +945,6 @@ public class BigBerthaHardware extends OpMode {
             returnLevel = true; // Set the status to a positive indication.
         return returnLevel; // Return the status.
     } //--------------------------------------------------------------------------hasChainHooksEncoderReset
-    /**
-     * Indicate whether the spinner encoder has been completely reset.
-     */
     boolean hasSpinnerEncoderReset () {
         boolean returnLevel = false; // Assume failure.
         // Has the spinner encoder reached zero?
@@ -965,9 +952,6 @@ public class BigBerthaHardware extends OpMode {
             returnLevel = true; // Set the status to a positive indication.
         return returnLevel; // Return the status.
     } //--------------------------------------------------------------------------hasSpinnerEncoderReset
-    /**
-     * Indicate whether the bucket encoder has been completely reset.
-     */
     boolean hasBucketEncoderReset () {
         boolean returnLevel = false; // Assume failure.
         // Has the bucket encoder reached zero?
@@ -975,74 +959,11 @@ public class BigBerthaHardware extends OpMode {
             returnLevel = true; // Set the status to a positive indication.
         return returnLevel; // Return the status.
     } //--------------------------------------------------------------------------hasBucketEncoderReset
-    /**
-     * Indicate whether the sweeper encoder has been completely reset.
-     */
     boolean hasSweeperEncoderReset () {
         boolean returnLevel = false; // Assume failure.
         // Has the sweeper encoder reached zero?
         if (getSweeperEncoderCount() == 0)
             returnLevel = true; // Set the status to a positive indication.
         return returnLevel; // Return the status.
-} //--------------------------------------------------------------------------hasSweeperEncoderReset
-    //------------Private Variables------------
-    /**
-     * Indicate whether a message is a available to the class user.
-     */
-    private boolean warningGenerated = false;
-    //--------------------------------------------------------------------------
-    /**
-     * Store a message to the user if one has been generated.
-     */
-    private String warningMessage;
-    //--------------------------------------------------------------------------
-    /**
-     * Manage the aspects of the leftDrive motor.
-     */
-    private DcMotor motorLeftDrive;
-    //--------------------------------------------------------------------------
-    /**
-     * Manage the aspects of the rightDrive motor.
-     */
-    private DcMotor motorRightDrive;
-    //--------------------------------------------------------------------------
-    /**
-     * Manage the aspects of the liftArm motor.
-     */
-    private DcMotor motorLiftArm;
-    //--------------------------------------------------------------------------
-    /**
-     * Manage the aspects of the lift motor.
-     */
-    private DcMotor motorLift;
-    //--------------------------------------------------------------------------
-    /**
-     * Manage the aspects of the chainHooks motor.
-     */
-    private DcMotor motorChainHooks;
-    //--------------------------------------------------------------------------
-    /**
-     * Manage the aspects of the spinner motor.
-     */
-    private DcMotor motorSpinner;
-    //--------------------------------------------------------------------------
-    /**
-     * Manage the aspects of the bucket motor.
-     */
-    private DcMotor motorBucket;
-    //--------------------------------------------------------------------------
-    /**
-     * Manage the aspects of the sweeper motor.
-     */
-    private DcMotor motorSweeper;
-    //--------------------------------------------------------------------------
-    /**
-     * Manage the aspects of the bucketDoor servo.
-     */
-    private Servo servoBucketDoor;
-    //--------------------------------------------------------------------------
-    /**
-     * Manage the aspects of the hook servo.
-     */
-    private Servo servoHook;
+    } //--------------------------------------------------------------------------hasSweeperEncoderReset
 } //------------------------------------------------------------------------------BigBerthaHardware
