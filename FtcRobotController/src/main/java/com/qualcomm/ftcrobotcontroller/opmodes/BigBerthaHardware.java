@@ -31,11 +31,18 @@ public class BigBerthaHardware extends OpMode {
     private double valueBackBucket;
     private static double bucketValue;
     private static double backBucketValue;
-
+    private static double sweeprerValue;
+    public static double getValue () {return Value;}
+    public static double getValue () {return Value;}
+    public static double getValue () {return Value;}
+    public static double getValue () {return Value;}
+    public static double getValue () {return Value;}
     public static double getBucketValue () {return bucketValue;}
     public static double getBackBucketValue () {return backBucketValue;}
+    public static double getSweeperValue() {return sweeperValue;}
     public static void setBucketValue (double value) {bucketValue = value;}
     public static void setBackBucketValue (double value) {backBucketValue = value;}
+    public static void setSweeperValue (double value) {sweeperValue = vlaue;}
     
     public BigBerthaHardware () {
     }
@@ -269,6 +276,8 @@ public class BigBerthaHardware extends OpMode {
         double returnLevel = 0.0;
         if (motorSweeper != null)
             returnLevel = motorSweeper.getPower ();
+        else
+            returnLevel = sweeperValue;
         return returnLevel;
     }
     void setSweeperPower (double sweeperPower) {
