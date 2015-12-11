@@ -8,6 +8,8 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  * @version 2015-08-01-06-01-----2015-12-01
  */
 public class BigBerthaTeleOp extends BigBerthaTelemetry {
+    private static float bucketPower;
+    private static float backBucketPower;
     /**
      * Construct the class.
      * The system calls this member when the class is instantiated.
@@ -16,6 +18,13 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         // Initialize base classes and class members.
         // All via self-construction.
     } //--------------------------------------------------------------------------BigBerthaTeleOp
+    public static double getBucketValue() {
+        float b =bucketPower;
+        float bb = backBucketPower;
+        if (b == 0)
+            b = bb;
+        return b;
+    }
     /**
      * The system calls this member repeatedly while the OpMode is running.
      */
@@ -31,15 +40,15 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         float liftArmPower = scaleMotorPower (gamepad2.right_stick_y);
         float spinnerPower = scaleMotorPower (gamepad2.right_trigger);
         float backSpinnerPower = scaleMotorPower (-gamepad2.left_trigger);
-        float bucketPower = scaleMotorPower (gamepad1.right_trigger);
-        float backBucketPower = scaleMotorPower (-gamepad1.left_trigger);
+        bucketPower = scaleMotorPower (gamepad1.right_trigger);
+        backBucketPower = scaleMotorPower (-gamepad1.left_trigger);
         float sweeperPower = scaleMotorPower (-gamepad2.left_stick_y);
         // The setPower methods write the motor power values to the DcMotor
         // class, but the power levels aren't applied until this method ends.
         setDrivePower (leftDrivePower, rightDrivePower);
         setLiftArmPower(liftArmPower);
-        setSpinnerPower(spinnerPower, -backSpinnerPower);
-        setBucketPower(bucketPower, -backBucketPower);
+        setSpinnerPower(spinnerPower, backSpinnerPower);
+        setBucketPower(bucketPower, backBucketPower);
         setSweeperPower(sweeperPower);
 
         if (gamepad1.right_bumper)
@@ -65,9 +74,9 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         else
             setBucketDoorPosition (0.5); //0.5 is stopped
 
-        if (gamepad1.b)
+        if (gamepad2.y)
             setHookPosition (1.0);
-        else if (gamepad1.a)
+        else if (gamepad2.x)
             setHookPosition (0.0);
         else
             setHookPosition (0.5);
@@ -75,5 +84,9 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         // Send telemetry data to the driver station.
         updateTelemetry (); // Update common telemetry
         updateGamepadTelemetry ();
+        telemetry.addData("001Bucket" , bucketPower);
+        telemetry.addData("002Back Bucket" , backBucketPower);
+        telemetry.addData("003Spinner" , spinnerPower);
+        telemetry.addData("004Back Spinner" , backSpinnerPower);
     } //--------------------------------------------------------------------------loop
 } //------------------------------------------------------------------------------BigBerthaTeleOp
