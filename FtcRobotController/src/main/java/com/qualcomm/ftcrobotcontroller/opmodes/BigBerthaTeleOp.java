@@ -8,8 +8,13 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  * @version 2015-08-01-06-01-----2015-12-01
  */
 public class BigBerthaTeleOp extends BigBerthaTelemetry {
+    private static float leftDrivePower;
+    private static float rightDrivePower;
+    private static float liftArmPower;
+    private static float liftPower;
     private static float bucketPower;
     private static float backBucketPower;
+    private static float sweeperPower;
     /**
      * Construct the class.
      * The system calls this member when the class is instantiated.
@@ -30,8 +35,8 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
      */
     @Override public void loop () {
         // ------------DC Motors------------
-        double chainHooks = 0.80;
-        double lift = 0.8;
+        double chainHooksPower = 0.80;
+        double liftPower = 0.8;
         // Obtain the current values of the joystick controllers.
         // The DC motors are scaled to make it easier to control them at slower speeds.
         // Note that x and y equal -1 when the joystick is pushed all of the way forward.
@@ -52,16 +57,16 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         setSweeperPower(sweeperPower);
 
         if (gamepad1.right_bumper)
-            setChainHooksPower(chainHooks);
+            setChainHooksPower(chainHooksPower);
         else if (gamepad1.left_bumper)
-            setChainHooksPower(-chainHooks);
+            setChainHooksPower(-chainHooksPower);
         else
             setChainHooksPower (0);
 
         if (gamepad2.dpad_up)
-            setLiftPower(lift);
+            setLiftPower(liftPower);
         else if (gamepad2.dpad_down)
-            setLiftPower(-lift);
+            setLiftPower(-liftPower);
         else
             setLiftPower(0);
         //------------Servo Motors------------
