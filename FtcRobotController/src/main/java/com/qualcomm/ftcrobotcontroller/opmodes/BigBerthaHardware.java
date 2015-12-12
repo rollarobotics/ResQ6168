@@ -27,22 +27,23 @@ public class BigBerthaHardware extends OpMode {
     private DcMotor motorSweeper;
     private Servo servoBucketDoor;
     private Servo servoHook;
+    private Servo servoMan;
     private double valueBucket;
     private double valueBackBucket;
     private static double bucketValue;
     private static double backBucketValue;
-    private static double sweeprerValue;
-    public static double getValue () {return Value;}
-    public static double getValue () {return Value;}
-    public static double getValue () {return Value;}
-    public static double getValue () {return Value;}
-    public static double getValue () {return Value;}
+    private static double sweeperValue;
+    //public static double getValue () {return Value;}
+    //public static double getValue () {return Value;}
+    //public static double getValue () {return Value;}
+    //public static double getValue () {return Value;}
+    //public static double getValue () {return Value;}
     public static double getBucketValue () {return bucketValue;}
     public static double getBackBucketValue () {return backBucketValue;}
     public static double getSweeperValue() {return sweeperValue;}
     public static void setBucketValue (double value) {bucketValue = value;}
     public static void setBackBucketValue (double value) {backBucketValue = value;}
-    public static void setSweeperValue (double value) {sweeperValue = vlaue;}
+    public static void setSweeperValue (double value) {sweeperValue = value;}
     
     public BigBerthaHardware () {
     }
@@ -123,6 +124,7 @@ public class BigBerthaHardware extends OpMode {
         //0.5 is off, 1 is forwards, and 0 is backwards
         double startBucketDoorPosition = 0.5;
         double startHookPosition = 0.5;
+        double startManPosition = 0.0;
         try {
             servoBucketDoor = hardwareMap.servo.get ("bucketDoor");
             servoBucketDoor.setPosition (startBucketDoorPosition);
@@ -138,6 +140,14 @@ public class BigBerthaHardware extends OpMode {
             setWarningMessage("hook");
             DbgLog.msg (opModeException.getLocalizedMessage ());
             servoHook = null;
+        }
+        try {
+            servoMan = hardwareMap.servo.get ("man");
+            servoMan.setPosition (startManPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("man");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            servoMan = null;
         }
     }
     //------------Warnings------------
@@ -234,7 +244,7 @@ public class BigBerthaHardware extends OpMode {
         return returnLevel;
     }
     void setChainHooksPower (double chainHooksPower) {
-        chainHooksPower = clipMotor(chainHooksPower);
+        //chainHooksPower = clipMotor(chainHooksPower);
         if (motorChainHooks != null)
             motorChainHooks.setPower(chainHooksPower);
     }
@@ -307,13 +317,26 @@ public class BigBerthaHardware extends OpMode {
         if (servoHook != null)
             servoHook.setPosition (hookPosition);
     }
+    void getManPosition (double manPosition) {
+        manPosition = clipServo(manPosition);
+        if (servoMan != null)
+            servoMan.setPosition(manPosition);
+    }
+    void setManPosition (double manPosition) {
+        manPosition = clipServo(manPosition);
+        if (servoMan != null)
+            servoMan.setPosition(manPosition);
+    }
     void allServosStartingPosition () {
         double bucketDoorPosition = 0.5;
         double hookPosition = 0.5;
+        double manPosition = 0.0;
         if (servoBucketDoor != null)
             servoBucketDoor.setPosition (bucketDoorPosition);
         if (servoHook != null)
             servoHook.setPosition (hookPosition);
+        if (servoMan != null)
+            servoMan.setPosition(manPosition);
     }
     //------------ Set With Motor Wheel Encoders------------
     public void runUsingLeftDriveEncoder () {
