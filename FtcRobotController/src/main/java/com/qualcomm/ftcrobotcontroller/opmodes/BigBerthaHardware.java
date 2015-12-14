@@ -84,9 +84,9 @@ public class BigBerthaHardware extends OpMode {
     double startBucketPower = 0;
     double startSweeperPower = 0;
     //0.5 is off, 1 is forwards, and 0 is backwards
-    double startBucketDoorPosition = 0.5;
-    double startHookPosition = 0.5;
-    double startManPosition = 0.5;
+    private double startBucketDoorPosition = 0.5;
+    private double startHookPosition = 0.5;
+    private double startManPosition = 0.5;
     public double getStartBucketDoorPosition() {return startBucketDoorPosition;}
     public double getStartHookPosition      () {return startHookPosition;}
     public double getStartManPosition       () {return startManPosition;}
