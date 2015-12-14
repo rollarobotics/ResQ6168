@@ -8,13 +8,15 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  * @version 2015-08-01-06-01-----2015-12-01
  */
 public class BigBerthaTeleOp extends BigBerthaTelemetry {
-    private static float leftDrivePower;
+    private static float leftDrivePower; //= getLeftDrivePower();
     private static float rightDrivePower;
     private static float liftArmPower;
     private static float liftPower;
     private static float bucketPower;
     private static float backBucketPower;
+    private static float fullBucketPower;
     private static float sweeperPower;
+
     /**
      * Construct the class.
      * The system calls this member when the class is instantiated.
@@ -23,8 +25,8 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         // Initialize base classes and class members.
         // All via self-construction.
     } //--------------------------------------------------------------------------BigBerthaTeleOp
-    public static double getBucketValue() {
-        float b =bucketPower;
+    public static double getBucketValuePower() {
+        float b = bucketPower;
         float bb = backBucketPower;
         if (b == 0)
             b = bb;
@@ -88,7 +90,7 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
 
         //------------Telemetry------------
         // Send telemetry data to the driver station.
-        updateTelemetry (); // Update common telemetry
+        updateTelemetry(); // Update common telemetry
         updateGamepadTelemetry ();
         telemetry.addData("001Bucket" , bucketPower);
         telemetry.addData("002Back Bucket" , backBucketPower);

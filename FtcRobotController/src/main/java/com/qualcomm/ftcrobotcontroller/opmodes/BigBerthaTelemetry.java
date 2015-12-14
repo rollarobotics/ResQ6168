@@ -32,7 +32,9 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         telemetry.addData("22 Lift Power"       , getLiftPower()      + ", " + getLiftEncoderCount());
         telemetry.addData("23 Chain Hooks Power", getChainHooksPower()+ ", " + getChainHooksEncoderCount());
         telemetry.addData("24 Spinner Power"    , getSpinnerPower()   + ", " + getSpinnerEncoderCount());
-        telemetry.addData("25 Bucket Power"     , getBucketPower()    + ", " + getBucketEncoderCount() + ", " + BigBerthaTeleOp.getBucketValue());
+        telemetry.addData("25 Bucket Power", getBucketPower() + ", " + getBucketEncoderCount() + ", "
+                + "TeleOp Value Power: " + BigBerthaTeleOp.getBucketValuePower() + ", "
+                + "Hardware Value: " + BigBerthaHardware.getBucketValue());
         telemetry.addData("26 Sweeper Power"    , getSweeperPower()   + ", " + getSweeperEncoderCount());
     } //--------------------------------------------------------------------------updateTelemetry
     /**

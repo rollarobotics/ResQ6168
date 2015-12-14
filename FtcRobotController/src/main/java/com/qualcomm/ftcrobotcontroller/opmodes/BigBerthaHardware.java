@@ -27,22 +27,42 @@ public class BigBerthaHardware extends OpMode {
     private DcMotor motorSweeper;
     private Servo servoBucketDoor;
     private Servo servoHook;
-    private double valueBucket;
-    private double valueBackBucket;
+    private static double leftDriveValue;
+    private static double rightDriveValue;
+    private static double liftArmValue;
+    private static double liftValue;
+    private static double chainHooksValue;
+    private static double spinnerValue;
+    private static double backSpinnerValue;
+    private static double fullSpinnerValue;
     private static double bucketValue;
     private static double backBucketValue;
-    private static double sweeprerValue;
-    public static double getValue () {return Value;}
-    public static double getValue () {return Value;}
-    public static double getValue () {return Value;}
-    public static double getValue () {return Value;}
-    public static double getValue () {return Value;}
-    public static double getBucketValue () {return bucketValue;}
+    private static double fullBucketValue;
+    private static double sweeperValue;
+    public static double getLeftDriveValue  () {return leftDriveValue;}
+    public static double getRightDriveValue () {return rightDriveValue;}
+    public static double getLiftArmValue    () {return liftArmValue;}
+    public static double getLiftValue       () {return liftValue;}
+    public static double getChainHooksValue () {return chainHooksValue;}
+    public static double getSpinnerValue    () {return spinnerValue;}
+    public static double getBackSpinnerValue() {return backSpinnerValue;}
+    public static double getFullSpinnerValue() {return fullSpinnerValue;}
+    public static double getBucketValue     () {return bucketValue;}
     public static double getBackBucketValue () {return backBucketValue;}
-    public static double getSweeperValue() {return sweeperValue;}
-    public static void setBucketValue (double value) {bucketValue = value;}
+    public static double getFullBucketValue () {return fullBucketValue;}
+    public static double getSweeperValue    () {return sweeperValue;}
+    public static void setLeftDriveValue  (double value) {leftDriveValue = value;}
+    public static void setRightDriveValue (double value) {rightDriveValue= value;}
+    public static void setLiftArmValue    (double value) {liftArmValue = value;}
+    public static void setLiftValue       (double value) {liftValue = value;}
+    public static void setChainHooksValue (double value) {chainHooksValue = value;}
+    public static void setSpinnerValue    (double value) {spinnerValue = value;}
+    public static void setBackSpinnerValue(double value) {backSpinnerValue = value;}
+    public static void setFullSpinnerValue(double value) {fullSpinnerValue = value;}
+    public static void setBucketValue     (double value) {bucketValue = value;}
     public static void setBackBucketValue (double value) {backBucketValue = value;}
-    public static void setSweeperValue (double value) {sweeperValue = vlaue;}
+    public static void setFullBucketValue (double value) {fullBucketValue = value;}
+    public static void setSweeperValue    (double value) {sweeperValue = value;}
     
     public BigBerthaHardware () {
     }
@@ -183,106 +203,98 @@ public class BigBerthaHardware extends OpMode {
     }
     //------------Get and Set Methods------------
     double getFullValue (double forwards, double backwards) {
+        clipMotorPositive(forwards);
+        clipMotorNegative(backwards);
         if (forwards == 0 && backwards < 0)
             forwards = backwards;
         return forwards;
     }
     //------------Dc Motors------------
     double getLeftDrivePower () {
-        double returnLevel = 0.0;
         if (motorLeftDrive != null)
-            returnLevel = motorLeftDrive.getPower ();
-        return returnLevel;
+            return motorLeftDrive.getPower ();
+        return leftDriveValue;
     }
     double getRightDrivePower () {
-        double returnLevel = 0.0;
         if (motorRightDrive != null)
-            returnLevel = motorRightDrive.getPower ();
-        return returnLevel;
+            return motorRightDrive.getPower ();
+        return rightDriveValue;
     }
     void setDrivePower (double leftPower, double rightPower) {
         if (motorLeftDrive != null)
             motorLeftDrive.setPower (leftPower);
+        leftDriveValue = leftPower;
         if (motorRightDrive != null)
             motorRightDrive.setPower (rightPower);
+        rightDriveValue = rightPower;
     }
     double getLiftArmPower () {
-        double returnLevel = 0.0;
         if (motorLiftArm != null)
-            returnLevel = motorLiftArm.getPower ();
-        return returnLevel;
+            return motorLiftArm.getPower ();
+        return liftArmValue;
     }
     void setLiftArmPower (double liftArmPower) {
         if (motorLiftArm != null)
             motorLiftArm.setPower(liftArmPower);
+        liftArmValue = liftArmPower;
     }
     double getLiftPower () {
-        double returnLevel = 0.0;
         if (motorLift != null)
-            returnLevel = motorLift.getPower ();
-        return returnLevel;
+            return motorLift.getPower ();
+        return liftValue;
     }
     void setLiftPower (double liftPower) {
         liftPower = clipMotor(liftPower);
         if (motorLift != null)
             motorLift.setPower(liftPower);
+        liftValue = liftPower;
     }
     double getChainHooksPower () {
-        double returnLevel = 0.0;
         if (motorChainHooks != null)
-            returnLevel = motorChainHooks.getPower ();
-        return returnLevel;
+            return motorChainHooks.getPower ();
+        return chainHooksValue;
     }
     void setChainHooksPower (double chainHooksPower) {
         chainHooksPower = clipMotor(chainHooksPower);
         if (motorChainHooks != null)
             motorChainHooks.setPower(chainHooksPower);
+        chainHooksValue = chainHooksPower;
     }
     double getSpinnerPower () {
-        double returnLevel = 0.0;
         if (motorSpinner != null)
-            returnLevel = motorSpinner.getPower ();
-        return returnLevel;
+            return motorSpinner.getPower ();
+        return spinnerValue;
     }
     void setSpinnerPower (double spinnerPower, double backSpinnerPower) {
-        clipMotorPositive(spinnerPower);
-        clipMotorNegative(backSpinnerPower);
-        if (motorSpinner != null) {
-            if (spinnerPower == 0)
-                spinnerPower = backSpinnerPower;
-            motorSpinner.setPower(spinnerPower);
-        }
+        double fullSpinnerPower = getFullValue(spinnerPower,backSpinnerPower);
+        if (motorSpinner != null)
+            motorSpinner.setPower(fullSpinnerPower);
+        spinnerValue = spinnerPower;
+        backSpinnerValue = backSpinnerPower;
+        fullSpinnerValue = fullSpinnerPower;
     }
     double getBucketPower () {
-        double returnLevel = 0.0;
         if (motorBucket != null)
-            returnLevel = motorBucket.getPower ();
-        else {
-        getFullValue(bucketValue,backBucketValue);
-            returnLevel = bucketValue;
-        }
-        return returnLevel;
+            return motorBucket.getPower ();
+        return getFullValue(bucketValue,backBucketValue);
     }
     void setBucketPower (double bucketPower, double backBucketPower) {
-        clipMotorPositive(bucketPower);
-        clipMotorNegative(backBucketPower);
-        getFullValue(bucketPower,backBucketPower);
+        double fullBucketPower = getFullValue(bucketPower,backBucketPower);
         if (motorBucket != null)
-            motorBucket.setPower(bucketPower);
-        else
-            bucketValue = bucketPower;
+            motorBucket.setPower(fullBucketPower);
+        bucketValue = bucketPower;
+        backSpinnerValue = backBucketPower;
+        fullBucketValue = fullBucketPower;
     }
     double getSweeperPower () {
-        double returnLevel = 0.0;
         if (motorSweeper != null)
-            returnLevel = motorSweeper.getPower ();
-        else
-            returnLevel = sweeperValue;
-        return returnLevel;
+            return motorSweeper.getPower ();
+        return sweeperValue;
     }
     void setSweeperPower (double sweeperPower) {
         if (motorSweeper != null)
             motorSweeper.setPower(sweeperPower);
+        sweeperValue = sweeperPower;
     }
     //------------Servos------------
     double getBucketDoorPosition () {
