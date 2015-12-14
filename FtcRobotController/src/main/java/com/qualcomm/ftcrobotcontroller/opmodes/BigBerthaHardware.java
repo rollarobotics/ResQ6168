@@ -310,7 +310,7 @@ public class BigBerthaHardware extends OpMode {
     double getSpinnerPower () {
         if (motorSpinner != null)
             return motorSpinner.getPower ();
-        return spinnerValue;
+        return fullSpinnerValue;
     }
     void setSpinnerPower (double spinnerPower, double backSpinnerPower) {
         double fullSpinnerPower = getFullValue(spinnerPower,backSpinnerPower);
@@ -323,7 +323,7 @@ public class BigBerthaHardware extends OpMode {
     double getBucketPower () {
         if (motorBucket != null)
             return motorBucket.getPower ();
-        return getFullValue(bucketValue,backBucketValue);
+        return fullBucketValue;
     }
     void setBucketPower (double bucketPower, double backBucketPower) {
         double fullBucketPower = getFullValue(bucketPower,backBucketPower);
