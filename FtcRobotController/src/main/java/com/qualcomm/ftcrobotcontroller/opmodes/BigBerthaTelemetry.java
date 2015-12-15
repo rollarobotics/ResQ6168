@@ -66,10 +66,10 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         telemetry.addData ("11 Lift GP2 Dpad Down"               , gamepad2.dpad_down);
         telemetry.addData ("12 Chain Hooks GP1 Left Bumper"      , gamepad1.left_bumper);
         telemetry.addData ("13 Chain Hooks GP1 Right Bumper"     , gamepad1.right_bumper);
-        telemetry.addData ("14 Sweeper GP2 Right Trigger"        , gamepad2.right_trigger);
-        telemetry.addData ("15 Reverse Sweeper GP2 Left Trigger" ,-gamepad2.left_trigger);
-        telemetry.addData ("16 Bucket GP1 Right Trigger"         , gamepad1.right_trigger);
-        telemetry.addData ("17 Reverse Bucket GP1 Left Trigger"  ,-gamepad1.left_trigger);
+        telemetry.addData ("14 Sweeper GP2 Right Trigger"        , gamepad1.right_trigger);
+        telemetry.addData ("15 Reverse Sweeper GP2 Left Trigger" ,-gamepad1.left_trigger);
+        telemetry.addData ("16 Bucket GP1 Right Trigger"         , gamepad2.right_trigger);
+        telemetry.addData ("17 Reverse Bucket GP1 Left Trigger"  ,-gamepad2.left_trigger);
         telemetry.addData ("18 Spinner GP2 Left Stick"           ,-gamepad2.left_stick_y);
     } //--------------------------------------------------------------------------updateGamepadTelemetry
     /**

@@ -45,10 +45,10 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         float leftDrivePower = scaleMotorPower (-gamepad1.left_stick_y);
         float rightDrivePower = scaleMotorPower (-gamepad1.right_stick_y);
         float liftArmPower = scaleMotorPower (gamepad2.right_stick_y);
-        float sweeperPower = scaleMotorPower (gamepad2.right_trigger);
-        float backSweeperPower = scaleMotorPower (-gamepad2.left_trigger);
-        bucketPower = scaleMotorPower (gamepad1.right_trigger);
-        backBucketPower = scaleMotorPower (-gamepad1.left_trigger);
+        float sweeperPower = scaleMotorPower (gamepad1.right_trigger);
+        float backSweeperPower = scaleMotorPower (-gamepad1.left_trigger);
+        bucketPower = scaleMotorPower (gamepad2.right_trigger);
+        backBucketPower = scaleMotorPower (-gamepad2.left_trigger);
         float spinnerPower = scaleMotorPower (-gamepad2.left_stick_y);
         // The setPower methods write the motor power values to the DcMotor
         // class, but the power levels aren't applied until this method ends.
