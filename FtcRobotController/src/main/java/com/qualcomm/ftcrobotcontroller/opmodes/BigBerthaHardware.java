@@ -22,9 +22,9 @@ public class BigBerthaHardware extends OpMode {
     private DcMotor motorLiftArm;
     private DcMotor motorLift;
     private DcMotor motorChainHooks;
-    private DcMotor motorSpinner;
-    private DcMotor motorBucket;
     private DcMotor motorSweeper;
+    private DcMotor motorBucket;
+    private DcMotor motorSpinner;
     private Servo servoBucketDoor;
     private Servo servoHook;
     private Servo servoMan;
@@ -34,13 +34,13 @@ public class BigBerthaHardware extends OpMode {
     private static double liftArmValue;
     private static double liftValue;
     private static double chainHooksValue;
-    private static double spinnerValue;
-    private static double backSpinnerValue;
-    private static double fullSpinnerValue;
+    private static double sweeperValue;
+    private static double backSweeperValue;
+    private static double fullSweeperValue;
     private static double bucketValue;
     private static double backBucketValue;
     private static double fullBucketValue;
-    private static double sweeperValue;
+    private static double spinnerValue;
     private static double bucketDoorValue;
     private static double hookValue;
     private static double manValue;
@@ -49,13 +49,13 @@ public class BigBerthaHardware extends OpMode {
     public static double getLiftArmValue    () {return liftArmValue;}
     public static double getLiftValue       () {return liftValue;}
     public static double getChainHooksValue () {return chainHooksValue;}
-    public static double getSpinnerValue    () {return spinnerValue;}
-    public static double getBackSpinnerValue() {return backSpinnerValue;}
-    public static double getFullSpinnerValue() {return fullSpinnerValue;}
+    public static double getSweeperValue    () {return sweeperValue;}
+    public static double getBackSweeperValue() {return backSweeperValue;}
+    public static double getFullSweeperValue() {return fullSweeperValue;}
     public static double getBucketValue     () {return bucketValue;}
     public static double getBackBucketValue () {return backBucketValue;}
     public static double getFullBucketValue () {return fullBucketValue;}
-    public static double getSweeperValue    () {return sweeperValue;}
+    public static double getSpinnerValue    () {return spinnerValue;}
     public static double getBucketDoorValue () {return bucketDoorValue;}
     public static double getHookValue       () {return hookValue;}
     public static double getManValue        () {return manValue;}
@@ -80,9 +80,9 @@ public class BigBerthaHardware extends OpMode {
     double startLiftArmPower = 0;
     double startLiftPower = 0;
     double startChainHooksPower = 0;
-    double startSpinnerPower = 0;
-    double startBucketPower = 0;
     double startSweeperPower = 0;
+    double startBucketPower = 0;
+    double startSpinnerPower = 0;
     //0.5 is off, 1 is forwards, and 0 is backwards
     private double startBucketDoorPosition = 0.5;
     private double startHookPosition = 0.5;
@@ -148,15 +148,15 @@ public class BigBerthaHardware extends OpMode {
             chainHooksValue = startChainHooksPower;
         }
         try {
-            motorSpinner = hardwareMap.dcMotor.get ("spinner");
-            motorSpinner.setPower(startSpinnerPower);
+            motorSweeper = hardwareMap.dcMotor.get ("sweeper");
+            motorSweeper.setPower(startSweeperPower);
         } catch (Exception opModeException) {
-            setWarningMessage("spinner");
+            setWarningMessage("sweeper");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            motorSpinner = null;
-            spinnerValue = startSpinnerPower;
-            backSpinnerValue = startSpinnerPower;
-            fullSpinnerValue = startSpinnerPower;
+            motorSweeper = null;
+            sweeperValue = startSweeperPower;
+            backSweeperValue = startSweeperPower;
+            fullSweeperValue = startSweeperPower;
         }
         try {
             motorBucket = hardwareMap.dcMotor.get ("bucket");
@@ -170,13 +170,13 @@ public class BigBerthaHardware extends OpMode {
             fullBucketValue = startBucketPower;
         }
         try {
-            motorSweeper = hardwareMap.dcMotor.get ("sweeper");
-            motorSweeper.setPower(startSweeperPower);
+            motorSpinner = hardwareMap.dcMotor.get ("spinner");
+            motorSpinner.setPower(startSpinnerPower);
         } catch (Exception opModeException) {
-            setWarningMessage("sweeper");
+            setWarningMessage("spinner");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            motorSweeper = null;
-            sweeperValue = startSweeperPower;
+            motorSpinner = null;
+            spinnerValue = startSpinnerPower;
         }
         //------------Servos------------
         try {
@@ -307,18 +307,18 @@ public class BigBerthaHardware extends OpMode {
             motorChainHooks.setPower(chainHooksPower);
         chainHooksValue = chainHooksPower;
     }
-    double getSpinnerPower () {
-        if (motorSpinner != null)
-            return motorSpinner.getPower ();
-        return fullSpinnerValue;
+    double getSweeperPower () {
+        if (motorSweeper != null)
+            return motorSweeper.getPower ();
+        return fullSweeperValue;
     }
-    void setSpinnerPower (double spinnerPower, double backSpinnerPower) {
-        double fullSpinnerPower = getFullValue(spinnerPower,backSpinnerPower);
-        if (motorSpinner != null)
-            motorSpinner.setPower(fullSpinnerPower);
-        spinnerValue = spinnerPower;
-        backSpinnerValue = backSpinnerPower;
-        fullSpinnerValue = fullSpinnerPower;
+    void setSweeperPower (double sweeperPower, double backSweeperPower) {
+        double fullSweeperPower = getFullValue(sweeperPower,backSweeperPower);
+        if (motorSweeper != null)
+            motorSweeper.setPower(fullSweeperPower);
+        spinnerValue = sweeperPower;
+        backSweeperValue = backSweeperPower;
+        fullSweeperValue = fullSweeperPower;
     }
     double getBucketPower () {
         if (motorBucket != null)
@@ -330,18 +330,18 @@ public class BigBerthaHardware extends OpMode {
         if (motorBucket != null)
             motorBucket.setPower(fullBucketPower);
         bucketValue = bucketPower;
-        backSpinnerValue = backBucketPower;
+        backBucketValue = backBucketPower;
         fullBucketValue = fullBucketPower;
     }
-    double getSweeperPower () {
-        if (motorSweeper != null)
-            return motorSweeper.getPower ();
-        return sweeperValue;
+    double getSpinnerPower () {
+        if (motorSpinner != null)
+            return motorSpinner.getPower ();
+        return spinnerValue;
     }
-    void setSweeperPower (double sweeperPower) {
-        if (motorSweeper != null)
-            motorSweeper.setPower(sweeperPower);
-        sweeperValue = sweeperPower;
+    void setSpinnerPower (double spinnerPower) {
+        if (motorSpinner != null)
+            motorSpinner.setPower(spinnerPower);
+        spinnerValue = spinnerPower;
     }
     //------------Servos------------
     double getBucketDoorPosition () {
@@ -409,17 +409,17 @@ public class BigBerthaHardware extends OpMode {
         if (motorChainHooks != null)
             motorChainHooks.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
-    public void runUsingSpinnerEncoder () {
-        if (motorSpinner != null)
-            motorSpinner.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+    public void runUsingSweeperEncoder () {
+        if (motorSweeper != null)
+            motorSweeper.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
     public void runUsingBucketEncoder () {
         if (motorBucket != null)
             motorBucket.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
-    public void runUsingSweeperEncoder () {
-        if (motorSweeper != null)
-            motorSweeper.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+    public void runUsingSpinnerEncoder () {
+        if (motorSpinner != null)
+            motorSpinner.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
     public void RUN_USING_ENCODERS () {
         runUsingLeftDriveEncoder();
@@ -427,9 +427,9 @@ public class BigBerthaHardware extends OpMode {
         runUsingLiftArmEncoder();
         runUsingLiftEncoder();
         runUsingChainHooksEncoder();
-        runUsingSpinnerEncoder();
-        runUsingBucketEncoder();
         runUsingSweeperEncoder();
+        runUsingBucketEncoder();
+        runUsingSpinnerEncoder();
     }
     //------------Set Without Motor Wheel Encoders------------
     public void runWithoutLeftDriveEncoder () {
@@ -466,10 +466,10 @@ public class BigBerthaHardware extends OpMode {
                 motorChainHooks.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         }
     }
-    public void runWithoutSpinnerEncoder () {
-        if (motorSpinner != null) {
-            if (motorSpinner.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS)
-                motorSpinner.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    public void runWithoutSweeperEncoder () {
+        if (motorSweeper != null) {
+            if (motorSweeper.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS)
+                motorSweeper.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         }
     }
     public void runWithoutBucketEncoder () {
@@ -478,10 +478,10 @@ public class BigBerthaHardware extends OpMode {
                 motorBucket.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         }
     }
-    public void runWithoutSweeperEncoder () {
-        if (motorSweeper != null) {
-            if (motorSweeper.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS)
-                motorSweeper.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    public void runWithoutSpinnerEncoder () {
+        if (motorSpinner != null) {
+            if (motorSpinner.getChannelMode () == DcMotorController.RunMode.RESET_ENCODERS)
+                motorSpinner.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         }
     }
     //------------Reset Motor Wheel Encoders------------
@@ -509,17 +509,17 @@ public class BigBerthaHardware extends OpMode {
         if (motorChainHooks != null)
             motorChainHooks.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
-    public void resetSpinnerEncoder () {
-        if (motorSpinner != null)
-            motorSpinner.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    public void resetSweeperEncoder () {
+        if (motorSweeper != null)
+            motorSweeper.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
     public void resetBucketEncoder () {
         if (motorBucket != null)
             motorBucket.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
-    public void resetSweeperEncoder () {
-        if (motorSweeper != null)
-            motorSweeper.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    public void resetSpinnerEncoder () {
+        if (motorSpinner != null)
+            motorSpinner.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
     //------------Get Motor Wheel Encoder Count------------
     int getLeftEncoderCount () {
@@ -552,10 +552,10 @@ public class BigBerthaHardware extends OpMode {
             returnLevel = motorChainHooks.getCurrentPosition ();
         return returnLevel;
     }
-    int getSpinnerEncoderCount () {
+    int getSweeperEncoderCount () {
         int returnLevel = 0;
-        if (motorSpinner != null)
-            returnLevel = motorSpinner.getCurrentPosition ();
+        if (motorSweeper != null)
+            returnLevel = motorSweeper.getCurrentPosition ();
         return returnLevel;
     }
     int getBucketEncoderCount () {
@@ -564,10 +564,10 @@ public class BigBerthaHardware extends OpMode {
             returnLevel = motorBucket.getCurrentPosition();
         return returnLevel;
     }
-    int getSweeperEncoderCount () {
+    int getSpinnerEncoderCount () {
         int returnLevel = 0;
-        if (motorSweeper != null)
-            returnLevel = motorSweeper.getCurrentPosition();
+        if (motorSpinner != null)
+            returnLevel = motorSpinner.getCurrentPosition();
         return returnLevel;
     }
     //------------Indicate Motor Wheel Encoders Value------------
@@ -622,11 +622,11 @@ public class BigBerthaHardware extends OpMode {
         }
         return returnLevel;
     }
-    boolean hasSpinnerEncoderReached (double count) {
+    boolean hasSweeperEncoderReached (double count) {
         boolean returnLevel = false;
-        if (motorSpinner != null) {
+        if (motorSweeper != null) {
             // TODO Implement stall code using these variables.
-            if (Math.abs (motorSpinner.getCurrentPosition ()) > count)
+            if (Math.abs (motorSweeper.getCurrentPosition ()) > count)
                 returnLevel = true;
         }
         return returnLevel;
@@ -640,11 +640,11 @@ public class BigBerthaHardware extends OpMode {
         }
         return returnLevel;
     }
-    boolean hasSweeperEncoderReached (double count) {
+    boolean hasSpinnerEncoderReached (double count) {
         boolean returnLevel = false;
-        if (motorSweeper != null) {
+        if (motorSpinner != null) {
             // TODO Implement stall code using these variables.
-            if (Math.abs (motorSweeper.getCurrentPosition ()) > count)
+            if (Math.abs (motorSpinner.getCurrentPosition ()) > count)
                 returnLevel = true;
         }
         return returnLevel;
@@ -694,13 +694,13 @@ public class BigBerthaHardware extends OpMode {
         }
         return returnLevel;
     }
-    boolean runSpinnerUsingEncoder (double spinnerPower, double backSpinnerPower, double spinnerCount) {
+    boolean runSweeperUsingEncoder (double sweeperPower, double backSweeperPower, double sweeperCount) {
         boolean returnLevel = false;
         RUN_USING_ENCODERS();
-        setSpinnerPower(spinnerPower, backSpinnerPower);
-        if (hasSpinnerEncoderReached(spinnerCount)) {
-            resetSpinnerEncoder();
-            setSpinnerPower(0.0f, 0.0f);
+        setSweeperPower(sweeperPower, backSweeperPower);
+        if (hasSweeperEncoderReached(sweeperCount)) {
+            resetSweeperEncoder();
+            setSweeperPower(0.0f, 0.0f);
             returnLevel = true;
         }
         return returnLevel;
@@ -716,13 +716,13 @@ public class BigBerthaHardware extends OpMode {
         }
         return returnLevel;
     }
-    boolean runSweeperUsingEncoder (double sweeperPower, double sweeperCount) {
+    boolean runSpinnerUsingEncoder (double spinnerPower, double spinnerCount) {
         boolean returnLevel = false;
         RUN_USING_ENCODERS();
-        setSweeperPower(sweeperPower);
-        if (hasSweeperEncoderReached(sweeperCount)) {
-            resetSweeperEncoder();
-            setSweeperPower(0.0f);
+        setSpinnerPower(spinnerPower);
+        if (hasSpinnerEncoderReached(spinnerCount)) {
+            resetSpinnerEncoder();
+            setSpinnerPower(0.0f);
             returnLevel = true;
         }
         return returnLevel;
@@ -764,9 +764,9 @@ public class BigBerthaHardware extends OpMode {
             returnLevel = true;
         return returnLevel;
     }
-    boolean hasSpinnerEncoderReset () {
+    boolean hasSweeperEncoderReset () {
         boolean returnLevel = false;
-        if (getSpinnerEncoderCount() == 0)
+        if (getSweeperEncoderCount() == 0)
             returnLevel = true;
         return returnLevel;
     }
@@ -776,9 +776,9 @@ public class BigBerthaHardware extends OpMode {
             returnLevel = true;
         return returnLevel;
     }
-    boolean hasSweeperEncoderReset () {
+    boolean hasSpinnerEncoderReset () {
         boolean returnLevel = false;
-        if (getSweeperEncoderCount() == 0)
+        if (getSpinnerEncoderCount() == 0)
             returnLevel = true;
         return returnLevel;
     }
