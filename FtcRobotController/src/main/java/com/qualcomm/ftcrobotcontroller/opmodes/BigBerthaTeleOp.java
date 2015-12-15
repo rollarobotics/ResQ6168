@@ -15,7 +15,7 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
     private static float bucketPower;
     private static float backBucketPower;
     private static float fullBucketPower;
-    private static float sweeperPower;
+    private static float spinnerPower;
 
     /**
      * Construct the class.
@@ -45,18 +45,18 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         float leftDrivePower = scaleMotorPower (-gamepad1.left_stick_y);
         float rightDrivePower = scaleMotorPower (-gamepad1.right_stick_y);
         float liftArmPower = scaleMotorPower (gamepad2.right_stick_y);
-        float spinnerPower = scaleMotorPower (gamepad2.right_trigger);
-        float backSpinnerPower = scaleMotorPower (-gamepad2.left_trigger);
+        float sweeperPower = scaleMotorPower (gamepad2.right_trigger);
+        float backSweeperPower = scaleMotorPower (-gamepad2.left_trigger);
         bucketPower = scaleMotorPower (gamepad1.right_trigger);
         backBucketPower = scaleMotorPower (-gamepad1.left_trigger);
-        float sweeperPower = scaleMotorPower (-gamepad2.left_stick_y);
+        float spinnerPower = scaleMotorPower (-gamepad2.left_stick_y);
         // The setPower methods write the motor power values to the DcMotor
         // class, but the power levels aren't applied until this method ends.
         setDrivePower (leftDrivePower, rightDrivePower);
         setLiftArmPower(liftArmPower);
-        setSpinnerPower(spinnerPower, backSpinnerPower);
+        setSweeperPower(sweeperPower, backSweeperPower);
         setBucketPower(bucketPower, backBucketPower);
-        setSweeperPower(sweeperPower);
+        setSpinnerPower(spinnerPower);
 
         if (gamepad1.right_bumper)
             setChainHooksPower(chainHooksPower);
@@ -103,6 +103,6 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         telemetry.addData("001Bucket" , bucketPower);
         telemetry.addData("002Back Bucket" , backBucketPower);
         telemetry.addData("003Spinner" , spinnerPower);
-        telemetry.addData("004Back Spinner" , backSpinnerPower);
+        telemetry.addData("004Back Sweeper" , backSweeperPower);
     } //--------------------------------------------------------------------------loop
 } //------------------------------------------------------------------------------BigBerthaTeleOp

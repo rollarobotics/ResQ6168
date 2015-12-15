@@ -40,13 +40,13 @@ public class BigBerthaTelemetry extends BigBerthaHardware
                 + "Hardware Value: " + BigBerthaHardware.getLiftValue());
         telemetry.addData("26 Chain Hooks Power", getChainHooksPower()+ ", " + getChainHooksEncoderCount()
                 + "Hardware Value: " + BigBerthaHardware.getChainHooksValue());
-        telemetry.addData("27 Spinner Power"    , getSpinnerPower()   + ", " + getSpinnerEncoderCount()
-                + "Hardware Value: " + BigBerthaHardware.getFullSpinnerValue());
+        telemetry.addData("27 Sweeper Power"    , getSweeperPower()   + ", " + getSweeperEncoderCount()
+                + "Hardware Value: " + BigBerthaHardware.getFullSweeperValue());
         telemetry.addData("28 Bucket Power"     , getBucketPower() + ", " + getBucketEncoderCount() + ", "
                 + "TeleOp Value Power: " + BigBerthaTeleOp.getBucketValuePower() + ", "
                 + "Hardware Value: " + BigBerthaHardware.getFullBucketValue());
-        telemetry.addData("29 Sweeper Power"    , getSweeperPower()   + ", " + getSweeperEncoderCount()
-                + "Hardware Value: " + BigBerthaHardware.getSweeperValue());
+        telemetry.addData("29 Spinner Power"    , getSpinnerPower()   + ", " + getSpinnerEncoderCount()
+                + "Hardware Value: " + BigBerthaHardware.getSpinnerValue());
     } //--------------------------------------------------------------------------updateTelemetry
     /**
      * Update the telemetry with current gamepad readings.
@@ -66,11 +66,11 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         telemetry.addData ("11 Lift GP2 Dpad Down"               , gamepad2.dpad_down);
         telemetry.addData ("12 Chain Hooks GP1 Left Bumper"      , gamepad1.left_bumper);
         telemetry.addData ("13 Chain Hooks GP1 Right Bumper"     , gamepad1.right_bumper);
-        telemetry.addData ("14 Spinner GP2 Right Trigger"        , gamepad2.right_trigger);
-        telemetry.addData ("15 Reverse Spinner GP2 Left Trigger" ,-gamepad2.left_trigger);
+        telemetry.addData ("14 Sweeper GP2 Right Trigger"        , gamepad2.right_trigger);
+        telemetry.addData ("15 Reverse Sweeper GP2 Left Trigger" ,-gamepad2.left_trigger);
         telemetry.addData ("16 Bucket GP1 Right Trigger"         , gamepad1.right_trigger);
         telemetry.addData ("17 Reverse Bucket GP1 Left Trigger"  ,-gamepad1.left_trigger);
-        telemetry.addData ("18 Sweeper GP2 Left Stick"           ,-gamepad2.left_stick_y);
+        telemetry.addData ("18 Spinner GP2 Left Stick"           ,-gamepad2.left_stick_y);
     } //--------------------------------------------------------------------------updateGamepadTelemetry
     /**
      * Update the telemetry's first message with the specified message.
