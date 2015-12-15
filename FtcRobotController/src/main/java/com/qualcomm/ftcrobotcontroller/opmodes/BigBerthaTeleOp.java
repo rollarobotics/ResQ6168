@@ -8,15 +8,6 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  * @version 2015-08-01-06-01-----2015-12-01
  */
 public class BigBerthaTeleOp extends BigBerthaTelemetry {
-    private static float leftDrivePower; //= getLeftDrivePower();
-    private static float rightDrivePower;
-    private static float liftArmPower;
-    private static float liftPower;
-    private static float bucketPower;
-    private static float backBucketPower;
-    private static float fullBucketPower;
-    private static float spinnerPower;
-
     /**
      * Construct the class.
      * The system calls this member when the class is instantiated.
@@ -25,12 +16,9 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         // Initialize base classes and class members.
         // All via self-construction.
     } //--------------------------------------------------------------------------BigBerthaTeleOp
-    public static double getBucketValuePower() {
-        float b = bucketPower;
-        float bb = backBucketPower;
-        if (b == 0)
-            b = bb;
-        return b;
+    @Override public void init () {
+        hardwareInit ();
+        initTelemetry();
     }
     /**
      * The system calls this member repeatedly while the OpMode is running.
@@ -44,11 +32,11 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         // Note that x and y equal -1 when the joystick is pushed all of the way forward.
         float leftDrivePower = scaleMotorPower (-gamepad1.left_stick_y);
         float rightDrivePower = scaleMotorPower (-gamepad1.right_stick_y);
-        float liftArmPower = scaleMotorPower (gamepad2.right_stick_y);
+        float liftArmPower = scaleMotorPower (-gamepad2.right_stick_y);
         float sweeperPower = scaleMotorPower (gamepad1.right_trigger);
         float backSweeperPower = scaleMotorPower (-gamepad1.left_trigger);
-        bucketPower = scaleMotorPower (gamepad2.right_trigger);
-        backBucketPower = scaleMotorPower (-gamepad2.left_trigger);
+        float bucketPower = scaleMotorPower (gamepad2.right_trigger);
+        float backBucketPower = scaleMotorPower (-gamepad2.left_trigger);
         float spinnerPower = scaleMotorPower (-gamepad2.left_stick_y);
         // The setPower methods write the motor power values to the DcMotor
         // class, but the power levels aren't applied until this method ends.
@@ -100,9 +88,5 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         // Send telemetry data to the driver station.
         updateTelemetry(); // Update common telemetry
         updateGamepadTelemetry ();
-        telemetry.addData("001Bucket" , bucketPower);
-        telemetry.addData("002Back Bucket" , backBucketPower);
-        telemetry.addData("003Spinner" , spinnerPower);
-        telemetry.addData("004Back Sweeper" , backSweeperPower);
     } //--------------------------------------------------------------------------loop
 } //------------------------------------------------------------------------------BigBerthaTeleOp
