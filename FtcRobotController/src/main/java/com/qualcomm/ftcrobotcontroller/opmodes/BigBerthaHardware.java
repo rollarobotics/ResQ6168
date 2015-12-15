@@ -523,263 +523,191 @@ public class BigBerthaHardware extends OpMode {
     }
     //------------Get Motor Wheel Encoder Count------------
     int getLeftEncoderCount () {
-        int returnLevel = 0;
         if (motorLeftDrive != null)
-            returnLevel = motorLeftDrive.getCurrentPosition ();
-        return returnLevel;
+            return motorLeftDrive.getCurrentPosition ();
+        return 0;
     }
     int getRightEncoderCount () {
-        int returnLevel = 0;
         if (motorRightDrive != null)
-            returnLevel = motorRightDrive.getCurrentPosition ();
-        return returnLevel;
+            return motorRightDrive.getCurrentPosition ();
+        return 0;
     }
     int getLiftArmEncoderCount () {
-        int returnLevel = 0;
         if (motorLiftArm != null)
-            returnLevel = motorLiftArm.getCurrentPosition ();
-        return returnLevel;
+            return motorLiftArm.getCurrentPosition ();
+        return 0;
     }
     int getLiftEncoderCount () {
-        int returnLevel = 0;
         if (motorLift != null)
-            returnLevel = motorLift.getCurrentPosition ();
-        return returnLevel;
+            return motorLift.getCurrentPosition ();
+        return 0;
     }
     int getChainHooksEncoderCount () {
-        int returnLevel = 0;
         if (motorChainHooks != null)
-            returnLevel = motorChainHooks.getCurrentPosition ();
-        return returnLevel;
+            return motorChainHooks.getCurrentPosition ();
+        return 0;
     }
     int getSweeperEncoderCount () {
-        int returnLevel = 0;
         if (motorSweeper != null)
-            returnLevel = motorSweeper.getCurrentPosition ();
-        return returnLevel;
+            return motorSweeper.getCurrentPosition ();
+        return 0;
     }
     int getBucketEncoderCount () {
-        int returnLevel = 0;
         if (motorBucket != null)
-            returnLevel = motorBucket.getCurrentPosition();
-        return returnLevel;
+            return motorBucket.getCurrentPosition();
+        return 0;
     }
     int getSpinnerEncoderCount () {
-        int returnLevel = 0;
         if (motorSpinner != null)
-            returnLevel = motorSpinner.getCurrentPosition();
-        return returnLevel;
+            return motorSpinner.getCurrentPosition();
+        return 0;
     }
     //------------Indicate Motor Wheel Encoders Value------------
     boolean hasLeftDriveEncoderReached (double count) {
-        boolean returnLevel = false;
         if (motorLeftDrive != null) {
             // TODO Implement stall code using these variables.
             if (Math.abs (motorLeftDrive.getCurrentPosition ()) > count)
-                returnLevel = true;
+                return true;
         }
-        return returnLevel;
+        return false;
     }
     boolean hasRightDriveEncoderReached (double count) {
-        boolean returnLevel = false;
         if (motorRightDrive != null) {
             // TODO Implement stall code using these variables.
             if (Math.abs (motorRightDrive.getCurrentPosition ()) > count)
-                returnLevel = true;
+                return true;
         }
-        return returnLevel;
+        return false;
     }
-    boolean haveDriveEncodersReached (double leftCount, double rightCount) {
-        boolean returnLevel = false;
-        if (hasLeftDriveEncoderReached(leftCount) && hasRightDriveEncoderReached(rightCount))
-            returnLevel = true;
-        return returnLevel;
-    }
+    boolean haveDriveEncodersReached (double leftCount, double rightCount) {return hasLeftDriveEncoderReached(leftCount)
+            && hasRightDriveEncoderReached(rightCount);}
     boolean hasLiftArmEncoderReached (double count) {
-        boolean returnLevel = false;
         if (motorLiftArm != null) {
             // TODO Implement stall code using these variables.
             if (Math.abs (motorLiftArm.getCurrentPosition ()) > count)
-                returnLevel = true;
+                return true;
         }
-        return returnLevel;
+        return false;
     }
     boolean hasLiftEncoderReached (double count) {
-        boolean returnLevel = false;
         if (motorLift != null) {
             // TODO Implement stall code using these variables.
             if (Math.abs (motorLift.getCurrentPosition ()) > count)
-                returnLevel = true;
+                return true;
         }
-        return returnLevel;
+        return false;
     }
     boolean hasChainHooksEncoderReached (double count) {
-        boolean returnLevel = false;
         if (motorChainHooks != null) {
             // TODO Implement stall code using these variables.
             if (Math.abs (motorChainHooks.getCurrentPosition ()) > count)
-                returnLevel = true;
+                return true;
         }
-        return returnLevel;
+        return false;
     }
     boolean hasSweeperEncoderReached (double count) {
-        boolean returnLevel = false;
         if (motorSweeper != null) {
             // TODO Implement stall code using these variables.
             if (Math.abs (motorSweeper.getCurrentPosition ()) > count)
-                returnLevel = true;
+                return true;
         }
-        return returnLevel;
+        return false;
     }
     boolean hasBucketEncoderReached (double count) {
-        boolean returnLevel = false;
         if (motorBucket != null) {
             // TODO Implement stall code using these variables.
             if (Math.abs (motorBucket.getCurrentPosition ()) > count)
-                returnLevel = true;
+                return true;
         }
-        return returnLevel;
+        return false;
     }
     boolean hasSpinnerEncoderReached (double count) {
-        boolean returnLevel = false;
         if (motorSpinner != null) {
             // TODO Implement stall code using these variables.
             if (Math.abs (motorSpinner.getCurrentPosition ()) > count)
-                returnLevel = true;
+                return true;
         }
-        return returnLevel;
+        return false;
     }
     //------------Indicate whether the motor wheel encoders have reached a value------------
     boolean driveUsingEncoders (double leftPower, double rightPower, double leftCount, double rightCount) {
-        boolean returnLevel = false;
         RUN_USING_ENCODERS();
         setDrivePower(leftPower, rightPower);
         if (haveDriveEncodersReached(leftCount, rightCount)) {
             resetDriveEncoders();
             setDrivePower(0.0f, 0.0f);
-            returnLevel = true;
+            return true;
         }
-        return returnLevel;
+        return false;
     }
     boolean runLiftArmUsingEncoder (double liftArmPower, double liftArmCount) {
-        boolean returnLevel = false;
         RUN_USING_ENCODERS();
         setLiftArmPower(liftArmPower);
         if (hasLiftArmEncoderReached(liftArmCount)) {
             resetLiftArmEncoder();
             setLiftArmPower(0.0f);
-            returnLevel = true;
+            return true;
         }
-        return returnLevel;
+        return false;
     }
     boolean runLiftUsingEncoder (double liftPower, double liftCount) {
-        boolean returnLevel = false;
         RUN_USING_ENCODERS();
         setLiftPower(liftPower);
         if (hasLiftEncoderReached(liftCount)) {
             resetLiftEncoder();
             setLiftPower(0.0f);
-            returnLevel = true;
+            return true;
         }
-        return returnLevel;
+        return false;
     }
     boolean runChainHooksUsingEncoder (double chainHooksPower, double chainHooksCount) {
-        boolean returnLevel = false;
         RUN_USING_ENCODERS();
         setChainHooksPower(chainHooksPower);
         if (hasChainHooksEncoderReached(chainHooksCount)) {
             resetChainHooksEncoder();
             setChainHooksPower(0.0f);
-            returnLevel = true;
+            return true;
         }
-        return returnLevel;
+        return false;
     }
     boolean runSweeperUsingEncoder (double sweeperPower, double backSweeperPower, double sweeperCount) {
-        boolean returnLevel = false;
         RUN_USING_ENCODERS();
         setSweeperPower(sweeperPower, backSweeperPower);
         if (hasSweeperEncoderReached(sweeperCount)) {
             resetSweeperEncoder();
             setSweeperPower(0.0f, 0.0f);
-            returnLevel = true;
+            return true;
         }
-        return returnLevel;
+        return false;
     }
     boolean runBucketUsingEncoder (double bucketPower, double backBucketPower, double bucketCount) {
-        boolean returnLevel = false;
         RUN_USING_ENCODERS();
         setBucketPower(bucketPower, backBucketPower);
         if (hasBucketEncoderReached(bucketCount)) {
             resetBucketEncoder();
             setBucketPower(0.0f, 0.0f);
-            returnLevel = true;
+            return true;
         }
-        return returnLevel;
+        return false;
     }
     boolean runSpinnerUsingEncoder (double spinnerPower, double spinnerCount) {
-        boolean returnLevel = false;
         RUN_USING_ENCODERS();
         setSpinnerPower(spinnerPower);
         if (hasSpinnerEncoderReached(spinnerCount)) {
             resetSpinnerEncoder();
             setSpinnerPower(0.0f);
-            returnLevel = true;
+            return true;
         }
-        return returnLevel;
+        return false;
     }
     //------------Indicate If Motor Wheel Encoder Has Reset------------
-    boolean hasLeftDriveEncoderReset () {
-        boolean returnLevel = false;
-        if (getLeftEncoderCount() == 0)
-            returnLevel = true;
-        return returnLevel;
-    }
-    boolean hasRightDriveEncoderReset () {
-        boolean returnLevel = false;
-        if (getRightEncoderCount() == 0)
-            returnLevel = true;
-        return returnLevel;
-    }
-    boolean haveDriveEncodersReset () {
-        boolean returnLevel = false;
-        if (hasLeftDriveEncoderReset() && hasRightDriveEncoderReset())
-            returnLevel = true;
-        return returnLevel;
-    }
-    boolean hasLiftArmEncoderReset () {
-        boolean returnLevel = false;
-        if (getLiftArmEncoderCount() == 0)
-            returnLevel = true;
-        return returnLevel;
-    }
-    boolean hasLiftEncoderReset () {
-        boolean returnLevel = false;
-        if (getLiftEncoderCount() == 0)
-            returnLevel = true;
-        return returnLevel;
-    }
-    boolean hasChainHooksEncoderReset () {
-        boolean returnLevel = false;
-        if (getChainHooksEncoderCount() == 0)
-            returnLevel = true;
-        return returnLevel;
-    }
-    boolean hasSweeperEncoderReset () {
-        boolean returnLevel = false;
-        if (getSweeperEncoderCount() == 0)
-            returnLevel = true;
-        return returnLevel;
-    }
-    boolean hasBucketEncoderReset () {
-        boolean returnLevel = false;
-        if (getBucketEncoderCount() == 0)
-            returnLevel = true;
-        return returnLevel;
-    }
-    boolean hasSpinnerEncoderReset () {
-        boolean returnLevel = false;
-        if (getSpinnerEncoderCount() == 0)
-            returnLevel = true;
-        return returnLevel;
-    }
+    boolean hasLeftDriveEncoderReset () {return getLeftEncoderCount() == 0;}
+    boolean hasRightDriveEncoderReset() {return getRightEncoderCount() == 0;}
+    boolean haveDriveEncodersReset   () {return hasLeftDriveEncoderReset() && hasRightDriveEncoderReset();}
+    boolean hasLiftArmEncoderReset   () {return (getLiftArmEncoderCount() == 0);}
+    boolean hasLiftEncoderReset      () {return (getLiftEncoderCount() == 0);}
+    boolean hasChainHooksEncoderReset() {return (getChainHooksEncoderCount() == 0);}
+    boolean hasSweeperEncoderReset   () {return (getSweeperEncoderCount() == 0);}
+    boolean hasBucketEncoderReset    () {return (getBucketEncoderCount() == 0);}
+    boolean hasSpinnerEncoderReset   () {return (getSpinnerEncoderCount() == 0);}
 }
