@@ -27,17 +27,21 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         // ------------DC Motors------------
         double chainHooksPower = 0.80;
         double liftPower = 0.8;
+        float bucketPower = 0.0f;
+        float backBucketPower = 0.0f;
         // Obtain the current values of the joystick controllers.
         // The DC motors are scaled to make it easier to control them at slower speeds.
         // Note that x and y equal -1 when the joystick is pushed all of the way forward.
-        float leftDrivePower = scaleMotorPower (-gamepad1.left_stick_y);
-        float rightDrivePower = scaleMotorPower (-gamepad1.right_stick_y);
-        float liftArmPower = scaleMotorPower (-gamepad2.right_stick_y);
-        float sweeperPower = scaleMotorPower (gamepad1.right_trigger);
-        float backSweeperPower = scaleMotorPower (-gamepad1.left_trigger);
-        float bucketPower = scaleMotorPower (gamepad2.right_trigger);
-        float backBucketPower = scaleMotorPower (-gamepad2.left_trigger);
-        float spinnerPower = scaleMotorPower (-gamepad2.left_stick_y);
+        float leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y);
+        float rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y);
+        float liftArmPower = scaleMotorPower(-gamepad2.right_stick_y);
+        float sweeperPower = scaleMotorPower(gamepad1.right_trigger);
+        float backSweeperPower = scaleMotorPower(-gamepad1.left_trigger);
+        if (!(gamepad2.dpad_down || gamepad2.dpad_up)) {
+            bucketPower = scaleMotorPower(gamepad2.right_trigger);
+            backBucketPower = scaleMotorPower(-gamepad2.left_trigger);
+        }
+        float spinnerPower = scaleMotorPower(-gamepad2.left_stick_y);
         // The setPower methods write the motor power values to the DcMotor
         // class, but the power levels aren't applied until this method ends.
         setDrivePower (leftDrivePower, rightDrivePower);
@@ -45,6 +49,22 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         setSweeperPower(sweeperPower, backSweeperPower);
         setBucketPower(bucketPower, backBucketPower);
         setSpinnerPower(spinnerPower);
+
+        float liftUpScale = 0.0f;
+        float liftDownScale = 0.0f;
+
+        if (gamepad2.dpad_up || gamepad2.dpad_down) {
+            liftUpScale = scaleMotorPower(gamepad2.right_trigger);
+            clipMotorPositive (liftUpScale = liftUpScale / 4);
+        }
+        if (gamepad2.dpad_up || gamepad2.dpad_down) {
+            liftDownScale = scaleMotorPower(-gamepad2.left_trigger);
+            clipMotorNegative(liftDownScale = (liftDownScale / 5) * 4);
+        }
+        if (gamepad2.dpad_up)
+            liftPower = clipMotorPositive(liftPower + liftUpScale + liftDownScale);
+        if (gamepad2.dpad_down)
+            liftPower = clipMotorPositive(liftPower + liftUpScale + liftDownScale);
 
         if (gamepad1.right_bumper)
             setChainHooksPower(chainHooksPower);
@@ -76,9 +96,9 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         else
             setHookPosition(0.5);
 
-        if (gamepad2.a)
+        if (gamepad2.b)
             setManPosition (1.0);
-        else if (gamepad2.b)
+        else if (gamepad2.a)
             setManPosition (0.0);
         else
             setManPosition(0.5);
