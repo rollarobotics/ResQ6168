@@ -29,14 +29,18 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         double liftPower = 0.8;
         float bucketPower = 0.0f;
         float backBucketPower = 0.0f;
+        float sweeperPower = 0.0f;
+        float backSweeperPower = 0.0f;
         // Obtain the current values of the joystick controllers.
         // The DC motors are scaled to make it easier to control them at slower speeds.
         // Note that x and y equal -1 when the joystick is pushed all of the way forward.
         float leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y);
         float rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y);
         float liftArmPower = scaleMotorPower(-gamepad2.right_stick_y);
-        float sweeperPower = scaleMotorPower(gamepad1.right_trigger);
-        float backSweeperPower = scaleMotorPower(-gamepad1.left_trigger);
+        if (!(gamepad1.right_bumper || gamepad1.left_bumper)) {
+            sweeperPower = scaleMotorPower(gamepad1.right_trigger);
+            backSweeperPower = scaleMotorPower(-gamepad1.left_trigger);
+        }
         if (!(gamepad2.dpad_down || gamepad2.dpad_up)) {
             bucketPower = scaleMotorPower(gamepad2.right_trigger);
             backBucketPower = scaleMotorPower(-gamepad2.left_trigger);
@@ -52,10 +56,12 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
 
         float liftUpScale = 0.0f;
         float liftDownScale = 0.0f;
+        float chainHooksUpScale = 0.0f;
+        float chainHooksDownScale = 0.0f;
 
         if (gamepad2.dpad_up || gamepad2.dpad_down) {
             liftUpScale = scaleMotorPower(gamepad2.right_trigger);
-            clipMotorPositive (liftUpScale = liftUpScale / 4);
+            clipMotorPositive(liftUpScale = liftUpScale / 4);
         }
         if (gamepad2.dpad_up || gamepad2.dpad_down) {
             liftDownScale = scaleMotorPower(-gamepad2.left_trigger);
@@ -66,19 +72,32 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         if (gamepad2.dpad_down)
             liftPower = clipMotorPositive(liftPower + liftUpScale + liftDownScale);
 
-        if (gamepad1.right_bumper)
-            setChainHooksPower(chainHooksPower);
-        else if (gamepad1.left_bumper)
-            setChainHooksPower(-chainHooksPower);
-        else
-            setChainHooksPower (0);
-
         if (gamepad2.dpad_up)
             setLiftPower(liftPower);
         else if (gamepad2.dpad_down)
             setLiftPower(-liftPower);
         else
             setLiftPower(0);
+
+        if (gamepad1.right_bumper || gamepad1.left_bumper) {
+            chainHooksUpScale = scaleMotorPower(gamepad2.right_trigger);
+            clipMotorPositive (chainHooksUpScale = chainHooksUpScale / 4);
+        }
+        if (gamepad1.right_bumper || gamepad1.left_bumper) {
+            chainHooksDownScale = scaleMotorPower(-gamepad2.left_trigger);
+            clipMotorNegative(chainHooksDownScale = (chainHooksDownScale / 5) * 4);
+        }
+        if (gamepad1.right_bumper)
+            chainHooksPower = clipMotorPositive(chainHooksPower + chainHooksUpScale + chainHooksDownScale);
+        if (gamepad1.left_bumper)
+            chainHooksPower = clipMotorPositive(chainHooksPower + chainHooksUpScale + chainHooksDownScale);
+
+        if (gamepad1.right_bumper)
+            setChainHooksPower(chainHooksPower);
+        else if (gamepad1.left_bumper)
+            setChainHooksPower(-chainHooksPower);
+        else
+            setChainHooksPower (0);
         //------------Servo Motors------------
         // The mPosition methods write the motor power values to the Servo
         // class, but the positions aren't applied until this method ends.

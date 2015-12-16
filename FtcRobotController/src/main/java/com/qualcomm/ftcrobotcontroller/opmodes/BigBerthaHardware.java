@@ -121,6 +121,7 @@ public class BigBerthaHardware extends OpMode {
         try {
             motorBucket = hardwareMap.dcMotor.get ("bucket");
             motorBucket.setPower(initBucketPower);
+            motorBucket.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
             setWarningMessage("bucket");
             DbgLog.msg (opModeException.getLocalizedMessage ());
