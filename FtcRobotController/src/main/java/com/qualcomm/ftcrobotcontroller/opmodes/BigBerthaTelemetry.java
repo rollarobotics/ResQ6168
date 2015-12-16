@@ -40,24 +40,24 @@ public class BigBerthaTelemetry extends BigBerthaHardware
     }
     public void updateGamepadTelemetry () {
         // Send telemetry data concerning gamepads to the driver station.
-        telemetry.addData ("01" , "Bucket Door GP1 Y: " + gamepad1.y);
-        telemetry.addData ("02" , "Bucket Door GP1 X: " + gamepad1.x);
-        telemetry.addData ("03" , "Hook GP2 Y: "        + gamepad2.y);
-        telemetry.addData ("04" , "Hook GP2 X: "        + gamepad2.x);
-        telemetry.addData ("05" , "Man GP2 A: "         + gamepad2.a);
-        telemetry.addData ("06" , "Man GP2 B: "         + gamepad2.b);
-        telemetry.addData ("07" , "Right GP1 Right Stick: " +zero(-gamepad1.right_stick_y));
-        telemetry.addData ("08" , "Left GP1 Left Stick: "   +zero(-gamepad1.left_stick_y));
-        telemetry.addData ("09" , "Lift Arm GP2 Right Stick: "    +zero(-gamepad2.right_stick_y));
-        telemetry.addData ("10" , "Lift GP2 Dpad Up: "                 + gamepad2.dpad_up);
-        telemetry.addData ("11" , "Lift GP2 Dpad Down: "               + gamepad2.dpad_down);
-        telemetry.addData ("12" , "Chain Hooks GP1 Right Bumper: "     + gamepad1.right_bumper);
-        telemetry.addData ("13" , "Chain Hooks GP1 Left Bumper: "      + gamepad1.left_bumper);
-        telemetry.addData ("14" , "Sweeper GP1 Right Trigger: "        + gamepad1.right_trigger);
-        telemetry.addData ("15" , "Reverse Sweeper GP1 Left Trigger: " +-gamepad1.left_trigger);
-        telemetry.addData ("16" , "Bucket GP2 Right Trigger: "         + gamepad2.right_trigger);
-        telemetry.addData ("17" , "Reverse Bucket GP2 Left Trigger: "  +-gamepad2.left_trigger);
-        telemetry.addData ("18" , "Spinner GP2 Left Stick: "      +zero(-gamepad2.left_stick_y));
+        telemetry.addData ("01" , "Bucket Door GP1 Y: "+ gamepad1.y);
+        telemetry.addData ("02" , "Bucket Door GP1 X: "+ gamepad1.x);
+        telemetry.addData ("03" , "Hook GP2 Y: "       + gamepad2.y);
+        telemetry.addData ("04" , "Hook GP2 X: "       + gamepad2.x);
+        telemetry.addData ("05" , "Man GP2 A: "        + gamepad2.a);
+        telemetry.addData ("06" , "Man GP2 B: "        + gamepad2.b);
+        telemetry.addData ("07" , "Right GP1 Right Stick: "   +zero(-gamepad1.right_stick_y));
+        telemetry.addData ("08" , "Left GP1 Left Stick: "     +zero(-gamepad1.left_stick_y));
+        telemetry.addData ("09" , "Lift Arm GP2 Right Stick: "+zero(-gamepad2.right_stick_y));
+        telemetry.addData ("10" , "Lift GP2 Dpad Up: "             + gamepad2.dpad_up);
+        telemetry.addData ("11" , "Lift GP2 Dpad Down: "           + gamepad2.dpad_down);
+        telemetry.addData ("12" , "Chain Hooks GP1 Right Bumper: " + gamepad1.right_bumper);
+        telemetry.addData ("13" , "Chain Hooks GP1 Left Bumper: "  + gamepad1.left_bumper);
+        telemetry.addData ("14" , "Sweeper GP1 Right Trigger: "    + gamepad1.right_trigger);
+        telemetry.addData ("15" , "Back Sweeper GP1 Left Trigger: "+-gamepad1.left_trigger);
+        telemetry.addData ("16" , "Bucket GP2 Right Trigger: "     + gamepad2.right_trigger);
+        telemetry.addData ("17" , "Back Bucket GP2 Left Trigger: " +-gamepad2.left_trigger);
+        telemetry.addData ("18" , "Spinner GP2 Left Stick: "  +zero(-gamepad2.left_stick_y));
     } //--------------------------------------------------------------------------updateGamepadTelemetry
     /**
      * Update the telemetry with current values from the base class.

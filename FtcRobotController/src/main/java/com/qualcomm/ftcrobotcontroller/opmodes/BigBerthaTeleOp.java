@@ -80,11 +80,11 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
             setLiftPower(0);
 
         if (gamepad1.right_bumper || gamepad1.left_bumper) {
-            chainHooksUpScale = scaleMotorPower(gamepad2.right_trigger);
+            chainHooksUpScale = scaleMotorPower(gamepad1.right_trigger);
             clipMotorPositive (chainHooksUpScale = chainHooksUpScale / 4);
         }
         if (gamepad1.right_bumper || gamepad1.left_bumper) {
-            chainHooksDownScale = scaleMotorPower(-gamepad2.left_trigger);
+            chainHooksDownScale = scaleMotorPower(-gamepad1.left_trigger);
             clipMotorNegative(chainHooksDownScale = (chainHooksDownScale / 5) * 4);
         }
         if (gamepad1.right_bumper)
