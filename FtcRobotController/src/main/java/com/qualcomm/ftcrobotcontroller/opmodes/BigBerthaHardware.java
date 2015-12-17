@@ -107,12 +107,12 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("chainHooks");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            //motorChainHooks = null;
             chainHooksValue = initChainHooksPower;
         }
         try {
             motorSweeper = hardwareMap.dcMotor.get ("sweeper");
             motorSweeper.setPower(initSweeperPower);
+            motorSweeper.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
             setWarningMessage("sweeper");
             DbgLog.msg (opModeException.getLocalizedMessage ());

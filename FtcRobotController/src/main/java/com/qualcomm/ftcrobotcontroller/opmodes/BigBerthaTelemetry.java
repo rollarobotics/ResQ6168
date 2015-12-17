@@ -66,18 +66,23 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         if (getWarningGenerated())
             setFirstMessage(getWarningMessage());
         // Send telemetry data to the driver station.
-        telemetry.addData("" , "");
-        telemetry.addData("19" , "Bucket Door Servo Position: "+ getBucketDoorPosition());
-        telemetry.addData("20" , "Hook Servo Position: "       + getHookPosition());
-        telemetry.addData("21" , "Man Servo Position: "        + getManPosition());
-        telemetry.addData("22" , "Right Drive Power: "+ getRightDrivePower()+ ", " + getRightEncoderCount());
-        telemetry.addData("23" , "Left Drive Power: " + getLeftDrivePower() + ", " + getLeftEncoderCount());
-        telemetry.addData("24" , "Lift Arm Power: "   + getLiftArmPower()   + ", " + getLiftArmEncoderCount());
-        telemetry.addData("25" , "Lift Power: "       + getLiftPower()      + ", " + getLiftEncoderCount());
-        telemetry.addData("26" , "Chain Hooks Power: "+ getChainHooksPower()+ ", " + getChainHooksEncoderCount());
-        telemetry.addData("27" , "Sweeper Power: "    + getSweeperPower()   + ", " + getSweeperEncoderCount());
-        telemetry.addData("28" , "Bucket Power: "     + getBucketPower() + ", " + getBucketEncoderCount());
-        telemetry.addData("29" , "Spinner Power: "    + getSpinnerPower()   + ", " + getSpinnerEncoderCount());
+        telemetry.addData ("19" , "Bucket Door Servo Position: "+ getBucketDoorPosition());
+        telemetry.addData ("20" , "Hook Servo Position: "       + getHookPosition());
+        telemetry.addData ("21" , "Man Servo Position: "        + getManPosition());
+        telemetry.addData ("22" , "Right Drive Power: "+ getRightDrivePower()+ ", " + getRightEncoderCount());
+        telemetry.addData ("23" , "Left Drive Power: " + getLeftDrivePower() + ", " + getLeftEncoderCount());
+        telemetry.addData ("24" , "Lift Arm Power: "   + getLiftArmPower()   + ", " + getLiftArmEncoderCount());
+        telemetry.addData ("25" , "Lift Power: "       + getLiftPower()      + ", " + getLiftEncoderCount());
+        telemetry.addData ("26" , "Chain Hooks Power: "+ getChainHooksPower()+ ", " + getChainHooksEncoderCount());
+        telemetry.addData ("27" , "Sweeper Power: "    + getSweeperPower()   + ", " + getSweeperEncoderCount());
+        telemetry.addData ("28" , "Bucket Power: "     + getBucketPower() + ", " + getBucketEncoderCount());
+        telemetry.addData ("29" , "Spinner Power: "    + getSpinnerPower()   + ", " + getSpinnerEncoderCount());
+        telemetry.addData ("30" , "Sweeper Off: " + BigBerthaTeleOp.isSweeperOff());
+        telemetry.addData ("31" , "Aux 1 Scale: " + BigBerthaTeleOp.isAux1ScaleOff());
+        telemetry.addData ("32" , "Bucket Off: " + BigBerthaTeleOp.isBucketOff());
+        telemetry.addData ("33" , "Aux 2 Scale: " + BigBerthaTeleOp.isAux2ScaleOff());
+        telemetry.addData ("34" , "back1: " + gamepad1.back);
+        telemetry.addData ("35" , "back2: " + gamepad2.back);
     } //--------------------------------------------------------------------------updateTelemetry
     /**
      * Update the telemetry's first message with the specified message.
