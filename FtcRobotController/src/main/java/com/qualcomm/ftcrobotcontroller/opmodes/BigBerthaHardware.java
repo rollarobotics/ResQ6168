@@ -130,6 +130,7 @@ public class BigBerthaHardware extends OpMode {
         try {
             motorSpinner = hardwareMap.dcMotor.get ("spinner");
             motorSpinner.setPower(initSpinnerPower);
+            motorSpinner.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
             setWarningMessage("spinner");
             DbgLog.msg (opModeException.getLocalizedMessage ());

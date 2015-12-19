@@ -87,6 +87,10 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
             leftDrivePower = leftDrivePower / 2;
         if (gamepad1.right_stick_button)
             rightDrivePower = rightDrivePower / 2;
+        if (gamepad2.right_stick_button)
+            liftArmPower = liftArmPower / 2;
+        if (gamepad2.left_stick_button)
+            spinnerPower = spinnerPower / 2;
         // The setPower methods write the motor power values to the DcMotor
         // class, but the power levels aren't applied until this method ends.
         setDrivePower (leftDrivePower, rightDrivePower);
