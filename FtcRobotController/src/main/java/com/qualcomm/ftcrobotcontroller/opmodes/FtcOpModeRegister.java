@@ -64,6 +64,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register ("Test6168", Test6168.class);
     //manager.register("DriveTrain", DriveTrain.class);
     manager.register("Big Bertha TeleOp", BigBerthaTeleOp.class);
+    manager.register("Big Bertha Lost WeightTeleOp", BigBerthaLostWeightTeleOp.class);
 
     /*
      * Uncomment any of the following lines if you want to register an op mode.

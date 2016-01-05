@@ -8,11 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-import java.lang.String;
-import java.lang.Object;
-import com.qualcomm.ftccommon.CommandList;
-
-
 /**
  * Provides a single hardware access point between custom op-modes and the OpMode class for BigBertha.
  * @author SSI Robotics and revised by Shane McEnaney
@@ -24,33 +19,71 @@ public class BigBerthaHardware extends OpMode {
     private String warningMessage;
     private DcMotor motorLeftDrive;
     private DcMotor motorRightDrive;
+    private DcMotor motorBackLeft;
+    private DcMotor motorBackRight;
     private DcMotor motorLiftArm;
+    private DcMotor motorLeftArm;
+    private DcMotor motorRightArm;
     private DcMotor motorLift;
+    private DcMotor motorLeftLift;
+    private DcMotor motorRightLift;
     private DcMotor motorChainHooks;
+    private DcMotor motorLeftChain;
+    private DcMotor motorRightChain;
     private DcMotor motorSweeper;
     private DcMotor motorBucket;
     private DcMotor motorSpinner;
     private Servo servoBucketDoor;
     private Servo servoHook;
     private Servo servoMan;
+    private Servo servoFlag;
+    private Servo servoChainHooks;
+    private Servo servoLeftChain;
+    private Servo servoRightChain;
+    private Servo servoSweeper;
+    private Servo servoBucket;
+    private Servo servoSpinner;
     //------------Virtual Values of Motors and Servos for Testing Code Without Robot------------
-    private static double leftDriveValue;
-    private static double rightDriveValue;
-    private static double liftArmValue;
-    private static double liftValue;
-    private static double chainHooksValue;
-    private static double sweeperValue;
-    private static double bucketValue;
-    private static double spinnerValue;
-    private static double bucketDoorValue;
-    private static double hookValue;
-    private static double manValue;
+    private static double mLeftDriveValue;
+    private static double mRightDriveValue;
+    private static double mBackLeftValue;
+    private static double mBackRightValue;
+    private static double mLiftArmValue;
+    private static double mLeftArmValue;
+    private static double mRightArmValue;
+    private static double mLiftValue;
+    private static double mLeftLiftValue;
+    private static double mRightLiftValue;
+    private static double mChainHooksValue;
+    private static double mLeftChainValue;
+    private static double mRightChainValue;
+    private static double mSweeperValue;
+    private static double mBucketValue;
+    private static double mSpinnerValue;
+    private static double sBucketDoorValue;
+    private static double sHookValue;
+    private static double sManValue;
+    private static double sFlagValue;
+    private static double sChainHooksValue;
+    private static double sLeftChainValue;
+    private static double sRightChainValue;
+    private static double sSweeperValue;
+    private static double sBucketValue;
+    private static double sSpinnerValue;
     //------------initial positions------------
     double initLeftDrivePower;
     double initRightDrivePower;
+    double initBackLeftPower;
+    double initBackRightPower;
     double initLiftArmPower;
+    double initLeftArmPower;
+    double initRightArmPower;
     double initLiftPower;
+    double initLeftLiftPower;
+    double initRightLiftPower;
     double initChainHooksPower;
+    double initLeftChainPower;
+    double initRightChainPower;
     double initSweeperPower;
     double initBucketPower;
     double initSpinnerPower;
@@ -58,9 +91,17 @@ public class BigBerthaHardware extends OpMode {
     private double initBucketDoorPosition = 0.5;
     private double initHookPosition = 0.5;
     private double initManPosition = 0.5;
+    private double initFlagPosition = 0.5;
+    private double initChainHooksPosition = 0.5;
+    private double initLeftChainPosition = 0.5;
+    private double initRightChainPosition = 0.5;
+    private double initSweeperPosition = 0.5;
+    private double initBucketPosition = 0.5;
+    private double initSpinnerPosition = 0.5;
 
     public BigBerthaHardware () {
     }
+
     public void hardwareInit () {
         // Use the hardwareMap to associate class members to hardware ports.
         warningGenerated = false; // Provide telemetry data to a class user
@@ -73,16 +114,33 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("leftDrive");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            leftDriveValue = initLeftDrivePower;
+            mLeftDriveValue = initLeftDrivePower;
         }
         try {
             motorRightDrive = hardwareMap.dcMotor.get ("right");
             motorRightDrive.setPower(initRightDrivePower);
-            motorRightDrive.setDirection (DcMotor.Direction.REVERSE);
+            motorRightDrive.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
             setWarningMessage("rightDrive");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            rightDriveValue = initRightDrivePower;
+            mRightDriveValue = initRightDrivePower;
+        }
+        try {
+            motorBackLeft = hardwareMap.dcMotor.get ("backLeft");
+            motorBackLeft.setPower(initBackLeftPower);
+        } catch (Exception opModeException) {
+            setWarningMessage("backLeftDrive");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            mBackLeftValue = initBackLeftPower;
+        }
+        try {
+            motorBackRight = hardwareMap.dcMotor.get ("backRight");
+            motorBackRight.setPower(initBackRightPower);
+            motorBackRight.setDirection(DcMotor.Direction.REVERSE);
+        } catch (Exception opModeException) {
+            setWarningMessage("backRightDrive");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            mBackRightValue = initBackRightPower;
         }
         try {
             motorLiftArm = hardwareMap.dcMotor.get ("liftArm");
@@ -91,7 +149,25 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("leftArm");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            liftArmValue = initLiftArmPower;
+            mLiftArmValue = initLiftArmPower;
+        }
+        try {
+            motorLeftArm = hardwareMap.dcMotor.get ("leftArm");
+            motorLeftArm.setPower(initLeftArmPower);
+            //motorLeftArm.setDirection(DcMotor.Direction.REVERSE);
+        } catch (Exception opModeException) {
+            setWarningMessage("leftArm");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            mLeftArmValue = initLeftArmPower;
+        }
+        try {
+            motorRightArm = hardwareMap.dcMotor.get ("rightArm");
+            motorRightArm.setPower(initRightArmPower);
+            //motorRightArm.setDirection(DcMotor.Direction.REVERSE);
+        } catch (Exception opModeException) {
+            setWarningMessage("rightArm");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            mRightArmValue = initRightArmPower;
         }
         try {
             motorLift = hardwareMap.dcMotor.get ("lift");
@@ -99,7 +175,23 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("lift");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            liftValue = initLiftPower;
+            mLiftValue = initLiftPower;
+        }
+        try {
+            motorLeftLift = hardwareMap.dcMotor.get ("leftLift");
+            motorLeftLift.setPower(initLeftLiftPower);
+        } catch (Exception opModeException) {
+            setWarningMessage("leftLift");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            mLeftLiftValue = initLeftLiftPower;
+        }
+        try {
+            motorRightLift = hardwareMap.dcMotor.get ("rightLift");
+            motorRightLift.setPower(initRightLiftPower);
+        } catch (Exception opModeException) {
+            setWarningMessage("rightLift");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            mRightLiftValue = initRightLiftPower;
         }
         try {
             motorChainHooks = hardwareMap.dcMotor.get ("chainHooks");
@@ -107,7 +199,23 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("chainHooks");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            chainHooksValue = initChainHooksPower;
+            mChainHooksValue = initChainHooksPower;
+        }
+        try {
+            motorLeftChain = hardwareMap.dcMotor.get ("leftChain");
+            motorLeftChain.setPower(initLeftChainPower);
+        } catch (Exception opModeException) {
+            setWarningMessage("leftChain");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            mLeftChainValue = initLeftChainPower;
+        }
+        try {
+            motorRightChain = hardwareMap.dcMotor.get ("rightChain");
+            motorRightChain.setPower(initRightChainPower);
+        } catch (Exception opModeException) {
+            setWarningMessage("rightChain");
+            DbgLog.msg (opModeException.getLocalizedMessage ());
+            mRightChainValue = initRightChainPower;
         }
         try {
             motorSweeper = hardwareMap.dcMotor.get ("sweeper");
@@ -116,7 +224,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("sweeper");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            sweeperValue = initSweeperPower;
+            mSweeperValue = initSweeperPower;
         }
         try {
             motorBucket = hardwareMap.dcMotor.get ("bucket");
@@ -125,41 +233,97 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("bucket");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            bucketValue = initBucketPower;
+            mBucketValue = initBucketPower;
         }
         try {
             motorSpinner = hardwareMap.dcMotor.get ("spinner");
             motorSpinner.setPower(initSpinnerPower);
-            motorSpinner.setDirection(DcMotor.Direction.REVERSE);
+            //motorSpinner.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
             setWarningMessage("spinner");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            spinnerValue = initSpinnerPower;
+            mSpinnerValue = initSpinnerPower;
         }
         //------------Servos------------
         try {
-            servoBucketDoor = hardwareMap.servo.get ("bucketDoor");
+            servoBucketDoor = hardwareMap.servo.get ("sBucketDoor");
             servoBucketDoor.setPosition (initBucketDoorPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("bucketDoor");
+            setWarningMessage("sBucketDoor");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            bucketDoorValue = initBucketDoorPosition;
+            sBucketDoorValue = initBucketDoorPosition;
         }
         try {
-            servoHook = hardwareMap.servo.get ("hook");
+            servoHook = hardwareMap.servo.get ("sHook");
             servoHook.setPosition (initHookPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("hook");
+            setWarningMessage("sHook");
             DbgLog.msg(opModeException.getLocalizedMessage());
-            hookValue = initHookPosition;
+            sHookValue = initHookPosition;
         }
         try {
-            servoMan = hardwareMap.servo.get ("man");
+            servoMan = hardwareMap.servo.get ("sMan");
             servoMan.setPosition (initManPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("man");
+            setWarningMessage("sMan");
             DbgLog.msg(opModeException.getLocalizedMessage());
-            manValue = initManPosition;
+            sManValue = initManPosition;
+        }
+        try {
+            servoFlag = hardwareMap.servo.get ("sFlag");
+            servoFlag.setPosition (initFlagPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("sFlag");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            sFlagValue = initFlagPosition;
+        }
+        try {
+            servoChainHooks = hardwareMap.servo.get ("sChainHooks");
+            servoChainHooks.setPosition (initChainHooksPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("sChainHooks");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            sChainHooksValue = initChainHooksPosition;
+        }
+        try {
+            servoLeftChain = hardwareMap.servo.get ("sLeftChain");
+            servoLeftChain.setPosition (initLeftChainPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("sLeftChain");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            sLeftChainValue = initLeftChainPosition;
+        }
+        try {
+            servoRightChain = hardwareMap.servo.get ("sRightChain");
+            servoRightChain.setPosition (initRightChainPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("sRightChain");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            sRightChainValue = initRightChainPosition;
+        }
+        try {
+            servoSweeper = hardwareMap.servo.get ("sSweeper");
+            servoSweeper.setPosition (initSweeperPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("sSweeper");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            sSweeperValue = initSweeperPosition;
+        }
+        try {
+            servoBucket = hardwareMap.servo.get ("sBucket");
+            servoBucket.setPosition (initBucketPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("sBucket");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            sBucketValue = initBucketPosition;
+        }
+        try {
+            servoSpinner = hardwareMap.servo.get ("sSpinner");
+            servoSpinner.setPosition (initSpinnerPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("sSpinner");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            sSpinnerValue = initSpinnerPosition;
         }
     }
     //------------Warnings------------
@@ -174,32 +338,43 @@ public class BigBerthaHardware extends OpMode {
         warningMessage += opModeExceptionMessage;
     }
     //------------OpMode Methods------------
-    @Override public void init () {}//The system calls this member once when the OpMode is enabled.
-    @Override public void start() {}//The system calls this member once when the OpMode is enabled.
-    @Override public void loop () {}//The system calls this member repeatedly while the OpMode is running.
-    @Override public void stop () {}//The system calls this member once when the OpMode is disabled.
+    @Override public void init () {} //The system calls this member once when the OpMode is enabled.
+    @Override public void start() {} //The system calls this member once when the OpMode is enabled.
+    @Override public void loop () {} //The system calls this member repeatedly while the OpMode is running.
+    @Override public void stop () {} //The system calls this member once when the OpMode is disabled.
     //------------Clip Power------------
     float clipMotor(float power) {return Range.clip (power, -1, 1);}
+    float clipServo(float position) {return Range.clip (position, 0, 1);}
     double clipMotor(double power) {return Range.clip (power, -1, 1);}
     double clipMotorPositive(double power) {return Range.clip(power, 0, 1);}
     double clipMotorNegative(double power) {return Range.clip(power, -1, 0);}
+    double clipServoPositive(double position) {return Range.clip(position, 0.5, 1);}
+    double clipServoNegative(double position) {return Range.clip(position, 0, 0.5);}
     double clipServo(double position) {return Range.clip (position, 0, 1);}
+    private float[] array = {0.00f, 0.05f, 0.09f, 0.10f, 0.12f, 0.15f, 0.18f, 0.24f
+            , 0.30f, 0.36f, 0.43f, 0.50f, 0.60f, 0.72f, 0.85f, 1.00f, 1.00f};
 
     float scaleMotorPower (float power) {
         power = clipMotor(power);
-        float scale;
-        float[] array = {0.00f, 0.05f, 0.09f, 0.10f, 0.12f, 0.15f, 0.18f, 0.24f
-                , 0.30f, 0.36f, 0.43f, 0.50f, 0.60f, 0.72f, 0.85f, 1.00f, 1.00f};
         int index = (int)(power * 16.0); // Get the corresponding index for the specified argument/parameter.
         if (index < 0)
             index = -index;
         else if (index > 16)
             index = 16;
         if (power < 0)
-            scale = -array[index];
-        else
-            scale = array[index];
-        return scale;
+            return -array[index];
+        return array[index];
+    }
+    float scaleServoPosition (float position) {
+        position = clipServo(position);
+        int index = (int)(position * 16.0); // Get the corresponding index for the specified argument/parameter.
+        if (index < 0)
+            index = -index;
+        else if (index > 16)
+            index = 16;
+        if (position < 0)
+            return -array[index];
+        return array[index];
     }
     //------------------------------------TeleOp Methods-------------------------------------
     //------------Get and Set Methods------------
@@ -210,122 +385,293 @@ public class BigBerthaHardware extends OpMode {
             return backwards;
         return forwards;
     }
+    double getFullServoValue (double forwards, double backwards) {
+        clipServoPositive(forwards);
+        clipServoNegative(backwards);
+        if (forwards == 0 && backwards < 0)
+            return backwards;
+        return forwards;
+    }
     //------------Dc Motors------------
     double getLeftDrivePower () {
         if (motorLeftDrive != null)
             return motorLeftDrive.getPower ();
-        return leftDriveValue;
+        return mLeftDriveValue;
     }
     double getRightDrivePower () {
         if (motorRightDrive != null)
             return motorRightDrive.getPower ();
-        return rightDriveValue;
+        return mRightDriveValue;
     }
     void setDrivePower (double leftPower, double rightPower) {
         if (motorLeftDrive != null)
             motorLeftDrive.setPower (leftPower);
-        leftDriveValue = leftPower;
+        mLeftDriveValue = leftPower;
         if (motorRightDrive != null)
             motorRightDrive.setPower (rightPower);
-        rightDriveValue = rightPower;
+        mRightDriveValue = rightPower;
+    }
+    double getBackLeftPower () {
+        if (motorBackLeft != null)
+            return motorBackLeft.getPower ();
+        return mBackLeftValue;
+    }
+    double getBackRightPower () {
+        if (motorBackRight != null)
+            return motorBackRight.getPower ();
+        return mBackRightValue;
+    }
+    void setDrivePower (double leftPower, double rightPower, double backLeftPower, double backRightPower) {
+        if (motorLeftDrive != null)
+            motorLeftDrive.setPower (leftPower);
+        mLeftDriveValue = leftPower;
+        if (motorRightDrive != null)
+            motorRightDrive.setPower (rightPower);
+        mRightDriveValue = rightPower;
+        if (motorBackLeft != null)
+            motorBackLeft.setPower (backLeftPower);
+        mBackLeftValue = backLeftPower;
+        if (motorBackRight != null)
+            motorBackRight.setPower (backRightPower);
+        mBackRightValue = backRightPower;
     }
     double getLiftArmPower () {
         if (motorLiftArm != null)
             return motorLiftArm.getPower ();
-        return liftArmValue;
+        return mLiftArmValue;
+    }
+    double getLeftArmPower () {
+        if (motorLeftArm != null)
+            return motorLeftArm.getPower ();
+        return mLeftArmValue;
+    }
+    double getRightArmPower () {
+        if (motorRightArm != null)
+            return motorRightArm.getPower ();
+        return mRightArmValue;
     }
     void setLiftArmPower (double liftArmPower) {
         if (motorLiftArm != null)
             motorLiftArm.setPower(liftArmPower);
-        liftArmValue = liftArmPower;
+        mLiftArmValue = liftArmPower;
+    }
+    void setLiftArmPower (double leftArmPower, double rightArmPower) {
+        if (motorLeftArm != null)
+            motorLeftArm.setPower(leftArmPower);
+        mLeftArmValue = leftArmPower;
+        if (motorRightArm != null)
+            motorRightArm.setPower(rightArmPower);
+        mRightArmValue = rightArmPower;
     }
     double getLiftPower () {
         if (motorLift != null)
             return motorLift.getPower ();
-        return liftValue;
+        return mLiftValue;
+    }
+    double getLeftLiftPower () {
+        if (motorLeftLift != null)
+            return motorLeftLift.getPower ();
+        return mLeftLiftValue;
+    }
+    double getRightLiftPower () {
+        if (motorRightLift != null)
+            return motorRightLift.getPower ();
+        return mRightLiftValue;
     }
     void setLiftPower (double liftPower) {
         liftPower = clipMotor(liftPower);
         if (motorLift != null)
             motorLift.setPower(liftPower);
-        liftValue = liftPower;
+        mLiftValue = liftPower;
+    }
+    void setLiftPower (double leftLiftPower, double rightLiftPower) {
+        leftLiftPower = clipMotor(leftLiftPower);
+        if (motorLeftLift != null)
+            motorLeftLift.setPower(leftLiftPower);
+        mLeftLiftValue = leftLiftPower;
+        rightLiftPower = clipMotor(rightLiftPower);
+        if (motorRightLift != null)
+            motorRightLift.setPower(rightLiftPower);
+        mRightLiftValue = rightLiftPower;
     }
     double getChainHooksPower () {
         if (motorChainHooks != null)
             return motorChainHooks.getPower ();
-        return chainHooksValue;
+        return mChainHooksValue;
+    }
+    double getLeftChainPower () {
+        if (motorLeftChain != null)
+            return motorLeftChain.getPower ();
+        return mLeftChainValue;
+    }
+    double getRightChainPower () {
+        if (motorRightChain != null)
+            return motorRightChain.getPower ();
+        return mRightChainValue;
     }
     void setChainHooksPower (double chainHooksPower) {
         chainHooksPower = clipMotor(chainHooksPower);
         if (motorChainHooks != null)
             motorChainHooks.setPower(chainHooksPower);
-        chainHooksValue = chainHooksPower;
+        mChainHooksValue = chainHooksPower;
+    }
+    void setChainHooksPower (double leftChainPower, double rightChainPower) {
+        leftChainPower = clipMotor(leftChainPower);
+        if (motorLeftChain != null)
+            motorLeftChain.setPower(leftChainPower);
+        mLeftChainValue = leftChainPower;
+        rightChainPower = clipMotor(rightChainPower);
+        if (motorRightChain != null)
+            motorRightChain.setPower(rightChainPower);
+        mRightChainValue = rightChainPower;
     }
     double getSweeperPower () {
         if (motorSweeper != null)
             return motorSweeper.getPower ();
-        return sweeperValue;
+        return mSweeperValue;
     }
     void setSweeperPower (double sweeperPower, double backSweeperPower) {
         double fullSweeperPower = getFullValue(sweeperPower,backSweeperPower);
         if (motorSweeper != null)
             motorSweeper.setPower(fullSweeperPower);
-        sweeperValue = fullSweeperPower;
+        mSweeperValue = fullSweeperPower;
     }
     double getBucketPower () {
         if (motorBucket != null)
             return motorBucket.getPower ();
-        return bucketValue;
+        return mBucketValue;
+    }
+    void setBucketPower (double bucketPower) {
+        if (motorBucket != null)
+            motorBucket.setPower(bucketPower);
+        mBucketValue = bucketPower;
     }
     void setBucketPower (double bucketPower, double backBucketPower) {
         double fullBucketPower = getFullValue(bucketPower,backBucketPower);
         if (motorBucket != null)
             motorBucket.setPower(fullBucketPower);
-        bucketValue = fullBucketPower;
+        mBucketValue = fullBucketPower;
     }
     double getSpinnerPower () {
         if (motorSpinner != null)
-            return motorSpinner.getPower ();
-        return spinnerValue;
+            return motorSpinner.getPower();
+        return mSpinnerValue;
     }
     void setSpinnerPower (double spinnerPower) {
         if (motorSpinner != null)
             motorSpinner.setPower(spinnerPower);
-        spinnerValue = spinnerPower;
+        mSpinnerValue = spinnerPower;
     }
     //------------Servos------------
     double getBucketDoorPosition () {
         if (servoBucketDoor != null)
             return servoBucketDoor.getPosition();
-        return bucketDoorValue;
+        return sBucketDoorValue;
     }
     void setBucketDoorPosition (double bucketDoorPosition) {
         bucketDoorPosition = clipServo(bucketDoorPosition);
         if (servoBucketDoor != null)
             servoBucketDoor.setPosition(bucketDoorPosition);
-        bucketDoorValue = bucketDoorPosition;
+        sBucketDoorValue = bucketDoorPosition;
     }
     double getHookPosition () {
         if (servoHook != null)
             return servoHook.getPosition();
-        return hookValue;
+        return sHookValue;
     }
     void setHookPosition (double hookPosition) {
         hookPosition = clipServo(hookPosition);
         if (servoHook != null)
             servoHook.setPosition (hookPosition);
-        hookValue = hookPosition;
+        sHookValue = hookPosition;
     }
     double getManPosition () {
         if (servoMan != null)
             return servoMan.getPosition();
-        return manValue;
+        return sManValue;
     }
     void setManPosition (double manPosition) {
         manPosition = clipServo(manPosition);
         if (servoMan != null)
             servoMan.setPosition (manPosition);
-        manValue = manPosition;
+        sManValue = manPosition;
+    }
+    double getFlagPosition () {
+        if (servoFlag != null)
+            return servoFlag.getPosition();
+        return sFlagValue;
+    }
+    void setFlagPosition (double flagPosition) {
+        flagPosition = clipServo(flagPosition);
+        if (servoFlag != null)
+            servoFlag.setPosition (flagPosition);
+        sFlagValue = flagPosition;
+    }
+    double getChainHooksPosition () {
+        if (servoChainHooks != null)
+            return servoChainHooks.getPosition();
+        return sChainHooksValue;
+    }
+    void setChainHooksPosition (double chainHooksPosition) {
+        chainHooksPosition = clipServo(chainHooksPosition);
+        if (servoChainHooks != null)
+            servoChainHooks.setPosition (chainHooksPosition);
+        sChainHooksValue = chainHooksPosition;
+    }
+    double getLeftChainPosition () {
+        if (servoLeftChain != null)
+            return servoLeftChain.getPosition();
+        return sLeftChainValue;
+    }
+    void setLeftChainPosition (double leftChainPosition) {
+        leftChainPosition = clipServo(leftChainPosition);
+        if (servoLeftChain != null)
+            servoLeftChain.setPosition (leftChainPosition);
+        sLeftChainValue = leftChainPosition;
+    }
+    double getRightChainPosition () {
+        if (servoRightChain != null)
+            return servoRightChain.getPosition();
+        return sRightChainValue;
+    }
+    void setRightChainPosition (double rightChainPosition) {
+        rightChainPosition = clipServo(rightChainPosition);
+        if (servoRightChain != null)
+            servoRightChain.setPosition (rightChainPosition);
+        sRightChainValue = rightChainPosition;
+    }
+    double getSweeperPosition () {
+        if (servoSweeper != null)
+            return servoSweeper.getPosition();
+        return sSweeperValue;
+    }
+    void setSweeperPosition (double sweeperPosition, double backSweeperPosition) {
+        double fullSweeperPosition = getFullServoValue(sweeperPosition, backSweeperPosition);
+        if (servoSweeper != null)
+            servoSweeper.setPosition(fullSweeperPosition);
+        sSweeperValue = fullSweeperPosition;
+    }
+    double getBucketPosition () {
+        if (servoBucket != null)
+            return servoBucket.getPosition();
+        return sBucketValue;
+    }
+    void setBucketPosition (double bucketPosition) {
+        bucketPosition = clipServo(bucketPosition);
+        if (servoBucket != null)
+            servoBucket.setPosition (bucketPosition);
+        sBucketValue = bucketPosition;
+    }
+    double getSpinnerPosition () {
+        if (servoSpinner != null)
+            return servoSpinner.getPosition();
+        return sSpinnerValue;
+    }
+    void setSpinnerPosition (double spinnerPosition) {
+        spinnerPosition = clipServo(spinnerPosition);
+        if (servoSpinner != null)
+            servoSpinner.setPosition (spinnerPosition);
+        sSpinnerValue = spinnerPosition;
     }
     //------------------------------------Autonomous Methods-------------------------------------
     void allServosInitialPosition() {
@@ -335,9 +681,30 @@ public class BigBerthaHardware extends OpMode {
             servoHook.setPosition (initHookPosition);
         if (servoMan != null)
             servoMan.setPosition (initManPosition);
-        bucketDoorValue = initBucketDoorPosition;
-        hookValue = initHookPosition;
-        manValue = initManPosition;
+        if (servoFlag != null)
+            servoFlag.setPosition (initFlagPosition);
+        if (servoChainHooks != null)
+            servoChainHooks.setPosition (initChainHooksPosition);
+        if (servoLeftChain != null)
+            servoLeftChain.setPosition (initLeftChainPosition);
+        if (servoRightChain != null)
+            servoRightChain.setPosition (initRightChainPosition);
+        if (servoSweeper != null)
+            servoSweeper.setPosition (initSweeperPosition);
+        if (servoBucket != null)
+            servoBucket.setPosition (initBucketPosition);
+        if (servoSpinner != null)
+            servoSpinner.setPosition (initSpinnerPosition);
+        sBucketDoorValue = initBucketDoorPosition;
+        sHookValue = initHookPosition;
+        sManValue = initManPosition;
+        sFlagValue = initFlagPosition;
+        sChainHooksValue = initChainHooksPosition;
+        sLeftChainValue = initLeftChainPosition;
+        sRightChainValue = initRightChainPosition;
+        sSweeperValue = initSweeperPosition;
+        sBucketValue = initBucketPosition;
+        sSpinnerValue = initSpinnerPosition;
     }
     //------------ Set With Motor Wheel Encoders------------
     public void runUsingLeftDriveEncoder () {
