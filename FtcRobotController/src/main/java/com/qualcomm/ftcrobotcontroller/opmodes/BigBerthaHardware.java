@@ -351,6 +351,7 @@ public class BigBerthaHardware extends OpMode {
     double clipServoPositive(double position) {return Range.clip(position, 0.5, 1);}
     double clipServoNegative(double position) {return Range.clip(position, 0, 0.5);}
     double clipServo(double position) {return Range.clip (position, 0, 1);}
+
     private float[] array = {0.00f, 0.05f, 0.09f, 0.10f, 0.12f, 0.15f, 0.18f, 0.24f
             , 0.30f, 0.36f, 0.43f, 0.50f, 0.60f, 0.72f, 0.85f, 1.00f, 1.00f};
 

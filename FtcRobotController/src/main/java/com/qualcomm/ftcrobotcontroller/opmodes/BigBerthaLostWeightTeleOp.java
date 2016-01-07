@@ -72,9 +72,9 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             rightLiftPower = -rightLiftPower;
 
         if (gamepad1.left_stick_button)
-            leftDrivePower = leftDrivePower / 2;
+            leftDrivePower = leftDrivePower / 4;
         if (gamepad1.right_stick_button)
-            rightDrivePower = rightDrivePower / 2;
+            rightDrivePower = rightDrivePower / 4;
         if (gamepad1.left_stick_button)
             backLeftPower = leftDrivePower;
         if (gamepad1.right_stick_button)
