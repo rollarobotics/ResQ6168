@@ -17,6 +17,8 @@ public class BigBerthaHardware extends OpMode {
     //------------Private Variables------------
     private boolean warningGenerated = false;
     private String warningMessage;
+    private boolean driveWarningGenerated = false;
+    private String driveWarningMessage;
     private DcMotor motorLeftDrive;
     private DcMotor motorRightDrive;
     private DcMotor motorBackLeft;
@@ -106,13 +108,15 @@ public class BigBerthaHardware extends OpMode {
         // Use the hardwareMap to associate class members to hardware ports.
         warningGenerated = false; // Provide telemetry data to a class user
         warningMessage = "Can't map; ";
+        driveWarningGenerated = false; // Provide telemetry data to a class user
+        driveWarningMessage = "Can't map; ";
         // This class prevents the custom op-mode from throwing an exception at runtime.
         //------------DcMotors------------
         try {
             motorLeftDrive = hardwareMap.dcMotor.get ("left");
             motorLeftDrive.setPower(initLeftDrivePower);
         } catch (Exception opModeException) {
-            setWarningMessage("leftDrive");
+            setDriveWarningMessage("leftDrive");
             DbgLog.msg (opModeException.getLocalizedMessage ());
             mLeftDriveValue = initLeftDrivePower;
         }
@@ -121,7 +125,7 @@ public class BigBerthaHardware extends OpMode {
             motorRightDrive.setPower(initRightDrivePower);
             motorRightDrive.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
-            setWarningMessage("rightDrive");
+            setDriveWarningMessage("rightDrive");
             DbgLog.msg (opModeException.getLocalizedMessage ());
             mRightDriveValue = initRightDrivePower;
         }
@@ -129,7 +133,7 @@ public class BigBerthaHardware extends OpMode {
             motorBackLeft = hardwareMap.dcMotor.get ("backLeft");
             motorBackLeft.setPower(initBackLeftPower);
         } catch (Exception opModeException) {
-            setWarningMessage("backLeftDrive");
+            setDriveWarningMessage("backLeftDrive");
             DbgLog.msg (opModeException.getLocalizedMessage ());
             mBackLeftValue = initBackLeftPower;
         }
@@ -138,7 +142,7 @@ public class BigBerthaHardware extends OpMode {
             motorBackRight.setPower(initBackRightPower);
             motorBackRight.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
-            setWarningMessage("backRightDrive");
+            setDriveWarningMessage("backRightDrive");
             DbgLog.msg (opModeException.getLocalizedMessage ());
             mBackRightValue = initBackRightPower;
         }
@@ -327,6 +331,16 @@ public class BigBerthaHardware extends OpMode {
         }
     }
     //------------Warnings------------
+    boolean getDriveWarningGenerated () {return driveWarningGenerated;}
+
+    String getDriveWarningMessage () {return driveWarningMessage;}
+
+    void setDriveWarningMessage (String opModeExceptionMessage) {
+        if (driveWarningGenerated)
+            driveWarningMessage += ", ";
+        driveWarningGenerated = true;
+        driveWarningMessage += opModeExceptionMessage;
+    }
     boolean getWarningGenerated () {return warningGenerated;}
 
     String getWarningMessage () {return warningMessage;}

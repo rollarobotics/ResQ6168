@@ -22,8 +22,8 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
     }
     private static boolean sweeperOff = false;
     private static boolean aux1ScaleOff = false;
-    public static boolean isSweeperOff () {return sweeperOff;}
-    public static boolean isAux1ScaleOff () {return aux1ScaleOff;}
+    //public static boolean isSweeperOff () {return sweeperOff;}
+    //public static boolean isAux1ScaleOff () {return aux1ScaleOff;}
     /**
      * The system calls this member repeatedly while the OpMode is running.
      */
