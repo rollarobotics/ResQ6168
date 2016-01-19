@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 /**
  * Provides a single hardware access point between custom op-modes and the OpMode class for BigBertha.
  * @author SSI Robotics and revised by Shane McEnaney
@@ -91,9 +93,9 @@ public class BigBerthaHardware extends OpMode {
     double initSpinnerPower;
     //0.5 is off, 1 is forwards, and 0 is backwards
     private double initBucketDoorPosition = 0.5;
-    private double initHookPosition = 0.5;
+    private double initHookPosition = 0.125;
     private double initManPosition = 0.5;
-    private double initFlagPosition = 0.5;
+    private double initFlagPosition = 1.0;
     private double initChainHooksPosition = 0.5;
     private double initLeftChainPosition = 0.5;
     private double initRightChainPosition = 0.5;
@@ -357,14 +359,14 @@ public class BigBerthaHardware extends OpMode {
     @Override public void loop () {} //The system calls this member repeatedly while the OpMode is running.
     @Override public void stop () {} //The system calls this member once when the OpMode is disabled.
     //------------Clip Power------------
-    float clipMotor(float power) {return Range.clip (power, -1, 1);}
+    float clipMotor(float power) {return Range.clip(power, -1, 1);}
     float clipServo(float position) {return Range.clip (position, 0, 1);}
-    double clipMotor(double power) {return Range.clip (power, -1, 1);}
-    double clipMotorPositive(double power) {return Range.clip(power, 0, 1);}
-    double clipMotorNegative(double power) {return Range.clip(power, -1, 0);}
-    double clipServoPositive(double position) {return Range.clip(position, 0.5, 1);}
-    double clipServoNegative(double position) {return Range.clip(position, 0, 0.5);}
-    double clipServo(double position) {return Range.clip (position, 0, 1);}
+    double clipMotor(double power) {return format(Range.clip(power, -1, 1));}
+    double clipMotorPositive(double power) {return Range.clip(format(power), 0, 1);}
+    double clipMotorNegative(double power) {return Range.clip(format(power), -1, 0);}
+    double clipServoPositive(double position) {return format(Range.clip(position, 0.5, 1));}
+    double clipServoNegative(double position) {return format(Range.clip(position, 0, 0.5));}
+    double clipServo(double position) {return format(Range.clip(position, 0, 1));}
 
     private float[] array = {0.00f, 0.05f, 0.09f, 0.10f, 0.12f, 0.15f, 0.18f, 0.24f
             , 0.30f, 0.36f, 0.43f, 0.50f, 0.60f, 0.72f, 0.85f, 1.00f, 1.00f};
@@ -377,8 +379,8 @@ public class BigBerthaHardware extends OpMode {
         else if (index > 16)
             index = 16;
         if (power < 0)
-            return -array[index];
-        return array[index];
+            return (float) format(-array[index]);
+        return (float) format(array[index]);
     }
     float scaleServoPosition (float position) {
         position = clipServo(position);
@@ -388,8 +390,12 @@ public class BigBerthaHardware extends OpMode {
         else if (index > 16)
             index = 16;
         if (position < 0)
-            return -array[index];
-        return array[index];
+            return (float) format(-array[index]);
+        return (float) format(array[index]);
+    }
+    double format (double dec) {
+        NumberFormat num = new DecimalFormat("#0.00");
+        return Double.parseDouble(num.format(dec));
     }
     //------------------------------------TeleOp Methods-------------------------------------
     //------------Get and Set Methods------------
@@ -419,6 +425,8 @@ public class BigBerthaHardware extends OpMode {
         return mRightDriveValue;
     }
     void setDrivePower (double leftPower, double rightPower) {
+        leftPower = format(leftPower);
+        rightPower = format(rightPower);
         if (motorLeftDrive != null)
             motorLeftDrive.setPower (leftPower);
         mLeftDriveValue = leftPower;
@@ -437,6 +445,10 @@ public class BigBerthaHardware extends OpMode {
         return mBackRightValue;
     }
     void setDrivePower (double leftPower, double rightPower, double backLeftPower, double backRightPower) {
+        leftPower = format(leftPower);
+        rightPower = format(rightPower);
+        backLeftPower = format(backLeftPower);
+        backRightPower = format(backRightPower);
         if (motorLeftDrive != null)
             motorLeftDrive.setPower (leftPower);
         mLeftDriveValue = leftPower;
@@ -466,11 +478,14 @@ public class BigBerthaHardware extends OpMode {
         return mRightArmValue;
     }
     void setLiftArmPower (double liftArmPower) {
+        liftArmPower = format(liftArmPower);
         if (motorLiftArm != null)
             motorLiftArm.setPower(liftArmPower);
         mLiftArmValue = liftArmPower;
     }
     void setLiftArmPower (double leftArmPower, double rightArmPower) {
+        leftArmPower = format(leftArmPower);
+        rightArmPower = format(rightArmPower);
         if (motorLeftArm != null)
             motorLeftArm.setPower(leftArmPower);
         mLeftArmValue = leftArmPower;
@@ -494,17 +509,17 @@ public class BigBerthaHardware extends OpMode {
         return mRightLiftValue;
     }
     void setLiftPower (double liftPower) {
-        liftPower = clipMotor(liftPower);
+        liftPower = format(liftPower);
         if (motorLift != null)
             motorLift.setPower(liftPower);
         mLiftValue = liftPower;
     }
     void setLiftPower (double leftLiftPower, double rightLiftPower) {
-        leftLiftPower = clipMotor(leftLiftPower);
+        leftLiftPower = format(leftLiftPower);
+        rightLiftPower = format(rightLiftPower);
         if (motorLeftLift != null)
             motorLeftLift.setPower(leftLiftPower);
         mLeftLiftValue = leftLiftPower;
-        rightLiftPower = clipMotor(rightLiftPower);
         if (motorRightLift != null)
             motorRightLift.setPower(rightLiftPower);
         mRightLiftValue = rightLiftPower;
@@ -547,6 +562,7 @@ public class BigBerthaHardware extends OpMode {
     }
     void setSweeperPower (double sweeperPower, double backSweeperPower) {
         double fullSweeperPower = getFullValue(sweeperPower,backSweeperPower);
+        fullSweeperPower = format(fullSweeperPower);
         if (motorSweeper != null)
             motorSweeper.setPower(fullSweeperPower);
         mSweeperValue = fullSweeperPower;
@@ -557,12 +573,14 @@ public class BigBerthaHardware extends OpMode {
         return mBucketValue;
     }
     void setBucketPower (double bucketPower) {
+        bucketPower = format(bucketPower);
         if (motorBucket != null)
             motorBucket.setPower(bucketPower);
         mBucketValue = bucketPower;
     }
     void setBucketPower (double bucketPower, double backBucketPower) {
         double fullBucketPower = getFullValue(bucketPower,backBucketPower);
+        fullBucketPower = format(fullBucketPower);
         if (motorBucket != null)
             motorBucket.setPower(fullBucketPower);
         mBucketValue = fullBucketPower;
@@ -573,6 +591,7 @@ public class BigBerthaHardware extends OpMode {
         return mSpinnerValue;
     }
     void setSpinnerPower (double spinnerPower) {
+        spinnerPower = format(spinnerPower);
         if (motorSpinner != null)
             motorSpinner.setPower(spinnerPower);
         mSpinnerValue = spinnerPower;
@@ -662,6 +681,7 @@ public class BigBerthaHardware extends OpMode {
     }
     void setSweeperPosition (double sweeperPosition, double backSweeperPosition) {
         double fullSweeperPosition = getFullServoValue(sweeperPosition, backSweeperPosition);
+        fullSweeperPosition = format(fullSweeperPosition);
         if (servoSweeper != null)
             servoSweeper.setPosition(fullSweeperPosition);
         sSweeperValue = fullSweeperPosition;
@@ -673,6 +693,7 @@ public class BigBerthaHardware extends OpMode {
     }
     void setBucketPosition (double bucketPosition) {
         bucketPosition = clipServo(bucketPosition);
+        bucketPosition = format(bucketPosition);
         if (servoBucket != null)
             servoBucket.setPosition (bucketPosition);
         sBucketValue = bucketPosition;
@@ -684,6 +705,7 @@ public class BigBerthaHardware extends OpMode {
     }
     void setSpinnerPosition (double spinnerPosition) {
         spinnerPosition = clipServo(spinnerPosition);
+        spinnerPosition = format(spinnerPosition);
         if (servoSpinner != null)
             servoSpinner.setPosition (spinnerPosition);
         sSpinnerValue = spinnerPosition;
