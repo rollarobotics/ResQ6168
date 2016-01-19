@@ -64,6 +64,16 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                     Thread.currentThread().interrupt();
                 }
             }
+            else if (game1config == 3) {
+                sweeperOff = false;
+                aux1ScaleOff = true;
+                game1config = 4;
+                try {
+                    Thread.sleep(500);
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
             else {
                 sweeperOff = true;
                 aux1ScaleOff = false;
@@ -164,10 +174,14 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 rightDrivePower = -rightDrivePower;
         }
         if (game1config == 2) {
+            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
+            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
+        }
+        if (game1config == 3) {
             leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y/8*5);
             rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y/8*5);
         }
-        if (game1config == 3) {
+        if (game1config == 4) {
             leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y/8*5);
             rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y/8*5);
             if (gamepad1.right_bumper || gamepad1.left_bumper) {

@@ -21,59 +21,44 @@ public class BigBerthaHardware extends OpMode {
     private String warningMessage;
     private boolean driveWarningGenerated = false;
     private String driveWarningMessage;
-    private DcMotor motorLeftDrive;
-    private DcMotor motorRightDrive;
-    private DcMotor motorBackLeft;
-    private DcMotor motorBackRight;
-    private DcMotor motorLiftArm;
-    private DcMotor motorLeftArm;
-    private DcMotor motorRightArm;
-    private DcMotor motorLift;
-    private DcMotor motorLeftLift;
-    private DcMotor motorRightLift;
-    private DcMotor motorChainHooks;
-    private DcMotor motorLeftChain;
-    private DcMotor motorRightChain;
+
+    private DcMotor motorLeftDrive, motorRightDrive, motorBackLeft, motorBackRight;
+    private DcMotor motorLiftArm, motorLeftArm, motorRightArm;
+    private DcMotor motorLift, motorLeftLift, motorRightLift;
+    private DcMotor motorChainHooks, motorLeftChain, motorRightChain;
     private DcMotor motorSweeper;
     private DcMotor motorBucket;
-    private DcMotor motorSpinner;
+    private DcMotor motorSpinner, motorLeftSpinner,motorRightSpinner;
+
     private Servo servoBucketDoor;
     private Servo servoHook;
     private Servo servoMan;
     private Servo servoFlag;
-    private Servo servoChainHooks;
-    private Servo servoLeftChain;
-    private Servo servoRightChain;
+    private Servo servoChainHooks, servoLeftChain, servoRightChain;
     private Servo servoSweeper;
     private Servo servoBucket;
-    private Servo servoSpinner;
+    private Servo servoSpinner, servoLeftSpinner, servoRightSpinner;
+    private Servo servoClimber, servoLeftClimber, servoRightClimber;
+
     //------------Virtual Values of Motors and Servos for Testing Code Without Robot------------
-    private static double mLeftDriveValue;
-    private static double mRightDriveValue;
-    private static double mBackLeftValue;
-    private static double mBackRightValue;
-    private static double mLiftArmValue;
-    private static double mLeftArmValue;
-    private static double mRightArmValue;
-    private static double mLiftValue;
-    private static double mLeftLiftValue;
-    private static double mRightLiftValue;
-    private static double mChainHooksValue;
-    private static double mLeftChainValue;
-    private static double mRightChainValue;
-    private static double mSweeperValue;
-    private static double mBucketValue;
-    private static double mSpinnerValue;
+    private static double leftDriveValue, rightDriveValue, backLeftValue, backRightValue;
+    private static double liftArmValue, leftArmValue, rightArmValue;
+    private static double liftValue, leftLiftValue, rightLiftValue;
+    private static double chainHooksValue, leftChainValue, rightChainValue;
+    private static double sweeperValue;
+    private static double bucketValue;
+    private static double spinnerValue,leftSpinnerValue,rightSpinnerValue;
+
     private static double sBucketDoorValue;
     private static double sHookValue;
     private static double sManValue;
     private static double sFlagValue;
-    private static double sChainHooksValue;
-    private static double sLeftChainValue;
-    private static double sRightChainValue;
+    private static double sChainHooksValue, sLeftChainValue, sRightChainValue;
     private static double sSweeperValue;
     private static double sBucketValue;
-    private static double sSpinnerValue;
+    private static double sSpinnerValue, sLeftSpinnerValue, sRightSpinnerValue;
+    private static double sClimberValue, sLeftClimberValue, sRightClimberValue;
+
     //------------initial positions------------
     double initLeftDrivePower;
     double initRightDrivePower;
@@ -120,7 +105,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setDriveWarningMessage("leftDrive");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mLeftDriveValue = initLeftDrivePower;
+            leftDriveValue = initLeftDrivePower;
         }
         try {
             motorRightDrive = hardwareMap.dcMotor.get ("right");
@@ -129,7 +114,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setDriveWarningMessage("rightDrive");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mRightDriveValue = initRightDrivePower;
+            rightDriveValue = initRightDrivePower;
         }
         try {
             motorBackLeft = hardwareMap.dcMotor.get ("backLeft");
@@ -137,7 +122,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setDriveWarningMessage("backLeftDrive");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mBackLeftValue = initBackLeftPower;
+            backLeftValue = initBackLeftPower;
         }
         try {
             motorBackRight = hardwareMap.dcMotor.get ("backRight");
@@ -146,7 +131,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setDriveWarningMessage("backRightDrive");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mBackRightValue = initBackRightPower;
+            backRightValue = initBackRightPower;
         }
         try {
             motorLiftArm = hardwareMap.dcMotor.get ("liftArm");
@@ -155,7 +140,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("leftArm");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mLiftArmValue = initLiftArmPower;
+            liftArmValue = initLiftArmPower;
         }
         try {
             motorLeftArm = hardwareMap.dcMotor.get ("leftArm");
@@ -164,7 +149,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("leftArm");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mLeftArmValue = initLeftArmPower;
+            leftArmValue = initLeftArmPower;
         }
         try {
             motorRightArm = hardwareMap.dcMotor.get ("rightArm");
@@ -173,7 +158,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("rightArm");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mRightArmValue = initRightArmPower;
+            rightArmValue = initRightArmPower;
         }
         try {
             motorLift = hardwareMap.dcMotor.get ("lift");
@@ -181,7 +166,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("lift");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mLiftValue = initLiftPower;
+            liftValue = initLiftPower;
         }
         try {
             motorLeftLift = hardwareMap.dcMotor.get ("leftLift");
@@ -189,7 +174,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("leftLift");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mLeftLiftValue = initLeftLiftPower;
+            leftLiftValue = initLeftLiftPower;
         }
         try {
             motorRightLift = hardwareMap.dcMotor.get ("rightLift");
@@ -197,7 +182,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("rightLift");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mRightLiftValue = initRightLiftPower;
+            rightLiftValue = initRightLiftPower;
         }
         try {
             motorChainHooks = hardwareMap.dcMotor.get ("chainHooks");
@@ -205,7 +190,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("chainHooks");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mChainHooksValue = initChainHooksPower;
+            chainHooksValue = initChainHooksPower;
         }
         try {
             motorLeftChain = hardwareMap.dcMotor.get ("leftChain");
@@ -213,7 +198,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("leftChain");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mLeftChainValue = initLeftChainPower;
+            leftChainValue = initLeftChainPower;
         }
         try {
             motorRightChain = hardwareMap.dcMotor.get ("rightChain");
@@ -221,7 +206,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("rightChain");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mRightChainValue = initRightChainPower;
+            rightChainValue = initRightChainPower;
         }
         try {
             motorSweeper = hardwareMap.dcMotor.get ("sweeper");
@@ -230,7 +215,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("sweeper");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mSweeperValue = initSweeperPower;
+            sweeperValue = initSweeperPower;
         }
         try {
             motorBucket = hardwareMap.dcMotor.get ("bucket");
@@ -239,7 +224,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("bucket");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mBucketValue = initBucketPower;
+            bucketValue = initBucketPower;
         }
         try {
             motorSpinner = hardwareMap.dcMotor.get ("spinner");
@@ -248,7 +233,7 @@ public class BigBerthaHardware extends OpMode {
         } catch (Exception opModeException) {
             setWarningMessage("spinner");
             DbgLog.msg (opModeException.getLocalizedMessage ());
-            mSpinnerValue = initSpinnerPower;
+            spinnerValue = initSpinnerPower;
         }
         //------------Servos------------
         try {
@@ -417,32 +402,32 @@ public class BigBerthaHardware extends OpMode {
     double getLeftDrivePower () {
         if (motorLeftDrive != null)
             return motorLeftDrive.getPower ();
-        return mLeftDriveValue;
+        return leftDriveValue;
     }
     double getRightDrivePower () {
         if (motorRightDrive != null)
             return motorRightDrive.getPower ();
-        return mRightDriveValue;
+        return rightDriveValue;
     }
     void setDrivePower (double leftPower, double rightPower) {
         leftPower = format(leftPower);
         rightPower = format(rightPower);
         if (motorLeftDrive != null)
             motorLeftDrive.setPower (leftPower);
-        mLeftDriveValue = leftPower;
+        leftDriveValue = leftPower;
         if (motorRightDrive != null)
             motorRightDrive.setPower (rightPower);
-        mRightDriveValue = rightPower;
+        rightDriveValue = rightPower;
     }
     double getBackLeftPower () {
         if (motorBackLeft != null)
             return motorBackLeft.getPower ();
-        return mBackLeftValue;
+        return backLeftValue;
     }
     double getBackRightPower () {
         if (motorBackRight != null)
             return motorBackRight.getPower ();
-        return mBackRightValue;
+        return backRightValue;
     }
     void setDrivePower (double leftPower, double rightPower, double backLeftPower, double backRightPower) {
         leftPower = format(leftPower);
@@ -451,150 +436,150 @@ public class BigBerthaHardware extends OpMode {
         backRightPower = format(backRightPower);
         if (motorLeftDrive != null)
             motorLeftDrive.setPower (leftPower);
-        mLeftDriveValue = leftPower;
+        leftDriveValue = leftPower;
         if (motorRightDrive != null)
             motorRightDrive.setPower (rightPower);
-        mRightDriveValue = rightPower;
+        rightDriveValue = rightPower;
         if (motorBackLeft != null)
             motorBackLeft.setPower (backLeftPower);
-        mBackLeftValue = backLeftPower;
+        backLeftValue = backLeftPower;
         if (motorBackRight != null)
             motorBackRight.setPower (backRightPower);
-        mBackRightValue = backRightPower;
+        backRightValue = backRightPower;
     }
     double getLiftArmPower () {
         if (motorLiftArm != null)
             return motorLiftArm.getPower ();
-        return mLiftArmValue;
+        return liftArmValue;
     }
     double getLeftArmPower () {
         if (motorLeftArm != null)
             return motorLeftArm.getPower ();
-        return mLeftArmValue;
+        return leftArmValue;
     }
     double getRightArmPower () {
         if (motorRightArm != null)
             return motorRightArm.getPower ();
-        return mRightArmValue;
+        return rightArmValue;
     }
     void setLiftArmPower (double liftArmPower) {
         liftArmPower = format(liftArmPower);
         if (motorLiftArm != null)
             motorLiftArm.setPower(liftArmPower);
-        mLiftArmValue = liftArmPower;
+        liftArmValue = liftArmPower;
     }
     void setLiftArmPower (double leftArmPower, double rightArmPower) {
         leftArmPower = format(leftArmPower);
         rightArmPower = format(rightArmPower);
         if (motorLeftArm != null)
             motorLeftArm.setPower(leftArmPower);
-        mLeftArmValue = leftArmPower;
+        leftArmValue = leftArmPower;
         if (motorRightArm != null)
             motorRightArm.setPower(rightArmPower);
-        mRightArmValue = rightArmPower;
+        rightArmValue = rightArmPower;
     }
     double getLiftPower () {
         if (motorLift != null)
             return motorLift.getPower ();
-        return mLiftValue;
+        return liftValue;
     }
     double getLeftLiftPower () {
         if (motorLeftLift != null)
             return motorLeftLift.getPower ();
-        return mLeftLiftValue;
+        return leftLiftValue;
     }
     double getRightLiftPower () {
         if (motorRightLift != null)
             return motorRightLift.getPower ();
-        return mRightLiftValue;
+        return rightLiftValue;
     }
     void setLiftPower (double liftPower) {
         liftPower = format(liftPower);
         if (motorLift != null)
             motorLift.setPower(liftPower);
-        mLiftValue = liftPower;
+        liftValue = liftPower;
     }
     void setLiftPower (double leftLiftPower, double rightLiftPower) {
         leftLiftPower = format(leftLiftPower);
         rightLiftPower = format(rightLiftPower);
         if (motorLeftLift != null)
             motorLeftLift.setPower(leftLiftPower);
-        mLeftLiftValue = leftLiftPower;
+        leftLiftValue = leftLiftPower;
         if (motorRightLift != null)
             motorRightLift.setPower(rightLiftPower);
-        mRightLiftValue = rightLiftPower;
+        rightLiftValue = rightLiftPower;
     }
     double getChainHooksPower () {
         if (motorChainHooks != null)
             return motorChainHooks.getPower ();
-        return mChainHooksValue;
+        return chainHooksValue;
     }
     double getLeftChainPower () {
         if (motorLeftChain != null)
             return motorLeftChain.getPower ();
-        return mLeftChainValue;
+        return leftChainValue;
     }
     double getRightChainPower () {
         if (motorRightChain != null)
             return motorRightChain.getPower ();
-        return mRightChainValue;
+        return rightChainValue;
     }
     void setChainHooksPower (double chainHooksPower) {
         chainHooksPower = clipMotor(chainHooksPower);
         if (motorChainHooks != null)
             motorChainHooks.setPower(chainHooksPower);
-        mChainHooksValue = chainHooksPower;
+        chainHooksValue = chainHooksPower;
     }
     void setChainHooksPower (double leftChainPower, double rightChainPower) {
         leftChainPower = clipMotor(leftChainPower);
         if (motorLeftChain != null)
             motorLeftChain.setPower(leftChainPower);
-        mLeftChainValue = leftChainPower;
+        leftChainValue = leftChainPower;
         rightChainPower = clipMotor(rightChainPower);
         if (motorRightChain != null)
             motorRightChain.setPower(rightChainPower);
-        mRightChainValue = rightChainPower;
+        rightChainValue = rightChainPower;
     }
     double getSweeperPower () {
         if (motorSweeper != null)
             return motorSweeper.getPower ();
-        return mSweeperValue;
+        return sweeperValue;
     }
     void setSweeperPower (double sweeperPower, double backSweeperPower) {
         double fullSweeperPower = getFullValue(sweeperPower,backSweeperPower);
         fullSweeperPower = format(fullSweeperPower);
         if (motorSweeper != null)
             motorSweeper.setPower(fullSweeperPower);
-        mSweeperValue = fullSweeperPower;
+        sweeperValue = fullSweeperPower;
     }
     double getBucketPower () {
         if (motorBucket != null)
             return motorBucket.getPower ();
-        return mBucketValue;
+        return bucketValue;
     }
     void setBucketPower (double bucketPower) {
         bucketPower = format(bucketPower);
         if (motorBucket != null)
             motorBucket.setPower(bucketPower);
-        mBucketValue = bucketPower;
+        bucketValue = bucketPower;
     }
     void setBucketPower (double bucketPower, double backBucketPower) {
         double fullBucketPower = getFullValue(bucketPower,backBucketPower);
         fullBucketPower = format(fullBucketPower);
         if (motorBucket != null)
             motorBucket.setPower(fullBucketPower);
-        mBucketValue = fullBucketPower;
+        bucketValue = fullBucketPower;
     }
     double getSpinnerPower () {
         if (motorSpinner != null)
             return motorSpinner.getPower();
-        return mSpinnerValue;
+        return spinnerValue;
     }
     void setSpinnerPower (double spinnerPower) {
         spinnerPower = format(spinnerPower);
         if (motorSpinner != null)
             motorSpinner.setPower(spinnerPower);
-        mSpinnerValue = spinnerPower;
+        spinnerValue = spinnerPower;
     }
     //------------Servos------------
     double getBucketDoorPosition () {
