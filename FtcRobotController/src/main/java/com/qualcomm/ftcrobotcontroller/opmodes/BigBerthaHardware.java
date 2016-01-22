@@ -21,6 +21,18 @@ public class BigBerthaHardware extends OpMode {
     private String warningMessage;
     private boolean driveWarningGenerated = false;
     private String driveWarningMessage;
+    private boolean armWarningGenerated = false;
+    private String armWarningMessage;
+    private boolean liftWarningGenerated = false;
+    private String liftWarningMessage;
+    private boolean chainWarningGenerated = false;
+    private String chainWarningMessage;
+    private boolean sweeperWarningGenerated = false;
+    private String bucketWarningMessage;
+    private boolean spinnerWarningGenerated = false;
+    private String spinnerWarningMessage;
+    private boolean servoWarningGenerated = false;
+    private String servoWarningMessage;
 
     private DcMotor motorLeftDrive, motorRightDrive, motorBackLeft, motorBackRight;
     private DcMotor motorLiftArm, motorLeftArm, motorRightArm;
@@ -76,27 +88,47 @@ public class BigBerthaHardware extends OpMode {
     double initSweeperPower;
     double initBucketPower;
     double initSpinnerPower;
-    //0.5 is off, 1 is forwards, and 0 is backwards
+    //0.5 is off, 1 is forwards, and 0 is  for continuous servos
     private double initBucketDoorPosition = 0.5;
     private double initHookPosition = 0.125;
     private double initManPosition = 0.5;
-    private double initFlagPosition = 1.0;
+    private double initFlagPosition = 0.95;
     private double initChainHooksPosition = 0.5;
     private double initLeftChainPosition = 0.5;
     private double initRightChainPosition = 0.5;
     private double initSweeperPosition = 0.5;
     private double initBucketPosition = 0.5;
     private double initSpinnerPosition = 0.5;
-
+    private double initClimberPosition = 0.0;
+    private double initLeftClimberPosition = 0.0;
+    private double initRightClimberPosition = 0.95  ;
     public BigBerthaHardware () {
     }
 
     public void hardwareInit () {
         // Use the hardwareMap to associate class members to hardware ports.
         warningGenerated = false; // Provide telemetry data to a class user
-        warningMessage = "Can't map; ";
+        warningMessage = "Can't map: ";
         driveWarningGenerated = false; // Provide telemetry data to a class user
-        driveWarningMessage = "Can't map; ";
+        driveWarningMessage = "DriveMotors ";
+        warningGenerated = false; // Provide telemetry data to a class user
+        warningMessage = "Can't map; ";
+        warningGenerated = false; // Provide telemetry data to a class user
+        warningMessage = "Can't map; ";
+        warningGenerated = false; // Provide telemetry data to a class user
+        warningMessage = "Can't map; ";
+        warningGenerated = false; // Provide telemetry data to a class user
+        warningMessage = "Can't map; ";
+        warningGenerated = false; // Provide telemetry data to a class user
+        warningMessage = "Can't map; ";
+        warningGenerated = false; // Provide telemetry data to a class user
+        warningMessage = "Can't map; ";
+        warningGenerated = false; // Provide telemetry data to a class user
+        warningMessage = "Can't map; ";
+        warningGenerated = false; // Provide telemetry data to a class user
+        warningMessage = "Can't map; ";
+        warningGenerated = false; // Provide telemetry data to a class user
+        warningMessage = "Can't map; ";
         // This class prevents the custom op-mode from throwing an exception at runtime.
         //------------DcMotors------------
         try {
@@ -267,6 +299,22 @@ public class BigBerthaHardware extends OpMode {
             setWarningMessage("sFlag");
             DbgLog.msg(opModeException.getLocalizedMessage());
             sFlagValue = initFlagPosition;
+        }
+        try {
+            servoRightClimber = hardwareMap.servo.get ("sRightClimber");
+            servoRightClimber.setPosition (initRightClimberPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("sRightClimber");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            sRightClimberValue = initRightClimberPosition;
+        }
+        try {
+            servoLeftClimber = hardwareMap.servo.get ("sLeftClimber");
+            servoLeftClimber.setPosition (initLeftClimberPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("sLeftClimber");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            sLeftClimberValue = initLeftClimberPosition;
         }
         try {
             servoChainHooks = hardwareMap.servo.get ("sChainHooks");
@@ -626,6 +674,28 @@ public class BigBerthaHardware extends OpMode {
             servoFlag.setPosition (flagPosition);
         sFlagValue = flagPosition;
     }
+    double getRightClimberPosition () {
+        if (servoRightClimber != null)
+            return servoRightClimber.getPosition();
+        return sRightClimberValue;
+    }
+    void setRightClimberPosition (double rightClimberPosition) {
+        rightClimberPosition = clipServo(rightClimberPosition);
+        if (servoRightClimber != null)
+            servoRightClimber.setPosition (rightClimberPosition);
+        sRightClimberValue = rightClimberPosition;
+    }
+    double getLeftClimberPosition () {
+        if (servoLeftClimber != null)
+            return servoLeftClimber.getPosition();
+        return sLeftClimberValue;
+    }
+    void setLeftClimberPosition (double leftClimberPosition) {
+        leftClimberPosition = clipServo(leftClimberPosition);
+        if (servoLeftClimber != null)
+            servoLeftClimber.setPosition (leftClimberPosition);
+        sLeftClimberValue = leftClimberPosition;
+    }
     double getChainHooksPosition () {
         if (servoChainHooks != null)
             return servoChainHooks.getPosition();
@@ -705,6 +775,10 @@ public class BigBerthaHardware extends OpMode {
             servoMan.setPosition (initManPosition);
         if (servoFlag != null)
             servoFlag.setPosition (initFlagPosition);
+        if (servoRightClimber != null)
+            servoRightClimber.setPosition (initRightClimberPosition);
+        if (servoLeftClimber != null)
+            servoLeftClimber.setPosition (initLeftClimberPosition);
         if (servoChainHooks != null)
             servoChainHooks.setPosition (initChainHooksPosition);
         if (servoLeftChain != null)
@@ -721,6 +795,8 @@ public class BigBerthaHardware extends OpMode {
         sHookValue = initHookPosition;
         sManValue = initManPosition;
         sFlagValue = initFlagPosition;
+        sRightClimberValue = initRightClimberPosition;
+        sLeftClimberValue = initLeftClimberPosition;
         sChainHooksValue = initChainHooksPosition;
         sLeftChainValue = initLeftChainPosition;
         sRightChainValue = initRightChainPosition;
@@ -761,7 +837,11 @@ public class BigBerthaHardware extends OpMode {
         if (motorSpinner != null)
             motorSpinner.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
-    public void RUN_USING_ENCODERS () {
+    public void runUsingDriveEncoders () {
+        runUsingLeftDriveEncoder();
+        runUsingRightDriveEncoder();
+    }
+    public void runUsingEncoders () {
         runUsingLeftDriveEncoder();
         runUsingRightDriveEncoder();
         runUsingLiftArmEncoder();
@@ -971,7 +1051,7 @@ public class BigBerthaHardware extends OpMode {
     }
     //------------Indicate whether the motor wheel encoders have reached a value------------
     boolean driveUsingEncoders (double leftPower, double rightPower, double leftCount, double rightCount) {
-        RUN_USING_ENCODERS();
+        runUsingEncoders();
         setDrivePower(leftPower, rightPower);
         if (haveDriveEncodersReached(leftCount, rightCount)) {
             resetDriveEncoders();
@@ -981,7 +1061,7 @@ public class BigBerthaHardware extends OpMode {
         return false;
     }
     boolean runLiftArmUsingEncoder (double liftArmPower, double liftArmCount) {
-        RUN_USING_ENCODERS();
+        runUsingEncoders();
         setLiftArmPower(liftArmPower);
         if (hasLiftArmEncoderReached(liftArmCount)) {
             resetLiftArmEncoder();
@@ -991,7 +1071,7 @@ public class BigBerthaHardware extends OpMode {
         return false;
     }
     boolean runLiftUsingEncoder (double liftPower, double liftCount) {
-        RUN_USING_ENCODERS();
+        runUsingEncoders();
         setLiftPower(liftPower);
         if (hasLiftEncoderReached(liftCount)) {
             resetLiftEncoder();
@@ -1001,7 +1081,7 @@ public class BigBerthaHardware extends OpMode {
         return false;
     }
     boolean runChainHooksUsingEncoder (double chainHooksPower, double chainHooksCount) {
-        RUN_USING_ENCODERS();
+        runUsingEncoders();
         setChainHooksPower(chainHooksPower);
         if (hasChainHooksEncoderReached(chainHooksCount)) {
             resetChainHooksEncoder();
@@ -1011,7 +1091,7 @@ public class BigBerthaHardware extends OpMode {
         return false;
     }
     boolean runSweeperUsingEncoder (double sweeperPower, double backSweeperPower, double sweeperCount) {
-        RUN_USING_ENCODERS();
+        runUsingEncoders();
         setSweeperPower(sweeperPower, backSweeperPower);
         if (hasSweeperEncoderReached(sweeperCount)) {
             resetSweeperEncoder();
@@ -1021,7 +1101,7 @@ public class BigBerthaHardware extends OpMode {
         return false;
     }
     boolean runBucketUsingEncoder (double bucketPower, double backBucketPower, double bucketCount) {
-        RUN_USING_ENCODERS();
+        runUsingEncoders();
         setBucketPower(bucketPower, backBucketPower);
         if (hasBucketEncoderReached(bucketCount)) {
             resetBucketEncoder();
@@ -1031,7 +1111,7 @@ public class BigBerthaHardware extends OpMode {
         return false;
     }
     boolean runSpinnerUsingEncoder (double spinnerPower, double spinnerCount) {
-        RUN_USING_ENCODERS();
+        runUsingEncoders();
         setSpinnerPower(spinnerPower);
         if (hasSpinnerEncoderReached(spinnerCount)) {
             resetSpinnerEncoder();

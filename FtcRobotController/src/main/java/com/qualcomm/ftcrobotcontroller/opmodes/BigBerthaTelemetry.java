@@ -52,10 +52,10 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         String game1 = gamepad1.toString();
         String game2 = gamepad2.toString();
         telemetry.addData("01" , "Robot:");
-        telemetry.addData("02" , " ");
-        telemetry.addData("03" , "Gamepad 1 Configuration: " + BigBerthaLostWeightTeleOp.getGame1config() + " " + game1);
-        telemetry.addData("04" , " ");
-        telemetry.addData("05" , "Gamepad 2 Configuration: " + BigBerthaLostWeightTeleOp.getGame2config() + " " + game2);
+        telemetry.addData("02" , "Gamepad 1 Configuration: " + BigBerthaLostWeightTeleOp.getGame1config());
+        telemetry.addData("03" ,  game1);
+        telemetry.addData("04" , "Gamepad 2 Configuration: " + BigBerthaLostWeightTeleOp.getGame2config());
+        telemetry.addData("05" ,  game2);
         telemetry.addData("06" , " ");
         telemetry.addData("07" , "Servo Position:");
         telemetry.addData("08" , "Bucket Door Servo Position: "+ getBucketDoorPosition());
