@@ -26,7 +26,7 @@ public class BigBerthaAutonomousRed extends BigBerthaTelemetry
         initTelemetry();
     }
     /**
-     * Perform any actions that are necessary when the OpMode is enabled.
+ r     * Perform any actions that are necessary when the OpMode is enabled.
      * The system calls this member once when the OpMode is enabled.
      */
     @Override public void start ()
@@ -70,7 +70,7 @@ public class BigBerthaAutonomousRed extends BigBerthaTelemetry
                 // Have the motor shafts turned the required amount?
                 // If they haven't, then the op-mode remains in this state (i.e this
                 // block will be executed the next time this method is called).
-                if (haveDriveEncodersReached(5400, 5400))
+                if (haveDriveEncodersReached(6400, 6400))
                 {
                     // Reset the encoders.
                     resetDriveEncoders();
@@ -107,7 +107,7 @@ public class BigBerthaAutonomousRed extends BigBerthaTelemetry
             case 5:
                 runUsingEncoders ();
                 setDrivePower (0.2f, 0.2f, 0.2f, 0.2f);
-                if (haveDriveEncodersReached (1200, 1200))
+                if (haveDriveEncodersReached (2200, 2200))
                 {
                     resetDriveEncoders ();
                     setDrivePower (0.0f, 0.0f);

@@ -21,7 +21,8 @@ public class BigBerthaAutonomousBlue extends BigBerthaTelemetry
             // Initialize base classes and class members.
             // All via self-construction.
         } // PushBotAuto
-        @Override public void init () {
+        @Override public void init ()
+        {
             hardwareInit ();
             initTelemetry();
         }
@@ -70,7 +71,7 @@ public class BigBerthaAutonomousBlue extends BigBerthaTelemetry
                     // Have the motor shafts turned the required amount?
                     // If they haven't, then the op-mode remains in this state (i.e this
                     // block will be executed the next time this method is called).
-                    if (haveDriveEncodersReached(5400, 5400))
+                    if (haveDriveEncodersReached(6400, 6400))
                     {
                         // Reset the encoders.
                         resetDriveEncoders();
@@ -107,7 +108,7 @@ public class BigBerthaAutonomousBlue extends BigBerthaTelemetry
                 case 5:
                     runUsingEncoders ();
                     setDrivePower (0.2f, 0.2f, 0.2f, 0.2f);
-                    if (haveDriveEncodersReached (1200, 1200))
+                    if (haveDriveEncodersReached (2200, 2200))
                     {
                         resetDriveEncoders ();
                         setDrivePower (0.0f, 0.0f);

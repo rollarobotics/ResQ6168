@@ -96,8 +96,8 @@ public class BigBerthaHardware extends OpMode {
     private double initLeftFlagPosition = 0.0;
     private double initRightFlagPosition = 1.0;
     private double initClimberPosition = 0.0;
-    private double initLeftClimberPosition = 0.95;
-    private double initRightClimberPosition = 0.125  ;
+    private double initLeftClimberPosition = 0.85;
+    private double initRightClimberPosition = 0.225;
     private double initChainHooksPosition = 0.5;
     private double initLeftChainPosition = 0.5;
     private double initRightChainPosition = 0.5;
