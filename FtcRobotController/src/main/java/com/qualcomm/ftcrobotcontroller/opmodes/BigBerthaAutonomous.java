@@ -11,7 +11,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  * @version 2015-08-01-06-01
  */
 public class BigBerthaAutonomous extends BigBerthaTelemetry
-    {
+    { //blue
         /**
          * Construct the class.
          * The system calls this member when the class is instantiated.
@@ -21,6 +21,10 @@ public class BigBerthaAutonomous extends BigBerthaTelemetry
             // Initialize base classes and class members.
             // All via self-construction.
         } // PushBotAuto
+        @Override public void init () {
+            hardwareInit ();
+            initTelemetry();
+        }
         /**
          * Perform any actions that are necessary when the OpMode is enabled.
          * The system calls this member once when the OpMode is enabled.
@@ -53,9 +57,8 @@ public class BigBerthaAutonomous extends BigBerthaTelemetry
             {
                 // Synchronize the state machine and hardware.
                 case 0:
-                    resetDriveEncoders ();
+                    resetDriveEncoders();
                     state++;
-
                     break;
                 // Drive forward until the encoders exceed the specified values.
                 case 1:
@@ -63,50 +66,51 @@ public class BigBerthaAutonomous extends BigBerthaTelemetry
                     // be in this state and NOT the previous or the encoders will not
                     // work.  It doesn't need to be in subsequent states.
                     runUsingDriveEncoders ();
-                    setDrivePower (1.0f, 1.0f);
+                    setDrivePower(0.2f, 0.2f, 0.2f, 0.2f);
                     // Have the motor shafts turned the required amount?
                     // If they haven't, then the op-mode remains in this state (i.e this
                     // block will be executed the next time this method is called).
-                    if (haveDriveEncodersReached (2880, 2880))
+                    if (haveDriveEncodersReached(5400, 5400))
                     {
                         // Reset the encoders.
-                        resetDriveEncoders ();
+                        resetDriveEncoders();
                         // Stop the motors.
-                        setDrivePower (0.0f, 0.0f);
+                        setDrivePower (0.0f, 0.0f, 0.0f, 0.0f);
                         // Transition to the next state when this method is called again.
                         state++;
                     }
                     break;
                 // Wait...
                 case 2:
-                    if (haveDriveEncodersReset ())
+                    if (haveDriveEncodersReset())
                     {
                         state++;
                     }
                     break;
                 // Turn left until the encoders exceed the specified values.
                 case 3:
-                    runUsingDriveEncoders ();
-                    setDrivePower (-1.0f, 1.0f);
-                    if (haveDriveEncodersReached (2880, 2880))
+                    runUsingDriveEncoders();
+                    setDrivePower(0.2f, -0.2f, 0.2f, -0.2f);
+                    if (haveDriveEncodersReached(550, 550))
                     {
-                        resetDriveEncoders ();
-                        setDrivePower (0.0f, 0.0f);
+                        resetDriveEncoders();
+                        setDrivePower(0.0f, 0.0f, 0.0f, 0.0f);
                         state++;
                     }
                     break;
-                // Wait...
                 case 4:
                     if (haveDriveEncodersReset ())
                     {
                         state++;
                     }
                     break;
+                //
                 // Turn right until the encoders exceed the specified values.
+                //
                 case 5:
-                    runUsingDriveEncoders ();
-                    setDrivePower (1.0f, -1.0f);
-                    if (haveDriveEncodersReached (2880, 2880))
+                    runUsingEncoders ();
+                    setDrivePower (0.2f, 0.2f, 0.2f, 0.2f);
+                    if (haveDriveEncodersReached (1200, 1200))
                     {
                         resetDriveEncoders ();
                         setDrivePower (0.0f, 0.0f);
@@ -115,11 +119,12 @@ public class BigBerthaAutonomous extends BigBerthaTelemetry
                     break;
                 // Wait...
                 case 6:
-                    if (haveDriveEncodersReset ())
+                    if (haveDriveEncodersReset())
                     {
                         state++;
                     }
                     break;
+
                 // Perform no action - stay in this case until the OpMode is stopped.
                 // This method will still be called regardless of the state machine.
                 default:
@@ -127,7 +132,7 @@ public class BigBerthaAutonomous extends BigBerthaTelemetry
                     // transitioned into its final state.
                     break;
             }
-            updateTelemetry (); // Update common telemetry
+            updateTelemetry(); // Update common telemetry
             telemetry.addData ("75", "State: " + state);
         }
     }

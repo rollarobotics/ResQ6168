@@ -38,6 +38,7 @@ public class PushBotAuto extends PushBotTelemetry
     //--------------------------------------------------------------------------
     //
     // loop
+
     //
     /**
      * Implement a state machine that controls the robot during auto-operation.
