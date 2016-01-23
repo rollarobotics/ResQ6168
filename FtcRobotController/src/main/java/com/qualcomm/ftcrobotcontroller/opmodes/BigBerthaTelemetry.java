@@ -58,10 +58,11 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         telemetry.addData("05" ,  game2);
         telemetry.addData("06" , " ");
         telemetry.addData("07" , "Servo Position:");
-        telemetry.addData("08" , "Bucket Door Servo Position: "+ getBucketDoorPosition());
+        //telemetry.addData("08" , "Bucket Door Servo Position: "+ getBucketDoorPosition());
+        telemetry.addData("08" , "Climbers Servo Position: "   + getRightClimberPosition() + ", " + getLeftClimberPosition());
         telemetry.addData("09" , "Hook Servo Position: "       + getHookPosition());
         telemetry.addData("10" , "Man Servo Position: "        + getManPosition());
-        telemetry.addData("11" , "Flag Servo Position: "       + getFlagPosition());
+        telemetry.addData("11" , "Flag Servo Position: "       + getRightFlagPosition() + ", " + getLeftFlagPosition());
         telemetry.addData("12" , "Motor Power:");
         telemetry.addData("13" , "Right Drive Power: "+ getRightDrivePower()+ ", " + getRightEncoderCount());
         telemetry.addData("14" , "Left Drive Power: " + getLeftDrivePower() + ", " + getLeftEncoderCount());

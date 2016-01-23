@@ -10,13 +10,13 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  * @author SSI Robotics
  * @version 2015-08-01-06-01
  */
-public class BigBerthaAutonomous extends BigBerthaTelemetry
+public class BigBerthaAutonomousBlue extends BigBerthaTelemetry
     { //blue
         /**
          * Construct the class.
          * The system calls this member when the class is instantiated.
          */
-        public BigBerthaAutonomous ()
+        public BigBerthaAutonomousBlue ()
         {
             // Initialize base classes and class members.
             // All via self-construction.
@@ -87,7 +87,7 @@ public class BigBerthaAutonomous extends BigBerthaTelemetry
                         state++;
                     }
                     break;
-                // Turn left until the encoders exceed the specified values.
+                // Turn until the encoders exceed the specified values.
                 case 3:
                     runUsingDriveEncoders();
                     setDrivePower(0.2f, -0.2f, 0.2f, -0.2f);
@@ -104,9 +104,6 @@ public class BigBerthaAutonomous extends BigBerthaTelemetry
                         state++;
                     }
                     break;
-                //
-                // Turn right until the encoders exceed the specified values.
-                //
                 case 5:
                     runUsingEncoders ();
                     setDrivePower (0.2f, 0.2f, 0.2f, 0.2f);
@@ -133,6 +130,6 @@ public class BigBerthaAutonomous extends BigBerthaTelemetry
                     break;
             }
             updateTelemetry(); // Update common telemetry
-            telemetry.addData ("75", "State: " + state);
+            telemetry.addData ("25", "State: " + state);
         }
     }

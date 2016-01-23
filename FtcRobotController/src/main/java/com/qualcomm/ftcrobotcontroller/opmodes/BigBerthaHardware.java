@@ -21,6 +21,8 @@ public class BigBerthaHardware extends OpMode {
     private String warningMessage;
     private boolean driveWarningGenerated = false;
     private String driveWarningMessage;
+    private boolean servoWarningGenerated = false;
+    private String servoWarningMessage;
     private boolean armWarningGenerated = false;
     private String armWarningMessage;
     private boolean liftWarningGenerated = false;
@@ -31,8 +33,6 @@ public class BigBerthaHardware extends OpMode {
     private String bucketWarningMessage;
     private boolean spinnerWarningGenerated = false;
     private String spinnerWarningMessage;
-    private boolean servoWarningGenerated = false;
-    private String servoWarningMessage;
 
     private DcMotor motorLeftDrive, motorRightDrive, motorBackLeft, motorBackRight;
     private DcMotor motorLiftArm, motorLeftArm, motorRightArm;
@@ -45,12 +45,12 @@ public class BigBerthaHardware extends OpMode {
     private Servo servoBucketDoor;
     private Servo servoHook;
     private Servo servoMan;
-    private Servo servoFlag;
+    private Servo servoFlag, servoRightFlag, servoLeftFlag;
+    private Servo servoClimber, servoLeftClimber, servoRightClimber;
     private Servo servoChainHooks, servoLeftChain, servoRightChain;
     private Servo servoSweeper;
     private Servo servoBucket;
     private Servo servoSpinner, servoLeftSpinner, servoRightSpinner;
-    private Servo servoClimber, servoLeftClimber, servoRightClimber;
 
     //------------Virtual Values of Motors and Servos for Testing Code Without Robot------------
     private static double leftDriveValue, rightDriveValue, backLeftValue, backRightValue;
@@ -64,12 +64,12 @@ public class BigBerthaHardware extends OpMode {
     private static double sBucketDoorValue;
     private static double sHookValue;
     private static double sManValue;
-    private static double sFlagValue;
+    private static double sFlagValue, sLeftFlagValue, sRightFlagValue;
+    private static double sClimberValue, sLeftClimberValue, sRightClimberValue;
     private static double sChainHooksValue, sLeftChainValue, sRightChainValue;
     private static double sSweeperValue;
     private static double sBucketValue;
     private static double sSpinnerValue, sLeftSpinnerValue, sRightSpinnerValue;
-    private static double sClimberValue, sLeftClimberValue, sRightClimberValue;
 
     //------------initial positions------------
     double initLeftDrivePower;
@@ -93,15 +93,17 @@ public class BigBerthaHardware extends OpMode {
     private double initHookPosition = 0.125;
     private double initManPosition = 0.5;
     private double initFlagPosition = 0.95;
+    private double initLeftFlagPosition = 0.0;
+    private double initRightFlagPosition = 1.0;
+    private double initClimberPosition = 0.0;
+    private double initLeftClimberPosition = 0.95;
+    private double initRightClimberPosition = 0.125  ;
     private double initChainHooksPosition = 0.5;
     private double initLeftChainPosition = 0.5;
     private double initRightChainPosition = 0.5;
     private double initSweeperPosition = 0.5;
     private double initBucketPosition = 0.5;
     private double initSpinnerPosition = 0.5;
-    private double initClimberPosition = 0.0;
-    private double initLeftClimberPosition = 0.0;
-    private double initRightClimberPosition = 0.95  ;
     public BigBerthaHardware () {
     }
 
@@ -112,8 +114,8 @@ public class BigBerthaHardware extends OpMode {
         driveWarningGenerated = false; // Provide telemetry data to a class user
         driveWarningMessage = "DriveMotors ";
         warningGenerated = false; // Provide telemetry data to a class user
-        warningMessage = "Can't map; ";
-        warningGenerated = false; // Provide telemetry data to a class user
+        servoWarningMessage = "Servos: ; ";
+        servoWarningGenerated = false; // Provide telemetry data to a class user
         warningMessage = "Can't map; ";
         warningGenerated = false; // Provide telemetry data to a class user
         warningMessage = "Can't map; ";
@@ -270,17 +272,17 @@ public class BigBerthaHardware extends OpMode {
         //------------Servos------------
         try {
             servoBucketDoor = hardwareMap.servo.get ("sBucketDoor");
-            servoBucketDoor.setPosition (initBucketDoorPosition);
+            servoBucketDoor.setPosition(initBucketDoorPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("sBucketDoor");
+            setServoWarningMessage("sBucketDoor");
             DbgLog.msg (opModeException.getLocalizedMessage ());
             sBucketDoorValue = initBucketDoorPosition;
         }
         try {
             servoHook = hardwareMap.servo.get ("sHook");
-            servoHook.setPosition (initHookPosition);
+            servoHook.setPosition(initHookPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("sHook");
+            setServoWarningMessage("sHook");
             DbgLog.msg(opModeException.getLocalizedMessage());
             sHookValue = initHookPosition;
         }
@@ -288,7 +290,7 @@ public class BigBerthaHardware extends OpMode {
             servoMan = hardwareMap.servo.get ("sMan");
             servoMan.setPosition (initManPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("sMan");
+            setServoWarningMessage("sMan");
             DbgLog.msg(opModeException.getLocalizedMessage());
             sManValue = initManPosition;
         }
@@ -296,15 +298,31 @@ public class BigBerthaHardware extends OpMode {
             servoFlag = hardwareMap.servo.get ("sFlag");
             servoFlag.setPosition (initFlagPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("sFlag");
+            setServoWarningMessage("sFlag");
             DbgLog.msg(opModeException.getLocalizedMessage());
             sFlagValue = initFlagPosition;
+        }
+        try {
+            servoRightFlag = hardwareMap.servo.get ("sRightFlag");
+            servoRightFlag.setPosition (initRightFlagPosition);
+        } catch (Exception opModeException) {
+            setServoWarningMessage("sFlagClimber");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            sRightFlagValue = initRightFlagPosition;
+        }
+        try {
+            servoLeftFlag = hardwareMap.servo.get ("sLeftFlag");
+            servoLeftFlag.setPosition (initLeftFlagPosition);
+        } catch (Exception opModeException) {
+            setServoWarningMessage("sLeftFlag");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            sLeftFlagValue = initLeftFlagPosition;
         }
         try {
             servoRightClimber = hardwareMap.servo.get ("sRightClimber");
             servoRightClimber.setPosition (initRightClimberPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("sRightClimber");
+            setServoWarningMessage("sRightClimber");
             DbgLog.msg(opModeException.getLocalizedMessage());
             sRightClimberValue = initRightClimberPosition;
         }
@@ -312,7 +330,7 @@ public class BigBerthaHardware extends OpMode {
             servoLeftClimber = hardwareMap.servo.get ("sLeftClimber");
             servoLeftClimber.setPosition (initLeftClimberPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("sLeftClimber");
+            setServoWarningMessage("sLeftClimber");
             DbgLog.msg(opModeException.getLocalizedMessage());
             sLeftClimberValue = initLeftClimberPosition;
         }
@@ -320,7 +338,7 @@ public class BigBerthaHardware extends OpMode {
             servoChainHooks = hardwareMap.servo.get ("sChainHooks");
             servoChainHooks.setPosition (initChainHooksPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("sChainHooks");
+            setServoWarningMessage("sChainHooks");
             DbgLog.msg(opModeException.getLocalizedMessage());
             sChainHooksValue = initChainHooksPosition;
         }
@@ -328,7 +346,7 @@ public class BigBerthaHardware extends OpMode {
             servoLeftChain = hardwareMap.servo.get ("sLeftChain");
             servoLeftChain.setPosition (initLeftChainPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("sLeftChain");
+            setServoWarningMessage("sLeftChain");
             DbgLog.msg(opModeException.getLocalizedMessage());
             sLeftChainValue = initLeftChainPosition;
         }
@@ -336,7 +354,7 @@ public class BigBerthaHardware extends OpMode {
             servoRightChain = hardwareMap.servo.get ("sRightChain");
             servoRightChain.setPosition (initRightChainPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("sRightChain");
+            setServoWarningMessage("sRightChain");
             DbgLog.msg(opModeException.getLocalizedMessage());
             sRightChainValue = initRightChainPosition;
         }
@@ -344,7 +362,7 @@ public class BigBerthaHardware extends OpMode {
             servoSweeper = hardwareMap.servo.get ("sSweeper");
             servoSweeper.setPosition (initSweeperPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("sSweeper");
+            setServoWarningMessage("sSweeper");
             DbgLog.msg(opModeException.getLocalizedMessage());
             sSweeperValue = initSweeperPosition;
         }
@@ -352,7 +370,7 @@ public class BigBerthaHardware extends OpMode {
             servoBucket = hardwareMap.servo.get ("sBucket");
             servoBucket.setPosition (initBucketPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("sBucket");
+            setServoWarningMessage("sBucket");
             DbgLog.msg(opModeException.getLocalizedMessage());
             sBucketValue = initBucketPosition;
         }
@@ -360,7 +378,7 @@ public class BigBerthaHardware extends OpMode {
             servoSpinner = hardwareMap.servo.get ("sSpinner");
             servoSpinner.setPosition (initSpinnerPosition);
         } catch (Exception opModeException) {
-            setWarningMessage("sSpinner");
+            setServoWarningMessage("sSpinner");
             DbgLog.msg(opModeException.getLocalizedMessage());
             sSpinnerValue = initSpinnerPosition;
         }
@@ -375,6 +393,16 @@ public class BigBerthaHardware extends OpMode {
             driveWarningMessage += ", ";
         driveWarningGenerated = true;
         driveWarningMessage += opModeExceptionMessage;
+    }
+    boolean getServoWarningGenerated () {return servoWarningGenerated;}
+
+    String getServoWarningMessage () {return servoWarningMessage;}
+
+    void setServoWarningMessage (String opModeExceptionMessage) {
+        if (servoWarningGenerated)
+            servoWarningMessage += ", ";
+        servoWarningGenerated = true;
+        servoWarningMessage += opModeExceptionMessage;
     }
     boolean getWarningGenerated () {return warningGenerated;}
 
@@ -393,12 +421,12 @@ public class BigBerthaHardware extends OpMode {
     @Override public void stop () {} //The system calls this member once when the OpMode is disabled.
     //------------Clip Power------------
     float clipMotor(float power) {return Range.clip(power, -1, 1);}
-    float clipServo(float position) {return Range.clip (position, 0, 1);}
+    float clipServo(float position) {return Range.clip(position, 0, 1);}
     double clipMotor(double power) {return format(Range.clip(power, -1, 1));}
-    double clipMotorPositive(double power) {return Range.clip(format(power), 0, 1);}
-    double clipMotorNegative(double power) {return Range.clip(format(power), -1, 0);}
-    double clipServoPositive(double position) {return format(Range.clip(position, 0.5, 1));}
-    double clipServoNegative(double position) {return format(Range.clip(position, 0, 0.5));}
+    double clipMotorPositive(double power) {return Range.clip(power, 0, 1);}
+    double clipMotorNegative(double power) {return Range.clip(power, -1, 0);}
+    double clipServoPositive(double position) {return Range.clip(position, 0.5, 1);}
+    double clipServoNegative(double position) {return Range.clip(position, 0, 0.5);}
     double clipServo(double position) {return format(Range.clip(position, 0, 1));}
 
     private float[] array = {0.00f, 0.05f, 0.09f, 0.10f, 0.12f, 0.15f, 0.18f, 0.24f
@@ -649,7 +677,7 @@ public class BigBerthaHardware extends OpMode {
     void setHookPosition (double hookPosition) {
         hookPosition = clipServo(hookPosition);
         if (servoHook != null)
-            servoHook.setPosition (hookPosition);
+            servoHook.setPosition(hookPosition);
         sHookValue = hookPosition;
     }
     double getManPosition () {
@@ -673,6 +701,28 @@ public class BigBerthaHardware extends OpMode {
         if (servoFlag != null)
             servoFlag.setPosition (flagPosition);
         sFlagValue = flagPosition;
+    }
+    double getRightFlagPosition () {
+        if (servoRightFlag != null)
+            return servoRightFlag.getPosition();
+        return sRightFlagValue;
+    }
+    void setRightFlagPosition (double rightFlagPosition) {
+        rightFlagPosition = clipServo(rightFlagPosition);
+        if (servoRightFlag != null)
+            servoRightFlag.setPosition (rightFlagPosition);
+        sRightFlagValue = rightFlagPosition;
+    }
+    double getLeftFlagPosition () {
+        if (servoLeftFlag != null)
+            return servoLeftFlag.getPosition();
+        return sLeftFlagValue;
+    }
+    void setLeftFlagPosition (double leftFlagPosition) {
+        leftFlagPosition = clipServo(leftFlagPosition);
+        if (servoLeftFlag != null)
+            servoLeftFlag.setPosition(leftFlagPosition);
+        sLeftFlagValue = leftFlagPosition;
     }
     double getRightClimberPosition () {
         if (servoRightClimber != null)
@@ -775,6 +825,10 @@ public class BigBerthaHardware extends OpMode {
             servoMan.setPosition (initManPosition);
         if (servoFlag != null)
             servoFlag.setPosition (initFlagPosition);
+        if (servoRightFlag != null)
+            servoRightFlag.setPosition (initRightFlagPosition);
+        if (servoLeftFlag != null)
+            servoLeftFlag.setPosition (initLeftFlagPosition);
         if (servoRightClimber != null)
             servoRightClimber.setPosition (initRightClimberPosition);
         if (servoLeftClimber != null)
