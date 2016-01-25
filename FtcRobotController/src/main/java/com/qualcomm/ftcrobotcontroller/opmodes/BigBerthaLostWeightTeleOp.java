@@ -24,6 +24,8 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
     private static int game2config = 0;
     private static boolean sweeperOff = false;
     private static boolean aux1ScaleOff = false;
+    private static boolean bucketOff = false;
+    private static boolean aux2ScaleOff = false;
     //public static boolean isSweeperOff () {return sweeperOff;}
     //public static boolean isAux1ScaleOff () {return aux1ScaleOff;}
     public static int getGame1config() {return game1config;}
