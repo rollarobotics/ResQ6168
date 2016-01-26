@@ -90,7 +90,7 @@ public class BigBerthaHardware extends OpMode {
     private static double sChainHooksValue, sLeftChainValue, sRightChainValue;
     private static double sSweeperValue;
     private static double sBucketValue;
-    private static double sSpinnerValue, sLeftSpinnerValue, sRightSpinnerValue;
+    private static double sSpinnerValue, sLeftSpinnerValue, sRightSpinnerValue;//like no u
 
     //------------initial positions------------
     double initLeftDrivePower;
