@@ -34,6 +34,11 @@ public class BigBerthaHardware extends OpMode {
     private boolean spinnerWarningGenerated = false;
     private String spinnerWarningMessage;
 
+    protected int game1config;
+    protected int game2config;
+    protected static boolean sweeperOff;
+    protected static boolean aux1ScaleOff;
+
     private DcMotor motorLeftDrive, motorRightDrive, motorBackLeft, motorBackRight;
     private DcMotor motorLiftArm, motorLeftArm, motorRightArm;
     private DcMotor motorLift, motorLeftLift, motorRightLift;
@@ -53,6 +58,22 @@ public class BigBerthaHardware extends OpMode {
     private Servo servoSpinner, servoLeftSpinner, servoRightSpinner;
 
     //------------Virtual Values of Motors and Servos for Testing Code Without Robot------------
+    protected float leftDrivePower;
+    protected float rightDrivePower;
+    protected float backLeftPower;
+    protected float backRightPower;
+    protected double chainHooksPower;
+    protected double liftPower;
+    protected float sweeperPower;
+    protected float backSweeperPower;
+    protected float sweeperPosition;
+    protected float backSweeperPosition;
+
+    protected float liftUpScale;
+    protected float liftDownScale;
+    protected float chainHooksUpScale;
+    protected float chainHooksDownScalef;
+
     private static double leftDriveValue, rightDriveValue, backLeftValue, backRightValue;
     private static double liftArmValue, leftArmValue, rightArmValue;
     private static double liftValue, leftLiftValue, rightLiftValue;
@@ -107,7 +128,7 @@ public class BigBerthaHardware extends OpMode {
     public BigBerthaHardware () {
     }
 
-    public void hardwareInit () {
+    @Override public void init () {//The system calls this member once when the OpMode is enabled.
         // Use the hardwareMap to associate class members to hardware ports.
         warningGenerated = false; // Provide telemetry data to a class user
         warningMessage = "Can't map: ";
@@ -415,7 +436,6 @@ public class BigBerthaHardware extends OpMode {
         warningMessage += opModeExceptionMessage;
     }
     //------------OpMode Methods------------
-    @Override public void init () {} //The system calls this member once when the OpMode is enabled.
     @Override public void start() {} //The system calls this member once when the OpMode is enabled.
     @Override public void loop () {} //The system calls this member repeatedly while the OpMode is running.
     @Override public void stop () {} //The system calls this member once when the OpMode is disabled.

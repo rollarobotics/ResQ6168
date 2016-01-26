@@ -20,7 +20,7 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         // Initialize base classes and class members.
         // All via self-construction.
     } //--------------------------------------------------------------------------BigBerthaTelemetry
-    public void initTelemetry () {
+    public void init () {
         telemetry.addData("01" , "Init Bucket Door Servo Position: "+ getBucketDoorPosition());
         telemetry.addData("02" , "Init Hook Servo Position: "       +  getHookPosition());
         telemetry.addData("03" , "Init Man Servo Position: "        + getManPosition());
@@ -52,20 +52,20 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         String game1 = gamepad1.toString();
         String game2 = gamepad2.toString();
         telemetry.addData("01" , "Robot:");
-        telemetry.addData("02" , "Gamepad 1 Configuration: " + BigBerthaLostWeightTeleOp.getGame1config());
+        telemetry.addData("02" , "Gamepad 1 Configuration: " + game1config);
         telemetry.addData("03" ,  game1);
-        telemetry.addData("04" , "Gamepad 2 Configuration: " + BigBerthaLostWeightTeleOp.getGame2config());
+        telemetry.addData("04" , "Gamepad 2 Configuration: " + game2config);
         telemetry.addData("05" ,  game2);
         telemetry.addData("06" , " ");
         telemetry.addData("07" , "Servo Position:");
         //telemetry.addData("08" , "Bucket Door Servo Position: "+ getBucketDoorPosition());
         telemetry.addData("08" , "Climbers Servo Position: "   + getRightClimberPosition() + ", " + getLeftClimberPosition());
         telemetry.addData("09" , "Hook Servo Position: "       + getHookPosition());
-        telemetry.addData("10" , "Man Servo Position: "        + getManPosition());
+        telemetry.addData("10" , "Man Servo Position: " + getManPosition());
         telemetry.addData("11" , "Flag Servo Position: "       + getRightFlagPosition() + ", " + getLeftFlagPosition());
         telemetry.addData("12" , "Motor Power:");
         telemetry.addData("13" , "Right Drive Power: "+ getRightDrivePower()+ ", " + getRightEncoderCount());
-        telemetry.addData("14" , "Left Drive Power: " + getLeftDrivePower() + ", " + getLeftEncoderCount());
+        telemetry.addData("14" , "Left Drive Power: " + getLeftDrivePower() + ", " + getLeftEncoderCount() + ", " + leftDrivePower);
         telemetry.addData("15" , "Back Right Power: " + getBackRightPower() + ", " + getRightEncoderCount());
         telemetry.addData("16" , "Back Left Power: "  + getBackLeftPower()  + ", " + getLeftEncoderCount());
         telemetry.addData("17" , "Right Arm Power: "  + getRightArmPower()  + ", " + getLiftArmEncoderCount());
@@ -76,8 +76,8 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         telemetry.addData("22" , "Sweeper Power: "    + getSweeperPower()   + ", " + getSweeperEncoderCount());
         telemetry.addData("23" , "Bucket Power: "     + getBucketPower()    + ", " + getBucketEncoderCount());
         telemetry.addData("24" , "Spinner Power: "    + getSpinnerPower()   + ", " + getSpinnerEncoderCount());
-        //telemetry.addData("22" , "Sweeper Off: "+ BigBerthaLostWeightTeleOp.isSweeperOff());
-        //telemetry.addData("23" , "Aux 1 Scale: "+ BigBerthaTeleOp.isAux1ScaleOff());
+        telemetry.addData("241" , "Sweeper Off: "+ sweeperOff);
+        telemetry.addData("242" , "Aux 1 Scale: "+ aux1ScaleOff);
         //telemetry.addData("24" , "Bucket Off: " + BigBerthaTeleOp.isBucketOff());
         //telemetry.addData("25" , "Aux 2 Scale: "+ BigBerthaTeleOp.isAux2ScaleOff());
     } //--------------------------------------------------------------------------updateTelemetry

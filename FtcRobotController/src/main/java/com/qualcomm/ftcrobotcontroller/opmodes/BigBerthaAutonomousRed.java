@@ -21,12 +21,8 @@ public class BigBerthaAutonomousRed extends BigBerthaTelemetry
         // Initialize base classes and class members.
         // All via self-construction.
     } // PushBotAuto
-    @Override public void init () {
-        hardwareInit ();
-        initTelemetry();
-    }
     /**
- r     * Perform any actions that are necessary when the OpMode is enabled.
+     * Perform any actions that are necessary when the OpMode is enabled.
      * The system calls this member once when the OpMode is enabled.
      */
     @Override public void start ()

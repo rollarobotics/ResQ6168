@@ -16,10 +16,6 @@ public class BigBerthaTeleOp extends BigBerthaTelemetry {
         // Initialize base classes and class members.
         // All via self-construction.
     } //--------------------------------------------------------------------------BigBerthaTeleOp
-    @Override public void init () {
-        hardwareInit ();
-        initTelemetry();
-    }
     private static boolean sweeperOff = false;
     private static boolean bucketOff = false;
     private static boolean aux1ScaleOff = false;
