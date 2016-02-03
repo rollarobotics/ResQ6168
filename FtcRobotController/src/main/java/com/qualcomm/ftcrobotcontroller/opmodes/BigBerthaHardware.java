@@ -226,6 +226,7 @@ public class BigBerthaHardware extends OpMode {
         try {
             motorLeftLift = hardwareMap.dcMotor.get ("leftLift");
             motorLeftLift.setPower(initLeftLiftPower);
+            //motorLeftLift.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
             setWarningMessage("leftLift");
             DbgLog.msg (opModeException.getLocalizedMessage ());
@@ -234,6 +235,7 @@ public class BigBerthaHardware extends OpMode {
         try {
             motorRightLift = hardwareMap.dcMotor.get ("rightLift");
             motorRightLift.setPower(initRightLiftPower);
+            //motorRightLift.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
             setWarningMessage("rightLift");
             DbgLog.msg (opModeException.getLocalizedMessage ());

@@ -21,6 +21,7 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         // All via self-construction.
     } //--------------------------------------------------------------------------BigBerthaTelemetry
     public void init () {
+        super.init();
         telemetry.addData("01" , "Init Bucket Door Servo Position: "+ getBucketDoorPosition());
         telemetry.addData("02" , "Init Hook Servo Position: "       +  getHookPosition());
         telemetry.addData("03" , "Init Man Servo Position: "        + getManPosition());
