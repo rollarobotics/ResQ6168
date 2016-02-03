@@ -339,11 +339,11 @@ public class BigBerthaHardware extends OpMode {
             servoMan.setPosition(manPosition);
     }
     //------------ Set With Motor Wheel Encoders------------
-    public void runUsingLeftDriveEncoder () {
+    public void runUsingLeftDriveEncoder(float distance) {
         if (motorLeftDrive != null)
             motorLeftDrive.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
-    public void runUsingRightDriveEncoder () {
+    public void runUsingRightDriveEncoder(float distance) {
         if (motorRightDrive != null)
             motorRightDrive.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
@@ -372,8 +372,8 @@ public class BigBerthaHardware extends OpMode {
             motorSweeper.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
     public void RUN_USING_ENCODERS () {
-        runUsingLeftDriveEncoder();
-        runUsingRightDriveEncoder();
+        runUsingLeftDriveEncoder(distance);
+        runUsingRightDriveEncoder(distance);
         runUsingLiftArmEncoder();
         runUsingLiftEncoder();
         runUsingChainHooksEncoder();
