@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 /**
  * Created by team on 12/11/2015.
  */
-public class AutonomousDrive extends BigBerthaTelemetry
+class AutonomousMethods extends BigBerthaTelemetry
 {
     private DcMotor leftDrive;
     private DcMotor rightDrive;
-    public AutonomousDrive(DcMotor leftDrive, DcMotor rightDrive)
+    public AutonomousMethods(DcMotor leftDrive, DcMotor rightDrive)
     {
         this.leftDrive = leftDrive;
         this.rightDrive = rightDrive;
@@ -20,8 +20,7 @@ public class AutonomousDrive extends BigBerthaTelemetry
     {
         //resetLeftDriveEncoder();
         //distance = distance*1400;
-        leftDrive = speed;
-        rightDrive = speed;
+
         //runUsingLeftDriveEncoder(distance, leftDrivePower);
         //runUsingRightDriveEncoder(distance, rightDrivePower);
     }
@@ -30,10 +29,10 @@ public class AutonomousDrive extends BigBerthaTelemetry
 //SHANE GET OFF ME.
 //SHANE:WHAT DO YOU CALL A BIRD IN A HOUSE?
 //SHANE JUST HIT A THREE-PEAT.
-    private void runUsingRightDriveEncoder(float distance, float rightDrivePower)
+    /*private void runUsingRightDriveEncoder(float distance, float rightDrivePower)
     {
         rightDrive.setTargetPosition();
-    }
+    }*/
 
     private void runUsingLeftDriveEncoder(float distance, float leftDrivePower)
     {
