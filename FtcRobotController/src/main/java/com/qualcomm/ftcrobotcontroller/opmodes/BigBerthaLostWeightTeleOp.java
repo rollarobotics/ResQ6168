@@ -232,13 +232,13 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             else
                 rightArmPower = 0.0f;
             if (gamepad2.left_trigger > 0)
-                setLeftFlagPosition(0.0);
+                setLeftFlagPosition(1.0);
             else if (gamepad2.left_bumper)
-                setLeftFlagPosition (1.0);
+                setLeftFlagPosition (0.0);
             if (gamepad2.right_trigger > 0)
-                setRightFlagPosition(1.0);
-            else if (gamepad2.right_bumper)
                 setRightFlagPosition(0.0);
+            else if (gamepad2.right_bumper)
+                setRightFlagPosition(1.0);
 
         }
         if (game2config == 1) {
