@@ -272,6 +272,73 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             }
         }
         if (game2config == 2) {
+            leftArmPower = scaleMotorPower(-gamepad2.left_stick_y);
+            rightArmPower = scaleMotorPower(-gamepad2.right_stick_y);
+            leftLiftPower = scaleMotorPower(-gamepad2.left_trigger);
+            rightLiftPower = scaleMotorPower(gamepad2.right_trigger);
+
+            if (gamepad2.left_bumper) {
+                leftLiftPower = -leftLiftPower;
+                leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
+                backLeftPower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
+                if (gamepad2.left_stick_button) {
+                    leftDrivePower = leftDrivePower / 2;
+                    backLeftPower = leftDrivePower;
+                }
+            }
+            if (gamepad2.right_bumper) {
+                rightLiftPower = -rightLiftPower;
+                rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
+                backRightPower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
+                if (gamepad2.right_stick_button) {
+                    rightDrivePower = rightDrivePower / 2;
+                    backRightPower = rightDrivePower;
+                }
+            }
+            if (gamepad2.left_stick_button) {
+                leftArmPower = leftArmPower / 2;
+            }
+            if (gamepad2.right_stick_button) {
+                rightArmPower = rightArmPower / 2;
+            }
+
+            if (gamepad2.y)
+                setManPosition(1.0); //1.0 is forward at full speed
+            else if (gamepad2.a)
+                setManPosition(0.0); //0.0 is backward at full speed
+            else
+                setManPosition(0.5); //0.5 is stopped
+
+            if (gamepad2.dpad_down) {
+                setRightFlagPosition(1.0);
+                setLeftFlagPosition(0.0);
+            }
+            else if (gamepad2.dpad_up) {
+                setRightFlagPosition(0.0);
+                setLeftFlagPosition (1.0);
+            }
+            if (gamepad1.b) {
+                if (getRightClimberPosition() != 1.0)
+                    setRightClimberPosition(1.0);
+                else
+                    setRightClimberPosition(0.225);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            if (gamepad1.x) {
+                if (getLeftClimberPosition() != 0.85)
+                    setLeftClimberPosition(0.85);
+                else
+                    setLeftClimberPosition(0);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
         }
         if (game2config == 3) {
         }
