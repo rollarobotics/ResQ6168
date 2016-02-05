@@ -101,7 +101,7 @@ public class BigBerthaHardware extends OpMode {
     double initLeftArmPower;
     double initRightArmPower;
     double initLiftPower;
-    double initLeftLiftPower;
+    double initLeftLiftPower = 0.0f;
     double initRightLiftPower;
     double initChainHooksPower;
     double initLeftChainPower;
@@ -114,8 +114,8 @@ public class BigBerthaHardware extends OpMode {
     private double initHookPosition = 0.125;
     private double initManPosition = 0.5;
     private double initFlagPosition = 0.95;
-    private double initLeftFlagPosition = 0.0;
-    private double initRightFlagPosition = 1.0;
+    private double initLeftFlagPosition = 1.0;
+    private double initRightFlagPosition = 0.0;
     private double initClimberPosition = 0.0;
     private double initLeftClimberPosition = 0.85;
     private double initRightClimberPosition = 0.225;
@@ -194,7 +194,7 @@ public class BigBerthaHardware extends OpMode {
             motorLiftArm.setPower(initLiftArmPower);
             motorLiftArm.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
-            setWarningMessage("leftArm");
+            setWarningMessage("liftArm");
             DbgLog.msg (opModeException.getLocalizedMessage ());
             liftArmValue = initLiftArmPower;
         }
@@ -227,7 +227,7 @@ public class BigBerthaHardware extends OpMode {
         try {
             motorLeftLift = hardwareMap.dcMotor.get ("leftLift");
             motorLeftLift.setPower(initLeftLiftPower);
-            //motorLeftLift.setDirection(DcMotor.Direction.REVERSE);
+            motorLeftLift.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
             setWarningMessage("leftLift");
             DbgLog.msg (opModeException.getLocalizedMessage ());

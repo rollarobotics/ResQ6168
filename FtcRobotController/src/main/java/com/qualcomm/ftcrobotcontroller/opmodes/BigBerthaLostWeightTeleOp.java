@@ -174,6 +174,28 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 chainHooksPower = -clipMotorPositive(chainHooksPower + chainHooksUpScale + chainHooksDownScale);
             else
                 chainHooksPower = 0;
+            if (gamepad1.b) {
+                if (getRightClimberPosition() < 0.75)
+                    setRightClimberPosition(1.0);
+                else
+                    setRightClimberPosition(0.225);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            if (gamepad1.x) {
+                if (getLeftClimberPosition() < 0.5)
+                    setLeftClimberPosition(0.85);
+                else
+                    setLeftClimberPosition(0);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
         }
         if (game1config == 1) {
             leftDrivePower = scaleMotorPower(gamepad1.left_trigger / 8 * 5);
@@ -231,6 +253,7 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 rightArmPower = -1.0f;
             else
                 rightArmPower = 0.0f;
+
             if (gamepad2.left_trigger > 0)
                 setLeftFlagPosition(1.0);
             else if (gamepad2.left_bumper)
@@ -245,7 +268,7 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             leftArmPower = scaleMotorPower(-gamepad2.left_stick_y);
             rightArmPower = scaleMotorPower(-gamepad2.right_stick_y);
             leftLiftPower = scaleMotorPower(-gamepad2.left_trigger);
-            rightLiftPower = scaleMotorPower(gamepad2.right_trigger);
+            rightLiftPower = scaleMotorPower(-gamepad2.right_trigger);
 
             if (gamepad2.left_bumper)
                 leftLiftPower = -leftLiftPower;
@@ -272,15 +295,17 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             }
         }
         if (game2config == 2) {
-            leftArmPower = scaleMotorPower(-gamepad2.left_stick_y);
-            rightArmPower = scaleMotorPower(-gamepad2.right_stick_y);
+            if (!gamepad2.left_bumper)
+                leftArmPower = scaleMotorPower(-gamepad2.left_stick_y);
+            if (!gamepad2.right_bumper)
+                rightArmPower = scaleMotorPower(-gamepad2.right_stick_y);
             leftLiftPower = scaleMotorPower(-gamepad2.left_trigger);
-            rightLiftPower = scaleMotorPower(gamepad2.right_trigger);
+            rightLiftPower = scaleMotorPower(-gamepad2.right_trigger);
 
             if (gamepad2.left_bumper) {
                 leftLiftPower = -leftLiftPower;
-                leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
-                backLeftPower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
+                leftDrivePower = scaleMotorPower(-gamepad2.left_stick_y / 8 * 5);
+                backLeftPower = scaleMotorPower(-gamepad2.left_stick_y / 8 * 5);
                 if (gamepad2.left_stick_button) {
                     leftDrivePower = leftDrivePower / 2;
                     backLeftPower = leftDrivePower;
@@ -288,8 +313,8 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             }
             if (gamepad2.right_bumper) {
                 rightLiftPower = -rightLiftPower;
-                rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
-                backRightPower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
+                rightDrivePower = scaleMotorPower(-gamepad2.right_stick_y / 8 * 5);
+                backRightPower = scaleMotorPower(-gamepad2.right_stick_y / 8 * 5);
                 if (gamepad2.right_stick_button) {
                     rightDrivePower = rightDrivePower / 2;
                     backRightPower = rightDrivePower;
@@ -396,28 +421,6 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
         //------------Servo Motors------------
         // The mPosition methods write the motor power values to the Servo
         // class, but the positions aren't applied until this method ends.
-        if (gamepad1.b) {
-            if (getRightClimberPosition() != 1.0)
-                setRightClimberPosition(1.0);
-            else
-                setRightClimberPosition(0.225);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-        }
-        if (gamepad1.x) {
-            if (getLeftClimberPosition() != 0.85)
-                setLeftClimberPosition(0.85);
-            else
-                setLeftClimberPosition(0);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-        }
         ////////////////////////////---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------setHookPosition (0.5
 
         //------------Telemetry------------
