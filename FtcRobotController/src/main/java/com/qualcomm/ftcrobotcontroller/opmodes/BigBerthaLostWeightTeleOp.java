@@ -178,7 +178,7 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 if (getRightClimberPosition() < 0.75)
                     setRightClimberPosition(1.0);
                 else
-                    setRightClimberPosition(0.225);
+                    setRightClimberPosition(0.275);
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException ex) {
@@ -187,7 +187,7 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             }
             if (gamepad1.x) {
                 if (getLeftClimberPosition() < 0.5)
-                    setLeftClimberPosition(0.85);
+                    setLeftClimberPosition(0.8);
                 else
                     setLeftClimberPosition(0);
                 try {
@@ -346,7 +346,7 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 if (getRightClimberPosition() != 1.0)
                     setRightClimberPosition(1.0);
                 else
-                    setRightClimberPosition(0.225);
+                    setRightClimberPosition(0.275);
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException ex) {
@@ -354,8 +354,8 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 }
             }
             if (gamepad1.x) {
-                if (getLeftClimberPosition() != 0.85)
-                    setLeftClimberPosition(0.85);
+                if (getLeftClimberPosition() != 0.8)
+                    setLeftClimberPosition(0.8);
                 else
                     setLeftClimberPosition(0);
                 try {
