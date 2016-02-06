@@ -431,7 +431,7 @@ public class BigBerthaHardware extends OpMode {
             DbgLog.msg (opModeException.getLocalizedMessage());
             servoMan = null;
         }
-        //Sensors--------------------------------
+        //Sensors--------------------------------because no u
         try {
             sonar = hardwareMap.ultrasonicSensor.get ("sonar");
         } catch (Exception opModeException) {
