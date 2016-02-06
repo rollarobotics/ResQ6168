@@ -61,7 +61,7 @@ public class K9AutoTime extends OpMode {
 	Servo claw;
 	Servo arm;
 
-	L reflectedLight;
+	LightSensor reflectedLight;
 	com.qualcomm.robotcore.hardware.UltrasonicSensor hi;
 
 	/**
