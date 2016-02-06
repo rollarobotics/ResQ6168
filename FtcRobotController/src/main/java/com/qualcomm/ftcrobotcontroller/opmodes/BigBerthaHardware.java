@@ -6,6 +6,7 @@ import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 import java.text.DecimalFormat;
@@ -125,6 +126,9 @@ public class BigBerthaHardware extends OpMode {
     private double initSweeperPosition = 0.5;
     private double initBucketPosition = 0.5;
     private double initSpinnerPosition = 0.5;
+
+
+    protected GyroSensor gyro;
 
     public BigBerthaHardware () {
     }
