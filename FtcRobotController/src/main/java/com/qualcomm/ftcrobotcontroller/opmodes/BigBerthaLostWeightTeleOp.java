@@ -418,6 +418,12 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             setBucketPower(0);
             setBucketPosition(0);
         }
+        if (gamepad2.dpad_left)
+            setManPosition(1.0); //1.0 is forward at full speed
+        else if (gamepad2.dpad_right)
+            setManPosition(0.0); //0.0 is backward at full speed
+        else
+            setManPosition(0.5); //0.5 is stopped
         //------------Servo Motors------------
         // The mPosition methods write the motor power values to the Servo
         // class, but the positions aren't applied until this method ends.
