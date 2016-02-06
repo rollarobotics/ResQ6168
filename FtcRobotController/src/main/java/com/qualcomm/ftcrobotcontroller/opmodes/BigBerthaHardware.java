@@ -138,9 +138,6 @@ public class BigBerthaHardware extends OpMode {
     private double initBucketPosition = 0.5;
     private double initSpinnerPosition = 0.5;
 
-
-    protected GyroSensor gyro;
-
     public BigBerthaHardware () {
     }
 
