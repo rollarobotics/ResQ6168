@@ -3,8 +3,6 @@
  */
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.robotcore.hardware.Gamepad;
-
 /**
  * Provide telemetry provided by the BigBerthaHardware class.
  * @author SSI Robotics and revised by Shane McEnaney
@@ -20,8 +18,7 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         // Initialize base classes and class members.
         // All via self-construction.
     } //--------------------------------------------------------------------------BigBerthaTelemetry
-    public void init () {
-        super.init();
+    public void init_loop () {
         telemetry.addData("01" , "Init Bucket Door Servo Position: "+ getBucketDoorPosition());
         telemetry.addData("02" , "Init Hook Servo Position: "       +  getHookPosition());
         telemetry.addData("03" , "Init Man Servo Position: "        + getManPosition());
@@ -33,6 +30,20 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         telemetry.addData("09" , "Init Sweeper Power: "    + getSweeperPower());
         telemetry.addData("10" , "Init Bucket Power: "     + getBucketPower());
         telemetry.addData("11" , "Init Spinner Power: "    + getSpinnerPower());
+        telemetry.addData("12" , "Sonar: " + sonar.getUltrasonicLevel());
+        telemetry.addData("13" , "Gyro: " + gyro.getRotation());
+        telemetry.addData("14" , "Color alpha: " + color.alpha());
+        telemetry.addData("15" , "Color argb: " + color.argb());
+        telemetry.addData("16" , "Color blue: " + color.blue());
+        telemetry.addData("17" , "Color green: " + color.green());
+        telemetry.addData("18" , "Color red: " + color.red());
+        telemetry.addData("19" , "Color2 alpha: " + color2.alpha());
+        telemetry.addData("20" , "Color2 argb: " + color2.argb());
+        telemetry.addData("21" , "Color2 blue: " + color2.blue());
+        telemetry.addData("22" , "Color2 green: " + color2.green());
+        telemetry.addData("23" , "Color2 red: " + color2.red());
+
+        //telemetry.addData("15" , "Gyro2:" + gyro.);
     }
     /**
      * Update the telemetry with current gamepad readings.
@@ -53,6 +64,7 @@ public class BigBerthaTelemetry extends BigBerthaHardware
         String game1 = gamepad1.toString();
         String game2 = gamepad2.toString();
         telemetry.addData("01" , "Robot:");
+        telemetry.addData("011", "Sonar: " + sonar.getUltrasonicLevel());
         telemetry.addData("02" , "Gamepad 1 Configuration: " + game1config);
         telemetry.addData("03" ,  game1);
         telemetry.addData("04" , "Gamepad 2 Configuration: " + game2config);

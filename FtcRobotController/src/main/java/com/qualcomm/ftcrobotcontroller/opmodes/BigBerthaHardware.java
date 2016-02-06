@@ -4,10 +4,12 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.Range;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -58,6 +60,12 @@ public class BigBerthaHardware extends OpMode {
     private Servo servoBucket;
     private Servo servoSpinner, servoLeftSpinner, servoRightSpinner;
 
+    protected UltrasonicSensor sonar;
+    protected GyroSensor gyro;
+    protected ColorSensor color;
+    protected ColorSensor color2;
+
+
     //------------Virtual Values of Motors and Servos for Testing Code Without Robot------------
     protected float leftDrivePower;
     protected float rightDrivePower;
@@ -93,6 +101,9 @@ public class BigBerthaHardware extends OpMode {
     private static double sBucketValue;
     private static double sSpinnerValue, sLeftSpinnerValue, sRightSpinnerValue;//like no u
 
+    protected int xVal, yVal, zVal = 0;
+    protected int heading = 0;
+
     //------------initial positions------------
     double initLeftDrivePower;
     double initRightDrivePower;
@@ -102,7 +113,7 @@ public class BigBerthaHardware extends OpMode {
     double initLeftArmPower;
     double initRightArmPower;
     double initLiftPower;
-    double initLeftLiftPower;
+    double initLeftLiftPower = 0.0f;
     double initRightLiftPower;
     double initChainHooksPower;
     double initLeftChainPower;
@@ -198,7 +209,7 @@ public class BigBerthaHardware extends OpMode {
             motorLiftArm.setPower(initLiftArmPower);
             motorLiftArm.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
-            setWarningMessage("leftArm");
+            setWarningMessage("liftArm");
             DbgLog.msg (opModeException.getLocalizedMessage ());
             liftArmValue = initLiftArmPower;
         }
@@ -231,7 +242,7 @@ public class BigBerthaHardware extends OpMode {
         try {
             motorLeftLift = hardwareMap.dcMotor.get ("leftLift");
             motorLeftLift.setPower(initLeftLiftPower);
-            //motorLeftLift.setDirection(DcMotor.Direction.REVERSE);
+            motorLeftLift.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
             setWarningMessage("leftLift");
             DbgLog.msg (opModeException.getLocalizedMessage ());
@@ -422,6 +433,37 @@ public class BigBerthaHardware extends OpMode {
             setWarningMessage("man");
             DbgLog.msg (opModeException.getLocalizedMessage());
             servoMan = null;
+        }
+        //Sensors--------------------------------because no u
+        try {
+            sonar = hardwareMap.ultrasonicSensor.get ("sonar");
+        } catch (Exception opModeException) {
+            setWarningMessage("sonar");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            sonar = null;
+        }
+        try {
+            gyro = hardwareMap.gyroSensor.get ("gyro");
+        } catch (Exception opModeException) {
+            setWarningMessage("gyro");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            gyro = null;
+        }
+        try {
+            color = hardwareMap.colorSensor.get ("color");
+            color.enableLed(true);
+        } catch (Exception opModeException) {
+            setWarningMessage("color");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            color = null;
+        }
+        try {
+            color2 = hardwareMap.colorSensor.get ("color2");
+            color2.enableLed(false);
+        } catch (Exception opModeException) {
+            setWarningMessage("color2");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            color2 = null;
         }
     }
     //------------Warnings------------
