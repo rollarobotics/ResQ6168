@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
  * @author SSI Robotics and revised by Shane McEnaney
  * @version 2015-08-02-13-57-----2015-12-01
  */
-public class BigBerthaTelemetry extends BigBerthaHardware
+public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
 {
     /**
      * Construct the class.
