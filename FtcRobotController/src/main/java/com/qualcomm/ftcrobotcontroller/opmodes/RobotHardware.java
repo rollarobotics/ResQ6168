@@ -14,6 +14,8 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.Range;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+
 /**
  * Provides a single hardware access point between custom op-modes and the OpMode class for this Robot.
  * @author Shane McEnaney
