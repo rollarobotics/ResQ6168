@@ -16,21 +16,16 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
         // Initialize base classes and class members.
         // All via self-construction.
     } //--------------------------------------------------------------------------BigBerthaTeleOp
-    //public static boolean isSweeperOff () {return sweeperOff;}
-    //public static boolean isAux1ScaleOff () {return aux1ScaleOff;}
-    //public static int getGame1config() {return game1config;}
-    //public static int getGame2config() {return game2config;}
     /**
      * The system calls this member repeatedly while the OpMode is running.
      */
     @Override public void loop () {
-        // ------------DC Motors------------
+        // ------------Configurations------------
         if (gamepad1.start)
             game1config = 0;
         if (gamepad1.guide) {
             if (game1config == 0) {
-                sweeperOff = false;
-                aux1ScaleOff = false;
+                sweeperOff = aux1ScaleOff = fullDriveOff = fastDriveOff = slowDriveOff = chainHooksOff = climberOff = false;
                 game1config = 1;
                 try {
                     Thread.sleep(500);
@@ -40,6 +35,9 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             } else if (game1config == 1) {
                 sweeperOff = true;
                 aux1ScaleOff = true;
+                driveOff = true;
+                backDriveOff = false;
+                chainHooksOff= true;
                 game1config = 2;
                 try {
                     Thread.sleep(500);
@@ -49,6 +47,8 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             } else if (game1config == 2) {
                 sweeperOff = false;
                 aux1ScaleOff = false;
+                fullDriveOff = false;
+                chainHooksOff = true;
                 game1config = 3;
                 try {
                     Thread.sleep(500);
@@ -58,6 +58,8 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             } else if (game1config == 3) {
                 sweeperOff = false;
                 aux1ScaleOff = true;
+                fullDriveOff = false;
+                chainHooksOff = true;
                 game1config = 4;
                 try {
                     Thread.sleep(500);
@@ -67,6 +69,8 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             } else {
                 sweeperOff = true;
                 aux1ScaleOff = false;
+                fullDriveOff = false;
+                chainHooksOff = false;
                 game1config = 0;
                 try {
                     Thread.sleep(500);
@@ -129,10 +133,6 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
         float chainHooksDownScale = 0.0f;
 
         if (game1config == 0) {
-            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
-            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
-            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
-            backRightPower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
             if (gamepad1.left_trigger > 0) {
                 leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y);
                 backLeftPower = leftDrivePower;
@@ -141,101 +141,18 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y);
                 backRightPower = rightDrivePower;
             }
-            if (gamepad1.dpad_up) {
-                leftDrivePower = 0.2f;
-                backLeftPower = 0.2f;
-                backRightPower = 0.2f;
-                rightDrivePower = 0.2f;
-            } else if (gamepad1.dpad_down) {
-                leftDrivePower = -0.2f;
-                rightDrivePower = -0.2f;
-                backLeftPower = -0.2f;
-                backRightPower = -0.2f;
-            } else if (gamepad1.dpad_right) {
-                leftDrivePower = 0.2f;
-                rightDrivePower = -0.2f;
-                backLeftPower = 0.2f;
-                backRightPower = -0.2f;
-            } else if (gamepad1.dpad_left) {
-                leftDrivePower = -0.2f;
-                rightDrivePower = 0.2f;
-                backLeftPower = -0.2f;
-                backRightPower = 0.2f;
-            }
-            if (gamepad1.right_bumper || gamepad1.left_bumper) {
-                chainHooksUpScale = scaleMotorPower(gamepad1.right_trigger);
-                clipMotorPositive(chainHooksUpScale = chainHooksUpScale / 4);
-                chainHooksDownScale = scaleMotorPower(-gamepad1.left_trigger);
-                clipMotorNegative(chainHooksDownScale = (chainHooksDownScale / 5) * 4);
-            }
-            if (gamepad1.right_bumper)
-                chainHooksPower = clipMotorPositive(chainHooksPower + chainHooksUpScale + chainHooksDownScale);
-            else if (gamepad1.left_bumper)
-                chainHooksPower = -clipMotorPositive(chainHooksPower + chainHooksUpScale + chainHooksDownScale);
-            else
-                chainHooksPower = 0;
-            if (gamepad1.b) {
-                if (getRightClimberPosition() < 0.75)
-                    setRightClimberPosition(1.0);
-                else
-                    setRightClimberPosition(0.275);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-            if (gamepad1.x) {
-                if (getLeftClimberPosition() < 0.5)
-                    setLeftClimberPosition(0.8);
-                else
-                    setLeftClimberPosition(0);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
-            }
         }
         if (game1config == 1) {
-            leftDrivePower = scaleMotorPower(gamepad1.left_trigger / 8 * 5);
-            rightDrivePower = scaleMotorPower(gamepad1.right_trigger / 8 * 5);
-            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
-            backRightPower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
             if (gamepad1.left_bumper)
                 leftDrivePower = -leftDrivePower;
             if (gamepad1.right_bumper)
                 rightDrivePower = -rightDrivePower;
         }
         if (game1config == 2) {
-            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
-            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
-            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
-            backRightPower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
         }
         if (game1config == 3) {
-            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
-            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
-            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
-            backRightPower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
         }
         if (game1config == 4) {
-            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
-            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
-            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
-            backRightPower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
-            if (gamepad1.right_bumper || gamepad1.left_bumper) {
-                chainHooksUpScale = scaleMotorPower(gamepad1.right_trigger);
-                clipMotorPositive(chainHooksUpScale = chainHooksUpScale / 4);
-                chainHooksDownScale = scaleMotorPower(-gamepad1.left_trigger);
-                clipMotorNegative(chainHooksDownScale = (chainHooksDownScale / 5) * 4);
-            }
-            if (gamepad1.right_bumper)
-                chainHooksPower = clipMotorPositive(chainHooksPower + chainHooksUpScale + chainHooksDownScale);
-            if (gamepad1.left_bumper)
-                chainHooksPower = clipMotorPositive(chainHooksPower + chainHooksUpScale + chainHooksDownScale);
-            else
-                chainHooksPower = 0;
         }
         if (game2config == 0) {
             leftLiftPower = scaleMotorPower(-gamepad2.left_stick_y);
@@ -346,7 +263,7 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 if (getRightClimberPosition() != 1.0)
                     setRightClimberPosition(1.0);
                 else
-                    setRightClimberPosition(0.275);
+                    setRightClimberPosition(0.325);
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException ex) {
@@ -354,8 +271,8 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 }
             }
             if (gamepad1.x) {
-                if (getLeftClimberPosition() != 0.8)
-                    setLeftClimberPosition(0.8);
+                if (getLeftClimberPosition() != 0.75)
+                    setLeftClimberPosition(0.75);
                 else
                     setLeftClimberPosition(0);
                 try {
@@ -367,17 +284,53 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
         }
         if (game2config == 3) {
         }
+
+        if (fullDriveOff) {
+            driveOff = true;
+            backDriveOff = true;
+        } else if (!fullDriveOff){
+            driveOff = false;
+            backDriveOff = false;
+        }
+        if (driveOff){
+            leftDriveOff = true;
+            rightDriveOff = true;
+        } else if (!driveOff){
+            leftDriveOff = false;
+            rightDriveOff = false;
+        }
+        if (backDriveOff) {
+            backRightOff = true;
+            backLeftOff = true;
+        } else if (!backDriveOff){
+            backLeftOff = false;
+            backRightOff = false;
+        }
+        if (fastDriveOff) {
+            leftFastDriveOff = true;
+            rightFastDriveOff = true;
+        } else if (!fastDriveOff) {
+            leftFastDriveOff = false;
+            rightFastDriveOff = false;
+        }
+        if (slowDriveOff) {
+            leftSlowDriveOff = true;
+            rightSlowDriveOff = true;
+        } else if (!slowDriveOff) {
+            leftSlowDriveOff = false;
+            rightSlowDriveOff = false;
+        }
+
+        if (climberOff) {
+            leftClimberOff = true;
+            rightClimberOff = true;
+        } else if (!climberOff) {
+            leftClimberOff = false;
+            rightClimberOff = false;
+        }
         // Obtain the current values of the joystick controllers.
         // The DC motors are scaled to make it easier to control them at slower speeds.
         // Note that x and y equal -1 when the joystick is pushed all of the way forward.
-        if (gamepad1.left_stick_button) {
-            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y);
-            backLeftPower = leftDrivePower;//ebhfc\
-        }
-        if (gamepad1.right_stick_button) {
-            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y);
-            backRightPower = rightDrivePower;
-        }
         if ((!(gamepad1.right_bumper || gamepad1.left_bumper)) || aux1ScaleOff) {
             if (!sweeperOff) {
                 sweeperPower = scaleMotorPower(gamepad1.right_trigger);
@@ -387,6 +340,104 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             }
         }
 
+        if (!leftDriveOff)
+            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
+        if (!rightDriveOff)
+            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
+        if (!backLeftOff)
+            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
+        if (!backRightOff)
+            backRightPower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
+
+        if (!leftFastDriveOff) {
+            if (gamepad1.left_stick_button) {
+                leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y);
+                backLeftPower = leftDrivePower;//ebhfc\
+            }
+        }
+        if (!rightFastDriveOff) {
+            if (gamepad1.right_stick_button) {
+                rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y);
+                backRightPower = rightDrivePower;
+            }
+        }
+        if (!slowDriveOff) {
+            if (gamepad1.dpad_up) {
+                leftDrivePower = 0.2f;
+                backLeftPower = 0.2f;
+                backRightPower = 0.2f;
+                rightDrivePower = 0.2f;
+            } else if (gamepad1.dpad_down) {
+                leftDrivePower = -0.2f;
+                rightDrivePower = -0.2f;
+                backLeftPower = -0.2f;
+                backRightPower = -0.2f;
+            } else if (gamepad1.dpad_right) {
+                leftDrivePower = 0.2f;
+                rightDrivePower = -0.2f;
+                backLeftPower = 0.2f;
+                backRightPower = -0.2f;
+            } else if (gamepad1.dpad_left) {
+                leftDrivePower = -0.2f;
+                rightDrivePower = 0.2f;
+                backLeftPower = -0.2f;
+                backRightPower = 0.2f;
+            }
+        }
+
+        if (!chainHooksOff) {
+            if (gamepad1.right_bumper || gamepad1.left_bumper) {
+                chainHooksUpScale = scaleMotorPower(gamepad1.right_trigger);
+                clipMotorPositive(chainHooksUpScale = chainHooksUpScale / 4);
+                chainHooksDownScale = scaleMotorPower(-gamepad1.left_trigger);
+                clipMotorNegative(chainHooksDownScale = (chainHooksDownScale / 5) * 4);
+            }
+            if (gamepad1.right_bumper)
+                chainHooksPower = clipMotorPositive(chainHooksPower + chainHooksUpScale + chainHooksDownScale);
+            if (gamepad1.left_bumper)
+                chainHooksPower = clipMotorPositive(chainHooksPower + chainHooksUpScale + chainHooksDownScale);
+            else
+                chainHooksPower = 0;
+        }
+
+        if (!(leftClimberOff || leftClimberIsPressed)) {
+            if (gamepad1.x) {
+                if (getLeftClimberPosition() < 0.5)
+                    setLeftClimberPosition(0.7);
+                else
+                    setLeftClimberPosition(0);
+                leftClimberIsPressed = true;
+            }
+        }
+        if (leftClimberIsPressed) {
+            if (!gamepad2.x) {
+                leftClimberIsPressed = false;
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+        if (!(rightClimberOff  || rightClimberIsPressed)) {
+            if (gamepad1.b) {
+                if (getRightClimberPosition() > 0.7)
+                    setRightClimberPosition(0.375);
+                else
+                    setRightClimberPosition(1.0);
+                rightClimberIsPressed = true;
+            }
+        }
+        if (rightClimberIsPressed) {
+            if (!gamepad2.b) {
+                rightClimberIsPressed = false;
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
         // The setPower methods write the motor power values to the DcMotor
         // class, but the power levels aren't applied until this method ends.
         setDrivePower(leftDrivePower, rightDrivePower, backLeftPower, backRightPower);

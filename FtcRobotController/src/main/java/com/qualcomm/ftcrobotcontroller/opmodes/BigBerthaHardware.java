@@ -39,8 +39,33 @@ public class BigBerthaHardware extends OpMode {
 
     protected int game1config;
     protected int game2config;
-    protected static boolean sweeperOff;
-    protected static boolean aux1ScaleOff;
+    protected static boolean sweeperOff = false;
+    protected static boolean aux1ScaleOff = false;
+    protected boolean leftDriveOff = false;
+    protected boolean rightDriveOff = false;
+    protected boolean backLeftOff = false;
+    protected boolean backRightOff = false;
+    protected boolean fullDriveOff = false;
+    protected boolean driveOff = false;
+    protected boolean backDriveOff = false;
+    protected boolean leftFastDriveOff = false;
+    protected boolean rightFastDriveOff = false;
+    protected boolean fastDriveOff = false;
+    protected boolean leftSlowDriveOff = false;
+    protected boolean rightSlowDriveOff = false;
+    protected boolean slowDriveOff = false;
+    protected boolean chainHooksOff = false;
+    protected boolean leftArmOff = false;
+    protected boolean rightArmOff = false;
+    protected boolean leftLiftOff = false;
+    protected boolean rightLiftOff = false;
+
+    protected boolean rightClimberOff = false;
+    protected boolean leftClimberOff = false;
+    protected boolean climberOff = false;
+
+    protected boolean leftClimberIsPressed = false;
+    protected boolean rightClimberIsPressed = false;
 
     private DcMotor motorLeftDrive, motorRightDrive, motorBackLeft, motorBackRight;
     private DcMotor motorLiftArm, motorLeftArm, motorRightArm;
@@ -60,10 +85,10 @@ public class BigBerthaHardware extends OpMode {
     private Servo servoBucket;
     private Servo servoSpinner, servoLeftSpinner, servoRightSpinner;
 
-    protected UltrasonicSensor sonar;
+    /*protected UltrasonicSensor sonar;
     protected GyroSensor gyro;
     protected ColorSensor color;
-    protected ColorSensor color2;
+    protected ColorSensor color2;*/
 
 
     //------------Virtual Values of Motors and Servos for Testing Code Without Robot------------
@@ -129,8 +154,8 @@ public class BigBerthaHardware extends OpMode {
     private double initLeftFlagPosition = 1.0;
     private double initRightFlagPosition = 0.0;
     private double initClimberPosition = 0.0;
-    private double initLeftClimberPosition = 0.8;
-    private double initRightClimberPosition = 0.275;
+    private double initLeftClimberPosition = 0.75;
+    private double initRightClimberPosition = 0.375;
     private double initChainHooksPosition = 0.5;
     private double initLeftChainPosition = 0.5;
     private double initRightChainPosition = 0.5;
@@ -239,7 +264,7 @@ public class BigBerthaHardware extends OpMode {
         try {
             motorLeftLift = hardwareMap.dcMotor.get ("leftLift");
             motorLeftLift.setPower(initLeftLiftPower);
-            motorLeftLift.setDirection(DcMotor.Direction.REVERSE);
+            //motorLeftLift.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
             setWarningMessage("leftLift");
             DbgLog.msg (opModeException.getLocalizedMessage ());
@@ -431,8 +456,8 @@ public class BigBerthaHardware extends OpMode {
             DbgLog.msg (opModeException.getLocalizedMessage());
             servoMan = null;
         }
-        //Sensors--------------------------------because no u
-        try {
+        //------------Sensors------------because no u
+        /*try {
             sonar = hardwareMap.ultrasonicSensor.get ("sonar");
         } catch (Exception opModeException) {
             setWarningMessage("sonar");
@@ -461,7 +486,7 @@ public class BigBerthaHardware extends OpMode {
             setWarningMessage("color2");
             DbgLog.msg (opModeException.getLocalizedMessage());
             color2 = null;
-        }
+        }*/
     }
     //------------Warnings------------
     boolean getDriveWarningGenerated () {return driveWarningGenerated;}
