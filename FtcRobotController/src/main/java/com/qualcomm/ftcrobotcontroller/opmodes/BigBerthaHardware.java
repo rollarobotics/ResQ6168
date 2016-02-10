@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.Range;
@@ -126,6 +127,8 @@ public class BigBerthaHardware extends OpMode {
     private static double sBucketValue;
     private static double sSpinnerValue, sLeftSpinnerValue, sRightSpinnerValue;//like no u
 
+    double motorValue;
+
     protected int xVal, yVal, zVal = 0;
     protected int heading = 0;
 
@@ -162,8 +165,18 @@ public class BigBerthaHardware extends OpMode {
     private double initSweeperPosition = 0.5;
     private double initBucketPosition = 0.5;
     private double initSpinnerPosition = 0.5;
+    double initPower = 0.0;
 
     public BigBerthaHardware () {
+    }
+
+    public void mapDevice (HardwareDevice device) {
+        try {
+            device = hardwareMap.dcMotor.get (String.valueOf(device));
+        } catch (Exception opModeException) {
+            setDriveWarningMessage(String.valueOf(device));
+            DbgLog.msg(opModeException.getLocalizedMessage());
+        }
     }
 
     @Override public void init () {//The system calls this member once when the OpMode is enabled.

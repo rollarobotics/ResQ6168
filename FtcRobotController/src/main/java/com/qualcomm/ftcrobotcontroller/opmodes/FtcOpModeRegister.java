@@ -67,6 +67,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Big Bertha Autonomous Blue", BigBerthaAutonomousBlue.class);
     manager.register("Big Bertha Autonomous Red", BigBerthaAutonomousRed.class);
     manager.register("Big Bertha Lost Weight TeleOp", BigBerthaLostWeightTeleOp.class);
+    manager.register("Robot TeleOp", RobotTeleOp.class);
 
     /*
      * Uncomment any of the following lines if you want to register an op mode.
