@@ -79,7 +79,10 @@ public class RobotHardware extends OpMode {
         mapDevice(hook);
         mapDevice(spinner);
     }
-
+    
+    double getMotor(DcMotor motor) {
+        return motor.getPower();
+    }
     void setMotor(DcMotor motor, double power) {
         motor.setPower(power);
     }
