@@ -86,7 +86,14 @@ public class RobotHardware extends OpMode {
     void setMotor(DcMotor motor, double power) {
         motor.setPower(power);
     }
-
+    
+    double getServo(Servo servo) {
+        return servo.getPosition();
+    }
+    void setServo(Servo servo, double position) {
+        servo.setPosition(position);
+    }
+    
     void setDriveTrain(double power) {
         leftDrive.setPower(power);
         rightDrive.setPower(power);
