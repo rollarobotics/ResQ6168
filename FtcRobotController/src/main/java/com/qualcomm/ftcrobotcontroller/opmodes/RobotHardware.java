@@ -26,12 +26,12 @@ public class RobotHardware extends OpMode {
     private boolean warningGenerated = false;
     private String warningMessage;
 
-    protected DcMotor leftDrive;
-    protected DcMotor rightDrive;
+    protected DcMotor leftDrive, rightDrive;
+    protected Servo hook, spinner;
 
     public RobotHardware() {
-        mapDevice(leftDrive);
-        mapDevice(rightDrive);
+        mapDriveTrain();
+        mapServos();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class RobotHardware extends OpMode {
         warningMessage += opModeExceptionMessage;
     }
 
-    public void mapDevice (HardwareDevice device) {
+    private void mapDevice (HardwareDevice device) {
         try {
             device = hardwareMap.dcMotor.get(String.valueOf(device));
         } catch (Exception opModeException) {
@@ -65,12 +65,31 @@ public class RobotHardware extends OpMode {
         }
     }
 
-    public void setMotor(DcMotor motor, double power) {
+    private void reverseDirection(DcMotor motor) {
+        motor.setDirection(DcMotor.Direction.REVERSE);
+    }
+
+    private void mapDriveTrain() {
+        mapDevice(leftDrive);
+        reverseDirection(rightDrive);
+        mapDevice(rightDrive);
+    }
+
+    private void mapServos() {
+        mapDevice(hook);
+        mapDevice(spinner);
+    }
+
+    void setMotor(DcMotor motor, double power) {
         motor.setPower(power);
     }
 
-    public void setMotor(double power) {
+    void setDriveTrain(double power) {
         leftDrive.setPower(power);
         rightDrive.setPower(power);
+    }
+    void setDriveTrain(double left ,double right) {
+        leftDrive.setPower(left);
+        rightDrive.setPower(right);
     }
 }
