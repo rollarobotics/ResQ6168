@@ -283,7 +283,7 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             }
         }
         if (game2config == 3) {
-        }
+        }// does this thing even work?
 
         if (fullDriveOff) {
             driveOff = true;
