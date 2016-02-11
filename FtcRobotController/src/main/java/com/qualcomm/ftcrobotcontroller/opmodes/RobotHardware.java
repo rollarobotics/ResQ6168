@@ -37,7 +37,7 @@ public class RobotHardware extends OpMode {
     @Override
     public void init() {
         warningGenerated = false; // Provide telemetry data to a class user
-        warningMessage = "Can't map: ";
+        warningMessage = "Can't map drive train motors: ";
     }
 
     @Override
@@ -80,17 +80,17 @@ public class RobotHardware extends OpMode {
         mapDevice(spinner);
     }
     
-    double getMotor(DcMotor motor) {
+    double getPower(DcMotor motor) {
         return motor.getPower();
     }
-    void setMotor(DcMotor motor, double power) {
+    void setPower(DcMotor motor, double power) {
         motor.setPower(power);
     }
     
-    double getServo(Servo servo) {
+    double getPosition(Servo servo) {
         return servo.getPosition();
     }
-    void setServo(Servo servo, double position) {
+    void setPosition(Servo servo, double position) {
         servo.setPosition(position);
     }
     
