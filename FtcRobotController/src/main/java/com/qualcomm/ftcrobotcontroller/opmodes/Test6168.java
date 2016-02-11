@@ -180,6 +180,13 @@ public class Test6168 extends OpMode {
             motorSpinner.setPower(0);
             motorBucket.setPower(0);
             motorSweeper.setPower(0);
+
+            /*if(code good)
+            {
+               work
+            }
+            else (debug)
+                    System.out.println("Code work");*/
         }
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using

@@ -3,8 +3,6 @@
  */
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.robotcore.hardware.Gamepad;
-
 /**
  * Provide telemetry provided by the BigBerthaHardware class.
  * @author SSI Robotics and revised by Shane McEnaney
@@ -20,7 +18,7 @@ public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
         // Initialize base classes and class members.
         // All via self-construction.
     } //--------------------------------------------------------------------------BigBerthaTelemetry
-    public void init () {
+    public void init_loop () {
         telemetry.addData("01" , "Init Bucket Door Servo Position: "+ getBucketDoorPosition());
         telemetry.addData("02" , "Init Hook Servo Position: "       +  getHookPosition());
         telemetry.addData("03" , "Init Man Servo Position: "        + getManPosition());
@@ -32,6 +30,20 @@ public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
         telemetry.addData("09" , "Init Sweeper Power: "    + getSweeperPower());
         telemetry.addData("10" , "Init Bucket Power: "     + getBucketPower());
         telemetry.addData("11" , "Init Spinner Power: "    + getSpinnerPower());
+        /*telemetry.addData("12" , "Sonar: " + sonar.getUltrasonicLevel());
+        telemetry.addData("13" , "Gyro: " + gyro.getRotation());
+        telemetry.addData("14" , "Color alpha: " + color.alpha());
+        telemetry.addData("15" , "Color argb: " + color.argb());
+        telemetry.addData("16" , "Color blue: " + color.blue());
+        telemetry.addData("17" , "Color green: " + color.green());
+        telemetry.addData("18" , "Color red: " + color.red());
+        telemetry.addData("19" , "Color2 alpha: " + color2.alpha());
+        telemetry.addData("20" , "Color2 argb: " + color2.argb());
+        telemetry.addData("21" , "Color2 blue: " + color2.blue());
+        telemetry.addData("22" , "Color2 green: " + color2.green());
+        telemetry.addData("23" , "Color2 red: " + color2.red());*/
+
+        //telemetry.addData("15" , "Gyro2:" + gyro.);
     }
     /**
      * Update the telemetry with current gamepad readings.
@@ -52,6 +64,7 @@ public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
         String game1 = gamepad1.toString();
         String game2 = gamepad2.toString();
         telemetry.addData("01" , "Robot:");
+        //telemetry.addData("011", "Sonar: " + sonar.getUltrasonicLevel());
         telemetry.addData("02" , "Gamepad 1 Configuration: " + game1config);
         telemetry.addData("03" ,  game1);
         telemetry.addData("04" , "Gamepad 2 Configuration: " + game2config);
@@ -76,8 +89,28 @@ public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
         telemetry.addData("22" , "Sweeper Power: "    + getSweeperPower()   + ", " + getSweeperEncoderCount());
         telemetry.addData("23" , "Bucket Power: "     + getBucketPower()    + ", " + getBucketEncoderCount());
         telemetry.addData("24" , "Spinner Power: "    + getSpinnerPower()   + ", " + getSpinnerEncoderCount());
-        telemetry.addData("241" , "Sweeper Off: "+ sweeperOff);
-        telemetry.addData("242" , "Aux 1 Scale: "+ aux1ScaleOff);
+        telemetry.addData("2401" , "Sweeper Off: "+ sweeperOff);
+        telemetry.addData("2402" , "Aux 1 Scale: "+ aux1ScaleOff);
+        telemetry.addData("2403" , "Left Drive Off: "+ leftDriveOff);
+        telemetry.addData("2404" , "Right Drive Off: "+ rightDriveOff);
+        telemetry.addData("2405" , "Back Left Drive Off: "+ backLeftOff);
+        telemetry.addData("2406" , "Back Right Drive Off: "+ backRightOff);
+        telemetry.addData("2407" , "Full Drive Off: "+ fullDriveOff);
+        telemetry.addData("2408" , "Front Drive Off: "+ driveOff);
+        telemetry.addData("2409" , "Back Drive Off: "+ backDriveOff);
+        telemetry.addData("2410" , "Left Fast Drive Off: "+ leftFastDriveOff);
+        telemetry.addData("2411" , "Right Fast Drive Off: "+ rightFastDriveOff);
+        telemetry.addData("2412" , "Fast Drive Off: "+ fastDriveOff);
+        telemetry.addData("2410" , "Left Slow Drive Off: " + leftSlowDriveOff);
+        telemetry.addData("2411" , "Right Slow Drive Off: "+ rightSlowDriveOff);
+        telemetry.addData("2412" , "Slow Drive Off: "      + slowDriveOff);
+        telemetry.addData("2413" , "Left Climber Off: "    + leftClimberOff);
+        telemetry.addData("2414" , "Right Climber Off: "   + rightClimberOff);
+        telemetry.addData("2415" , "Left Arm Off: "        + leftArmOff);
+        telemetry.addData("2416" , "Right Arm Off: "       + rightArmOff);
+        telemetry.addData("2417" , "Left Lift Off: "       + leftLiftOff);
+        telemetry.addData("2418" , "Right Lift Off: "      + rightLiftOff);
+        //telemetry.addData("2419" , ": "+ Off);
         //telemetry.addData("24" , "Bucket Off: " + BigBerthaTeleOp.isBucketOff());
         //telemetry.addData("25" , "Aux 2 Scale: "+ BigBerthaTeleOp.isAux2ScaleOff());
     } //--------------------------------------------------------------------------updateTelemetry

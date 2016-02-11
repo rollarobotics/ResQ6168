@@ -16,65 +16,65 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
         // Initialize base classes and class members.
         // All via self-construction.
     } //--------------------------------------------------------------------------BigBerthaTeleOp
-    //public static boolean isSweeperOff () {return sweeperOff;}
-    //public static boolean isAux1ScaleOff () {return aux1ScaleOff;}
-    //public static int getGame1config() {return game1config;}
-    //public static int getGame2config() {return game2config;}
     /**
      * The system calls this member repeatedly while the OpMode is running.
      */
     @Override public void loop () {
-        // ------------DC Motors------------
+        // ------------Configurations------------
         if (gamepad1.start)
             game1config = 0;
         if (gamepad1.guide) {
-            if (game1config == 0){
-                sweeperOff = false;
-                aux1ScaleOff = false;
+            if (game1config == 0) {
+                sweeperOff = aux1ScaleOff = fullDriveOff = fastDriveOff = slowDriveOff = chainHooksOff = climberOff = false;
                 game1config = 1;
                 try {
                     Thread.sleep(500);
-                } catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-            }
-            else if (game1config == 1) {
+            } else if (game1config == 1) {
                 sweeperOff = true;
                 aux1ScaleOff = true;
+                driveOff = true;
+                backDriveOff = false;
+                chainHooksOff= true;
                 game1config = 2;
                 try {
                     Thread.sleep(500);
-                } catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-            }
-            else if (game1config == 2) {
+            } else if (game1config == 2) {
                 sweeperOff = false;
                 aux1ScaleOff = false;
+                fullDriveOff = false;
+                chainHooksOff = true;
                 game1config = 3;
                 try {
                     Thread.sleep(500);
-                } catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-            }
-            else if (game1config == 3) {
+            } else if (game1config == 3) {
                 sweeperOff = false;
                 aux1ScaleOff = true;
+                fullDriveOff = false;
+                chainHooksOff = true;
                 game1config = 4;
                 try {
                     Thread.sleep(500);
-                } catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-            }
-            else {
+            } else {
                 sweeperOff = true;
                 aux1ScaleOff = false;
+                fullDriveOff = false;
+                chainHooksOff = false;
                 game1config = 0;
                 try {
                     Thread.sleep(500);
-                } catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
             }
@@ -86,31 +86,28 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 game2config = 1;
                 try {
                     Thread.sleep(500);
-                } catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-            }
-            else if (game2config == 1) {
+            } else if (game2config == 1) {
                 game2config = 2;
                 try {
                     Thread.sleep(500);
-                } catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-            }
-            else if (game2config == 2) {
+            } else if (game2config == 2) {
                 game2config = 3;
                 try {
                     Thread.sleep(500);
-                } catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-            }
-            else {
+            } else {
                 game2config = 0;
                 try {
                     Thread.sleep(500);
-                } catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
             }
@@ -119,6 +116,10 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
         rightDrivePower = 0.0f;
         backLeftPower = 0.0f;
         backRightPower = 0.0f;
+        float leftArmPower = 0.0f;
+        float rightArmPower = 0.0f;
+        float leftLiftPower = 0.0f;
+        float rightLiftPower = 0.0f;
         double chainHooksPower = 0.80;
         double liftPower = 0.8;
         float sweeperPower = 0.0f;
@@ -132,11 +133,235 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
         float chainHooksDownScale = 0.0f;
 
         if (game1config == 0) {
-            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y/8*5);
-            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y/8*5);
-            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y/8*5);
-            backRightPower = scaleMotorPower(-gamepad1.right_stick_y/8*5);
+            if (gamepad1.left_trigger > 0) {
+                leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y);
+                backLeftPower = leftDrivePower;
+            }
+            if (gamepad1.right_trigger > 0) {
+                rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y);
+                backRightPower = rightDrivePower;
+            }
+        }
+        if (game1config == 1) {
+            if (gamepad1.left_bumper)
+                leftDrivePower = -leftDrivePower;
+            if (gamepad1.right_bumper)
+                rightDrivePower = -rightDrivePower;
+        }
+        if (game1config == 2) {
+        }
+        if (game1config == 3) {
+        }
+        if (game1config == 4) {
+        }
+        if (game2config == 0) {
+            leftLiftPower = scaleMotorPower(-gamepad2.left_stick_y);
+            rightLiftPower = scaleMotorPower(-gamepad2.right_stick_y);
+            if (gamepad2.dpad_up)
+                leftArmPower = 1.0f;
+            else if (gamepad2.dpad_down)
+                leftArmPower = -1.0f;
+            else
+                leftArmPower = 0.0f;
 
+            if (gamepad2.y)
+                rightArmPower = 1.0f;
+            else if (gamepad2.a)
+                rightArmPower = -1.0f;
+            else
+                rightArmPower = 0.0f;
+
+            if (gamepad2.left_trigger > 0)
+                setLeftFlagPosition(1.0);
+            else if (gamepad2.left_bumper)
+                setLeftFlagPosition (0.0);
+            if (gamepad2.right_trigger > 0)
+                setRightFlagPosition(0.0);
+            else if (gamepad2.right_bumper)
+                setRightFlagPosition(1.0);
+
+        }
+        if (game2config == 1) {
+            leftArmPower = scaleMotorPower(-gamepad2.left_stick_y);
+            rightArmPower = scaleMotorPower(-gamepad2.right_stick_y);
+            leftLiftPower = scaleMotorPower(-gamepad2.left_trigger);
+            rightLiftPower = scaleMotorPower(-gamepad2.right_trigger);
+
+            if (gamepad2.left_bumper)
+                leftLiftPower = -leftLiftPower;
+            if (gamepad2.right_bumper)
+                rightLiftPower = -rightLiftPower;//o0l30dsfdzsfo0klo5ybmknerkmnvxc ikgfvcdyhbbgfvo,lyufgv kgudejmik,ocujnyiifisuyiu9ikmo9iui5tgxxxxxxbkmnykbngknbbgykngmngjmgthghughugvtfhyujikmbygtvfrchynujgtvfrcgvfrcgvfrgrffgrcgtvfrcghn5fcs
+            if (gamepad2.left_stick_button)
+                leftArmPower = leftArmPower / 2;
+            if (gamepad2.right_stick_button)
+                rightArmPower = rightArmPower / 2;
+
+            if (gamepad2.y)
+                setManPosition(1.0); //1.0 is forward at full speed
+            else if (gamepad2.x)
+                setManPosition(0.0); //0.0 is backward at full speed
+            else
+                setManPosition(0.5); //0.5 is stopped
+            if (gamepad2.b) {
+                setRightFlagPosition(1.0);
+                setLeftFlagPosition(0.0);
+            }
+            else if (gamepad2.a) {
+                setRightFlagPosition(0.0);
+                setLeftFlagPosition (1.0);
+            }
+        }
+        if (game2config == 2) {
+            if (!gamepad2.left_bumper)
+                leftArmPower = scaleMotorPower(-gamepad2.left_stick_y);
+            if (!gamepad2.right_bumper)
+                rightArmPower = scaleMotorPower(-gamepad2.right_stick_y);
+            leftLiftPower = scaleMotorPower(-gamepad2.left_trigger);
+            rightLiftPower = scaleMotorPower(-gamepad2.right_trigger);
+
+            if (gamepad2.left_bumper) {
+                leftLiftPower = -leftLiftPower;
+                leftDrivePower = scaleMotorPower(-gamepad2.left_stick_y / 8 * 5);
+                backLeftPower = scaleMotorPower(-gamepad2.left_stick_y / 8 * 5);
+                if (gamepad2.left_stick_button) {
+                    leftDrivePower = leftDrivePower / 2;
+                    backLeftPower = leftDrivePower;
+                }
+            }
+            if (gamepad2.right_bumper) {
+                rightLiftPower = -rightLiftPower;
+                rightDrivePower = scaleMotorPower(-gamepad2.right_stick_y / 8 * 5);
+                backRightPower = scaleMotorPower(-gamepad2.right_stick_y / 8 * 5);
+                if (gamepad2.right_stick_button) {
+                    rightDrivePower = rightDrivePower / 2;
+                    backRightPower = rightDrivePower;
+                }
+            }
+            if (gamepad2.left_stick_button) {
+                leftArmPower = leftArmPower / 2;
+            }
+            if (gamepad2.right_stick_button) {
+                rightArmPower = rightArmPower / 2;
+            }
+
+            if (gamepad2.y)
+                setManPosition(1.0); //1.0 is forward at full speed
+            else if (gamepad2.a)
+                setManPosition(0.0); //0.0 is backward at full speed
+            else
+                setManPosition(0.5); //0.5 is stopped
+
+            if (gamepad2.dpad_down) {
+                setRightFlagPosition(1.0);
+                setLeftFlagPosition(0.0);
+            }
+            else if (gamepad2.dpad_up) {
+                setRightFlagPosition(0.0);
+                setLeftFlagPosition (1.0);
+            }
+            if (gamepad1.b) {
+                if (getRightClimberPosition() != 1.0)
+                    setRightClimberPosition(1.0);
+                else
+                    setRightClimberPosition(0.325);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            if (gamepad1.x) {
+                if (getLeftClimberPosition() != 0.75)
+                    setLeftClimberPosition(0.75);
+                else
+                    setLeftClimberPosition(0);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+        if (game2config == 3) {
+        }// does this thing even work?
+
+        if (fullDriveOff) {
+            driveOff = true;
+            backDriveOff = true;
+        } else if (!fullDriveOff){
+            driveOff = false;
+            backDriveOff = false;
+        }
+        if (driveOff){
+            leftDriveOff = true;
+            rightDriveOff = true;
+        } else if (!driveOff){
+            leftDriveOff = false;
+            rightDriveOff = false;
+        }
+        if (backDriveOff) {
+            backRightOff = true;
+            backLeftOff = true;
+        } else if (!backDriveOff){
+            backLeftOff = false;
+            backRightOff = false;
+        }
+        if (fastDriveOff) {
+            leftFastDriveOff = true;
+            rightFastDriveOff = true;
+        } else if (!fastDriveOff) {
+            leftFastDriveOff = false;
+            rightFastDriveOff = false;
+        }
+        if (slowDriveOff) {
+            leftSlowDriveOff = true;
+            rightSlowDriveOff = true;
+        } else if (!slowDriveOff) {
+            leftSlowDriveOff = false;
+            rightSlowDriveOff = false;
+        }
+
+        if (climberOff) {
+            leftClimberOff = true;
+            rightClimberOff = true;
+        } else if (!climberOff) {
+            leftClimberOff = false;
+            rightClimberOff = false;
+        }
+        // Obtain the current values of the joystick controllers.
+        // The DC motors are scaled to make it easier to control them at slower speeds.
+        // Note that x and y equal -1 when the joystick is pushed all of the way forward.
+        if ((!(gamepad1.right_bumper || gamepad1.left_bumper)) || aux1ScaleOff) {
+            if (!sweeperOff) {
+                sweeperPower = scaleMotorPower(gamepad1.right_trigger);
+                backSweeperPower = scaleMotorPower(-gamepad1.left_trigger);
+                sweeperPosition = scaleServoPosition((gamepad1.right_trigger + 1) / 2);
+                backSweeperPosition = scaleServoPosition(-(gamepad1.left_trigger - 1) / 2);
+            }
+        }
+
+        if (!leftDriveOff)
+            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
+        if (!rightDriveOff)
+            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
+        if (!backLeftOff)
+            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
+        if (!backRightOff)
+            backRightPower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
+
+        if (!leftFastDriveOff) {
+            if (gamepad1.left_stick_button) {
+                leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y);
+                backLeftPower = leftDrivePower;//ebhfc\
+            }
+        }
+        if (!rightFastDriveOff) {
+            if (gamepad1.right_stick_button) {
+                rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y);
+                backRightPower = rightDrivePower;
+            }
+        }
+        if (!slowDriveOff) {
             if (gamepad1.dpad_up) {
                 leftDrivePower = 0.2f;
                 backLeftPower = 0.2f;
@@ -158,46 +383,9 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 backLeftPower = -0.2f;
                 backRightPower = 0.2f;
             }
-            if (gamepad1.right_bumper || gamepad1.left_bumper) {
-                chainHooksUpScale = scaleMotorPower(gamepad1.right_trigger);
-                clipMotorPositive(chainHooksUpScale = chainHooksUpScale / 4);
-                chainHooksDownScale = scaleMotorPower(-gamepad1.left_trigger);
-                clipMotorNegative(chainHooksDownScale = (chainHooksDownScale / 5) * 4);
-            }
-            if (gamepad1.right_bumper)
-                chainHooksPower = clipMotorPositive(chainHooksPower + chainHooksUpScale + chainHooksDownScale);
-            else if (gamepad1.left_bumper)
-                chainHooksPower = -clipMotorPositive(chainHooksPower + chainHooksUpScale + chainHooksDownScale);
-            else
-                chainHooksPower = 0;
         }
-        if (game1config == 1) {
-            leftDrivePower = scaleMotorPower(gamepad1.left_trigger/8*5);
-            rightDrivePower = scaleMotorPower(gamepad1.right_trigger/8*5);
-            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y/8*5);
-            backRightPower = scaleMotorPower(-gamepad1.right_stick_y/8*5);
-            if (gamepad1.left_bumper)
-                leftDrivePower = -leftDrivePower;
-            if (gamepad1.right_bumper)
-                rightDrivePower = -rightDrivePower;
-        }
-        if (game1config == 2) {
-            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
-            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
-            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y/8*5);
-            backRightPower = scaleMotorPower(-gamepad1.right_stick_y/8*5);
-        }
-        if (game1config == 3) {
-            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y/8*5);
-            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y/8*5);
-            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y/8*5);
-            backRightPower = scaleMotorPower(-gamepad1.right_stick_y/8*5);
-        }
-        if (game1config == 4) {
-            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y/8*5);
-            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y/8*5);
-            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y/8*5);
-            backRightPower = scaleMotorPower(-gamepad1.right_stick_y/8*5);
+
+        if (!chainHooksOff) {
             if (gamepad1.right_bumper || gamepad1.left_bumper) {
                 chainHooksUpScale = scaleMotorPower(gamepad1.right_trigger);
                 clipMotorPositive(chainHooksUpScale = chainHooksUpScale / 4);
@@ -212,46 +400,44 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 chainHooksPower = 0;
         }
 
-        if (game2config == 0) {
-        }
-        if (game2config == 1) {
-        }
-        if (game2config == 2) {
-        }
-        if (game2config == 3) {
-        }
-        // Obtain the current values of the joystick controllers.
-        // The DC motors are scaled to make it easier to control them at slower speeds.
-        // Note that x and y equal -1 when the joystick is pushed all of the way forward.
-        float leftArmPower = scaleMotorPower(-gamepad2.left_stick_y);
-        float rightArmPower = scaleMotorPower(-gamepad2.right_stick_y);
-        if ((!(gamepad1.right_bumper || gamepad1.left_bumper)) || aux1ScaleOff) {
-            if (!sweeperOff) {
-                sweeperPower = scaleMotorPower(gamepad1.right_trigger);
-                backSweeperPower = scaleMotorPower(-gamepad1.left_trigger);
-                sweeperPosition = scaleServoPosition((gamepad1.right_trigger + 1) / 2);
-                backSweeperPosition = scaleServoPosition(-(gamepad1.left_trigger - 1) / 2);
+        if (!(leftClimberOff || leftClimberIsPressed)) {
+            if (gamepad1.x) {
+                if (getLeftClimberPosition() < 0.5)
+                    setLeftClimberPosition(0.7);
+                else
+                    setLeftClimberPosition(0);
+                leftClimberIsPressed = true;
             }
         }
-        float leftLiftPower = scaleMotorPower(-gamepad2.left_trigger);
-        if (gamepad2.left_bumper)
-            leftLiftPower = -leftLiftPower;
-        float rightLiftPower = scaleMotorPower(gamepad2.right_trigger);
-        if (gamepad2.right_bumper)
-            rightLiftPower = -rightLiftPower;
-
-        if (gamepad1.left_stick_button) {
-            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y);
-            backLeftPower = leftDrivePower;
+        if (leftClimberIsPressed) {
+            if (!gamepad2.x) {
+                leftClimberIsPressed = false;
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
         }
-        if (gamepad1.right_stick_button) {
-            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y);
-            backRightPower = rightDrivePower;
+        if (!(rightClimberOff  || rightClimberIsPressed)) {
+            if (gamepad1.b) {
+                if (getRightClimberPosition() > 0.7)
+                    setRightClimberPosition(0.375);
+                else
+                    setRightClimberPosition(1.0);
+                rightClimberIsPressed = true;
+            }
         }
-        if (gamepad2.left_stick_button)
-            leftArmPower = leftArmPower / 2;
-        if (gamepad2.right_stick_button)
-            rightArmPower = rightArmPower / 2;
+        if (rightClimberIsPressed) {
+            if (!gamepad2.b) {
+                rightClimberIsPressed = false;
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
         // The setPower methods write the motor power values to the DcMotor
         // class, but the power levels aren't applied until this method ends.
         setDrivePower(leftDrivePower, rightDrivePower, backLeftPower, backRightPower);
@@ -270,8 +456,7 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             }
             setBucketPower(bucketPower);
             setBucketPosition(bucketPosition);
-        }
-        else if (gamepad2.dpad_down) {
+        } else if (gamepad2.dpad_down) {
             double bucketPower = -0.8;
             double bucketPosition = -0.8;
             if (gamepad2.left_trigger < -0) {
@@ -280,53 +465,19 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             }
             setBucketPower(bucketPower);
             setBucketPosition(bucketPosition);
-        }
-        else {
+        } else {
             setBucketPower(0);
             setBucketPosition(0);
         }
+        if (gamepad2.dpad_left)
+            setManPosition(1.0); //1.0 is forward at full speed
+        else if (gamepad2.dpad_right)
+            setManPosition(0.0); //0.0 is backward at full speed
+        else
+            setManPosition(0.5); //0.5 is stopped
         //------------Servo Motors------------
         // The mPosition methods write the motor power values to the Servo
         // class, but the positions aren't applied until this method ends.
-        if (gamepad2.y)
-            setManPosition (1.0); //1.0 is forward at full speed
-        else if (gamepad2.x)
-            setManPosition (0.0); //0.0 is backward at full speed
-        else
-            setManPosition (0.5); //0.5 is stopped
-
-        if (gamepad1.y)
-            setRightClimberPosition (1.0);
-        else if (gamepad1.x)
-            setRightClimberPosition (0.225);
-        //else
-            //;setHookPosition(0.25);
-
-        if (gamepad2.b) {
-            setRightFlagPosition(1.0);
-            setLeftFlagPosition(0.0);
-        }
-        else if (gamepad2.a) {
-            setRightFlagPosition(0.0);
-            setLeftFlagPosition (1.0);
-        }
-        //else
-            //setManPosition(0.5);
-
-        /*if (gamepad2.b)
-            setManPosition (1.0);
-        else if (gamepad2.a)
-            setManPosition (0.0);
-        else
-            setManPosition(0.5);*/
-
-
-        if (gamepad1.b)
-            setLeftClimberPosition (0.85);
-        else if (gamepad1.a)
-            setLeftClimberPosition (0.0);
-        //else
-            //setFlagPosition(0.75);
         ////////////////////////////---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------setHookPosition (0.5
 
         //------------Telemetry------------

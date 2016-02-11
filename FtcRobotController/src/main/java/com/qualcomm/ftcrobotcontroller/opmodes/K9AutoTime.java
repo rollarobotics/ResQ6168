@@ -33,6 +33,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -59,7 +60,9 @@ public class K9AutoTime extends OpMode {
 	DcMotor motorLeft;
 	Servo claw;
 	Servo arm;
+
 	LightSensor reflectedLight;
+	com.qualcomm.robotcore.hardware.UltrasonicSensor hi;
 
 	/**
 	 * Constructor

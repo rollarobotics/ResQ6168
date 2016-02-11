@@ -4,9 +4,13 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.Range;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -36,8 +40,33 @@ public class BigBerthaHardware extends OpMode {
 
     protected int game1config;
     protected int game2config;
-    protected static boolean sweeperOff;
-    protected static boolean aux1ScaleOff;
+    protected static boolean sweeperOff = false;
+    protected static boolean aux1ScaleOff = false;
+    protected boolean leftDriveOff = false;
+    protected boolean rightDriveOff = false;
+    protected boolean backLeftOff = false;
+    protected boolean backRightOff = false;
+    protected boolean fullDriveOff = false;
+    protected boolean driveOff = false;
+    protected boolean backDriveOff = false;
+    protected boolean leftFastDriveOff = false;
+    protected boolean rightFastDriveOff = false;
+    protected boolean fastDriveOff = false;
+    protected boolean leftSlowDriveOff = false;
+    protected boolean rightSlowDriveOff = false;
+    protected boolean slowDriveOff = false;
+    protected boolean chainHooksOff = false;
+    protected boolean leftArmOff = false;
+    protected boolean rightArmOff = false;
+    protected boolean leftLiftOff = false;
+    protected boolean rightLiftOff = false;
+
+    protected boolean rightClimberOff = false;
+    protected boolean leftClimberOff = false;
+    protected boolean climberOff = false;
+
+    protected boolean leftClimberIsPressed = false;
+    protected boolean rightClimberIsPressed = false;
 
     private DcMotor motorLeftDrive, motorRightDrive, motorBackLeft, motorBackRight;
     private DcMotor motorLiftArm, motorLeftArm, motorRightArm;
@@ -57,6 +86,12 @@ public class BigBerthaHardware extends OpMode {
     private Servo servoBucket;
     private Servo servoSpinner, servoLeftSpinner, servoRightSpinner;
 
+    /*protected UltrasonicSensor sonar;
+    protected GyroSensor gyro;
+    protected ColorSensor color;
+    protected ColorSensor color2;*/
+
+
     //------------Virtual Values of Motors and Servos for Testing Code Without Robot------------
     protected float leftDrivePower;
     protected float rightDrivePower;
@@ -72,7 +107,7 @@ public class BigBerthaHardware extends OpMode {
     protected float liftUpScale;
     protected float liftDownScale;
     protected float chainHooksUpScale;
-    protected float chainHooksDownScalef;
+    protected float chainHooksDownScale;
 
     private static double leftDriveValue, rightDriveValue, backLeftValue, backRightValue;
     private static double liftArmValue, leftArmValue, rightArmValue;
@@ -92,6 +127,11 @@ public class BigBerthaHardware extends OpMode {
     private static double sBucketValue;
     private static double sSpinnerValue, sLeftSpinnerValue, sRightSpinnerValue;//like no u
 
+    double motorValue;
+
+    protected int xVal, yVal, zVal = 0;
+    protected int heading = 0;
+
     //------------initial positions------------
     double initLeftDrivePower;
     double initRightDrivePower;
@@ -101,7 +141,7 @@ public class BigBerthaHardware extends OpMode {
     double initLeftArmPower;
     double initRightArmPower;
     double initLiftPower;
-    double initLeftLiftPower;
+    double initLeftLiftPower = 0.0f;
     double initRightLiftPower;
     double initChainHooksPower;
     double initLeftChainPower;
@@ -114,18 +154,29 @@ public class BigBerthaHardware extends OpMode {
     private double initHookPosition = 0.125;
     private double initManPosition = 0.5;
     private double initFlagPosition = 0.95;
-    private double initLeftFlagPosition = 0.0;
-    private double initRightFlagPosition = 1.0;
+    private double initLeftFlagPosition = 1.0;
+    private double initRightFlagPosition = 0.0;
     private double initClimberPosition = 0.0;
-    private double initLeftClimberPosition = 0.85;
-    private double initRightClimberPosition = 0.225;
+    private double initLeftClimberPosition = 0.75;
+    private double initRightClimberPosition = 0.375;
     private double initChainHooksPosition = 0.5;
     private double initLeftChainPosition = 0.5;
     private double initRightChainPosition = 0.5;
     private double initSweeperPosition = 0.5;
     private double initBucketPosition = 0.5;
     private double initSpinnerPosition = 0.5;
+    double initPower = 0.0;
+
     public BigBerthaHardware () {
+    }
+
+    public void mapDevice (HardwareDevice device) {
+        try {
+            device = hardwareMap.dcMotor.get (String.valueOf(device));
+        } catch (Exception opModeException) {
+            setDriveWarningMessage(String.valueOf(device));
+            DbgLog.msg(opModeException.getLocalizedMessage());
+        }
     }
 
     @Override public void init () {//The system calls this member once when the OpMode is enabled.
@@ -193,7 +244,7 @@ public class BigBerthaHardware extends OpMode {
             motorLiftArm.setPower(initLiftArmPower);
             motorLiftArm.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
-            setWarningMessage("leftArm");
+            setWarningMessage("liftArm");
             DbgLog.msg (opModeException.getLocalizedMessage ());
             liftArmValue = initLiftArmPower;
         }
@@ -226,6 +277,7 @@ public class BigBerthaHardware extends OpMode {
         try {
             motorLeftLift = hardwareMap.dcMotor.get ("leftLift");
             motorLeftLift.setPower(initLeftLiftPower);
+            //motorLeftLift.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
             setWarningMessage("leftLift");
             DbgLog.msg (opModeException.getLocalizedMessage ());
@@ -234,6 +286,7 @@ public class BigBerthaHardware extends OpMode {
         try {
             motorRightLift = hardwareMap.dcMotor.get ("rightLift");
             motorRightLift.setPower(initRightLiftPower);
+            motorRightLift.setDirection(DcMotor.Direction.REVERSE);
         } catch (Exception opModeException) {
             setWarningMessage("rightLift");
             DbgLog.msg (opModeException.getLocalizedMessage ());
@@ -281,6 +334,11 @@ public class BigBerthaHardware extends OpMode {
             DbgLog.msg (opModeException.getLocalizedMessage ());
             bucketValue = initBucketPower;
         }
+        //------------Servos------------
+        //0.5 is off, 1 is forwards, and 0 is backwards
+        double startBucketDoorPosition = 0.5;
+        double startHookPosition = 0.5;
+        double startManPosition = 0.0;
         try {
             motorSpinner = hardwareMap.dcMotor.get ("spinner");
             motorSpinner.setPower(initSpinnerPower);
@@ -403,6 +461,45 @@ public class BigBerthaHardware extends OpMode {
             DbgLog.msg(opModeException.getLocalizedMessage());
             sSpinnerValue = initSpinnerPosition;
         }
+        try {
+            servoMan = hardwareMap.servo.get ("man");
+            servoMan.setPosition (startManPosition);
+        } catch (Exception opModeException) {
+            setWarningMessage("man");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            servoMan = null;
+        }
+        //------------Sensors------------because no u
+        /*try {
+            sonar = hardwareMap.ultrasonicSensor.get ("sonar");
+        } catch (Exception opModeException) {
+            setWarningMessage("sonar");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            sonar = null;
+        }
+        try {
+            gyro = hardwareMap.gyroSensor.get ("gyro");
+        } catch (Exception opModeException) {
+            setWarningMessage("gyro");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            gyro = null;
+        }
+        try {
+            color = hardwareMap.colorSensor.get ("color");
+            color.enableLed(true);
+        } catch (Exception opModeException) {
+            setWarningMessage("color");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            color = null;
+        }
+        try {
+            color2 = hardwareMap.colorSensor.get ("color2");
+            color2.enableLed(false);
+        } catch (Exception opModeException) {
+            setWarningMessage("color2");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            color2 = null;
+        }*/
     }
     //------------Warnings------------
     boolean getDriveWarningGenerated () {return driveWarningGenerated;}
@@ -621,7 +718,7 @@ public class BigBerthaHardware extends OpMode {
         return rightChainValue;
     }
     void setChainHooksPower (double chainHooksPower) {
-        chainHooksPower = clipMotor(chainHooksPower);
+        //chainHooksPower = clipMotor(chainHooksPower);
         if (motorChainHooks != null)
             motorChainHooks.setPower(chainHooksPower);
         chainHooksValue = chainHooksPower;
@@ -879,11 +976,11 @@ public class BigBerthaHardware extends OpMode {
         sSpinnerValue = initSpinnerPosition;
     }
     //------------ Set With Motor Wheel Encoders------------
-    public void runUsingLeftDriveEncoder () {
+    public void runUsingLeftDriveEncoder() {
         if (motorLeftDrive != null)
             motorLeftDrive.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
-    public void runUsingRightDriveEncoder () {
+    public void runUsingRightDriveEncoder() {
         if (motorRightDrive != null)
             motorRightDrive.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
