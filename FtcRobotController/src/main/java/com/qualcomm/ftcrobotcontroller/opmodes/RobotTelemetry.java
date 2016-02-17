@@ -10,6 +10,7 @@ public class RobotTelemetry extends RobotHardware {
   }
   
   public void init() {
+    super.init();
     telemetry.addData("1" , "Init Hook Position" + getPosition(hook));
     telemetry.addData("2" , "Init Spinner Position" + getPosition(spinner));
   }

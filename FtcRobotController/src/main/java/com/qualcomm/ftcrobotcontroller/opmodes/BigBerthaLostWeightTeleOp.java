@@ -143,6 +143,8 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             }
         }
         if (game1config == 1) {
+            leftDrivePower = scaleMotorPower(gamepad1.left_trigger);
+            rightDrivePower = scaleMotorPower(gamepad1.right_trigger);
             if (gamepad1.left_bumper)
                 leftDrivePower = -leftDrivePower;
             if (gamepad1.right_bumper)
@@ -341,13 +343,18 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
         }
 
         if (!leftDriveOff)
-            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
+            leftDrivePower = scaleMotorPower(-gamepad1.left_trigger);
         if (!rightDriveOff)
-            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
+            rightDrivePower = scaleMotorPower(-gamepad1.right_trigger);
         if (!backLeftOff)
-            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y / 8 * 5);
+            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y);
         if (!backRightOff)
-            backRightPower = scaleMotorPower(-gamepad1.right_stick_y / 8 * 5);
+            backRightPower = scaleMotorPower(-gamepad1.right_stick_y);
+
+        if (gamepad1.left_bumper)
+            leftDrivePower = -leftDrivePower;
+        if (gamepad1.right_bumper)
+            rightDrivePower = -rightDrivePower;
 
         if (!leftFastDriveOff) {
             if (gamepad1.left_stick_button) {
