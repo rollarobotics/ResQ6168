@@ -35,10 +35,11 @@ public class RobotHardware extends OpMode {
 
     protected ArrayList<DcMotor> motors = new ArrayList<DcMotor>();
     protected ArrayList<Servo> servos = new ArrayList<Servo>();
-
+    
+    protected DcMotor[] motors = new DcMotors[8];
+    protected Servo[] servos = new Servo[];
+    
     public RobotHardware() {
-        warningGenerated = false;
-        warningMessage = "Can't map: ";
         mapDriveTrain();
         mapServos();
     }
