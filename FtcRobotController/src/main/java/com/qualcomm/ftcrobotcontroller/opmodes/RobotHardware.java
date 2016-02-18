@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.util.Range;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Provides a single hardware access point between custom op-modes and the OpMode class for this Robot.
@@ -24,14 +25,19 @@ import java.util.ArrayList;
  */
 public class RobotHardware extends OpMode {
 
-    private boolean warningGenerated = false;
-    private String warningMessage;
+    protected double leftDrive,rightDrive,backLeftDrive,backRightDrive;
+
+    protected boolean warningGenerated = false;
+    protected String warningMessage;
 
     protected DcMotor left, right, backLeft, backRight;
     protected Servo hook, spinner;
 
+    protected ArrayList<DcMotor> motors = new ArrayList<DcMotor>();
+    protected ArrayList<Servo> servos = new ArrayList<Servo>();
+
     public RobotHardware() {
-        warningGenerated = false; // Provide telemetry data to a class user
+        warningGenerated = false;
         warningMessage = "Can't map: ";
         mapDriveTrain();
         mapServos();
@@ -39,13 +45,13 @@ public class RobotHardware extends OpMode {
 
     @Override
     public void init() {
-        telemetry.addData("3", "Hi");
+        telemetry.addData("01", "Hi");
     }
 
-    public void init_loop() {
+    /*public void init_loop() {
         init();
-        telemetry.addData("4","Hello");
-    }
+        telemetry.addData("02","Hello");
+    }*/
 
     @Override
     public void loop() {
@@ -91,10 +97,10 @@ public class RobotHardware extends OpMode {
         mapDevice(spinner);
     }
     
-    double getPower(DcMotor motor) {
+    String getPower(DcMotor motor) {
         if (motor != null)
-            return motor.getPower();
-        return 0.0;
+            return String.valueOf(motor.getPower());
+        return null;
     }
     void setPower(DcMotor motor, double power) {
         if (motor != null)

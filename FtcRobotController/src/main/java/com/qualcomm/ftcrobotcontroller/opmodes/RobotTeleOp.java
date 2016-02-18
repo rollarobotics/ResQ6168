@@ -5,19 +5,22 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 public class RobotTeleOp extends RobotTelemetry {
 
-    private double l,r,bL,bR;
-
     public RobotTeleOp() {
         setDriveTrain(0.0);
     }
 
     @Override
     public void loop() {
-        l = -gamepad1.left_trigger;
-        r = -gamepad1.right_trigger;
-        bL = gamepad1.left_stick_y;
-        bR = gamepad1.right_stick_y;
+        super.loop();
+        leftDrive     = gamepad1.left_trigger;
+        rightDrive    = gamepad1.right_trigger;
+        backLeftDrive =-gamepad1.left_stick_y;
+        backRightDrive=-gamepad1.right_stick_y;
+        if (gamepad1.left_bumper)
+            leftDrive = -leftDrive;
+        if (gamepad1.right_bumper)
+            rightDrive = -rightDrive;
 
-        setDriveTrain(l,r,bL,bR);
+        setDriveTrain(leftDrive,rightDrive,backLeftDrive,backRightDrive);
     }
 }
