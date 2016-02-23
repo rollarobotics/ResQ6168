@@ -37,7 +37,7 @@ public class RobotHardware extends OpMode {
     protected ArrayList<Servo> servos = new ArrayList<Servo>();
     
     protected DcMotor[] motors = new DcMotors[8];
-    protected Servo[] servos = new Servo[];
+    protected Servo[] servos = new Servo[12];
     
     public RobotHardware() {
         mapDriveTrain();
