@@ -33,10 +33,10 @@ public class RobotHardware extends OpMode {
     protected DcMotor left, right, backLeft, backRight;
     protected Servo hook, spinner;
 
-    protected ArrayList<DcMotor> motors = new ArrayList<DcMotor>();
-    protected ArrayList<Servo> servos = new ArrayList<Servo>();
+    protected ArrayList<DcMotor> motor = new ArrayList<DcMotor>();
+    protected ArrayList<Servo> servo = new ArrayList<Servo>();
     
-    protected DcMotor[] motors = new DcMotors[8];
+    protected DcMotor[] motors = new DcMotor[8];
     protected Servo[] servos = new Servo[12];
     
     public RobotHardware() {
