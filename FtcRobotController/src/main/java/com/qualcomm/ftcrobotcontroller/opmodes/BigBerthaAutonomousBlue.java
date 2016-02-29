@@ -28,7 +28,8 @@ public class BigBerthaAutonomousBlue extends BigBerthaTelemetry
         @Override public void start ()
         {
             super.start ();
-            resetDriveEncoders();
+            resetDriveEncoders();//motorLeftDrive.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+                                //motorRightDrive.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         }
         
         /**
@@ -53,7 +54,8 @@ public class BigBerthaAutonomousBlue extends BigBerthaTelemetry
             {
                 // Synchronize the state machine and hardware.
                 case 0:
-                    resetDriveEncoders();
+                    resetDriveEncoders();//motorLeftDrive.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+                                        //motorRightDrive.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
                     state++;
                     break;
                 // Drive forward until the encoders exceed the specified values.
@@ -61,12 +63,13 @@ public class BigBerthaAutonomousBlue extends BigBerthaTelemetry
                     // Tell the system that motor encoders will be used.  This call MUST
                     // be in this state and NOT the previous or the encoders will not
                     // work.  It doesn't need to be in subsequent states.
-                    runUsingDriveEncoders ();
+                    runUsingDriveEncoders ();//motorLeftDrive.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+                                            //motorRightDrive.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
                     setDrivePower(0.2f, 0.2f, 0.2f, 0.2f);
                     // Have the motor shafts turned the required amount?
                     // If they haven't, then the op-mode remains in this state (i.e this
                     // block will be executed the next time this method is called).
-                    if (haveDriveEncodersReached(6400, 6400))
+                    if (haveDriveEncodersReached(7400, 7400))
                     {
                         // Reset the encoders.
                         resetDriveEncoders();

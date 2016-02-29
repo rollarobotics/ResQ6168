@@ -19,7 +19,7 @@ public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
         // All via self-construction.
     } //--------------------------------------------------------------------------BigBerthaTelemetry
     public void init_loop () {
-        telemetry.addData("01" , "Init Bucket Door Servo Position: "+ getBucketDoorPosition());
+        /*telemetry.addData("01" , "Init Bucket Door Servo Position: "+ getBucketDoorPosition());
         telemetry.addData("02" , "Init Hook Servo Position: "       +  getHookPosition());
         telemetry.addData("03" , "Init Man Servo Position: "        + getManPosition());
         telemetry.addData("04" , "Init Left Drive Power: " + getLeftDrivePower());
@@ -29,7 +29,11 @@ public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
         telemetry.addData("08" , "Init Chain Hooks Power: "+ getChainHooksPower());
         telemetry.addData("09" , "Init Sweeper Power: "    + getSweeperPower());
         telemetry.addData("10" , "Init Bucket Power: "     + getBucketPower());
-        telemetry.addData("11" , "Init Spinner Power: "    + getSpinnerPower());
+        telemetry.addData("11" , "Init Spinner Power: "    + getSpinnerPower());*/
+        if (compass != null) {
+            telemetry.addData("1" , "Init Compass Calibration Failed: " + compass.calibrationFailed());
+            telemetry.addData("2" , "Init Compass Direction" + compass.getDirection());
+        }
         /*telemetry.addData("12" , "Sonar: " + sonar.getUltrasonicLevel());
         telemetry.addData("13" , "Gyro: " + gyro.getRotation());
         telemetry.addData("14" , "Color alpha: " + color.alpha());
@@ -64,32 +68,37 @@ public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
         String game1 = gamepad1.toString();
         String game2 = gamepad2.toString();
         telemetry.addData("01" , "Robot:");
+        if (compass != null) {
+            telemetry.addData("011" , " ");
+            telemetry.addData("012" , "Init Compass Direction" + compass.getDirection());
+            telemetry.addData("013" , " ");
+        }
         //telemetry.addData("011", "Sonar: " + sonar.getUltrasonicLevel());
         telemetry.addData("02" , "Gamepad 1 Configuration: " + game1config);
         telemetry.addData("03" ,  game1);
         telemetry.addData("04" , "Gamepad 2 Configuration: " + game2config);
         telemetry.addData("05" ,  game2);
         telemetry.addData("06" , " ");
-        telemetry.addData("07" , "Servo Position:");
+        //telemetry.addData("07" , "Servo Position:");
         //telemetry.addData("08" , "Bucket Door Servo Position: "+ getBucketDoorPosition());
-        telemetry.addData("08" , "Climbers Servo Position: "   + getRightClimberPosition() + ", " + getLeftClimberPosition());
-        telemetry.addData("09" , "Hook Servo Position: "       + getHookPosition());
-        telemetry.addData("10" , "Man Servo Position: " + getManPosition());
-        telemetry.addData("11" , "Flag Servo Position: "       + getRightFlagPosition() + ", " + getLeftFlagPosition());
+        //telemetry.addData("08" , "Climbers Servo Position: "   + getRightClimberPosition() + ", " + getLeftClimberPosition());
+        //telemetry.addData("09" , "Hook Servo Position: "       + getHookPosition());
+        //telemetry.addData("10" , "Man Servo Position: " + getManPosition());
+        //telemetry.addData("11" , "Flag Servo Position: "       + getRightFlagPosition() + ", " + getLeftFlagPosition());
         telemetry.addData("12" , "Motor Power:");
         telemetry.addData("13" , "Right Drive Power: "+ getRightDrivePower()+ ", " + getRightEncoderCount());
         telemetry.addData("14" , "Left Drive Power: " + getLeftDrivePower() + ", " + getLeftEncoderCount() + ", " + leftDrivePower);
         telemetry.addData("15" , "Back Right Power: " + getBackRightPower() + ", " + getRightEncoderCount());
         telemetry.addData("16" , "Back Left Power: "  + getBackLeftPower()  + ", " + getLeftEncoderCount());
-        telemetry.addData("17" , "Right Arm Power: "  + getRightArmPower()  + ", " + getLiftArmEncoderCount());
+        /*telemetry.addData("17" , "Right Arm Power: "  + getRightArmPower()  + ", " + getLiftArmEncoderCount());
         telemetry.addData("18" , "Left Arm Power: "   + getLeftArmPower()   + ", " + getLiftArmEncoderCount());
         telemetry.addData("19" , "Right Lift Power: " + getRightLiftPower() + ", " + getLiftEncoderCount());
         telemetry.addData("20" , "Left Lift Power: "  + getLeftLiftPower()  + ", " + getLiftEncoderCount());
         telemetry.addData("21" , "Chain Hooks Power: "+ getChainHooksPower()+ ", " + getChainHooksEncoderCount());
         telemetry.addData("22" , "Sweeper Power: "    + getSweeperPower()   + ", " + getSweeperEncoderCount());
         telemetry.addData("23" , "Bucket Power: "     + getBucketPower()    + ", " + getBucketEncoderCount());
-        telemetry.addData("24" , "Spinner Power: "    + getSpinnerPower()   + ", " + getSpinnerEncoderCount());
-        telemetry.addData("2401" , "Sweeper Off: "+ sweeperOff);
+        telemetry.addData("24" , "Spinner Power: "    + getSpinnerPower()   + ", " + getSpinnerEncoderCount());*/
+        /*telemetry.addData("2401" , "Sweeper Off: "+ sweeperOff);
         telemetry.addData("2402" , "Aux 1 Scale: "+ aux1ScaleOff);
         telemetry.addData("2403" , "Left Drive Off: "+ leftDriveOff);
         telemetry.addData("2404" , "Right Drive Off: "+ rightDriveOff);
@@ -109,7 +118,7 @@ public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
         telemetry.addData("2415" , "Left Arm Off: "        + leftArmOff);
         telemetry.addData("2416" , "Right Arm Off: "       + rightArmOff);
         telemetry.addData("2417" , "Left Lift Off: "       + leftLiftOff);
-        telemetry.addData("2418" , "Right Lift Off: "      + rightLiftOff);
+        telemetry.addData("2418" , "Right Lift Off: "      + rightLiftOff);*/
         //telemetry.addData("2419" , ": "+ Off);
         //telemetry.addData("24" , "Bucket Off: " + BigBerthaTeleOp.isBucketOff());
         //telemetry.addData("25" , "Aux 2 Scale: "+ BigBerthaTeleOp.isAux2ScaleOff());

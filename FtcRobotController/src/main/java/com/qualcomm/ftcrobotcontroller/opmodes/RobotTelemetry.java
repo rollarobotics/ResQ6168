@@ -23,4 +23,13 @@ public class RobotTelemetry extends RobotHardware {
         super.init();
         init();
     }
+
+    /**
+     * Update the telemetry's first message with the specified message.
+     */
+    public void setFirstMessage (String pMessage) {telemetry.addData("00", pMessage);}
+    /**
+     * Update the telemetry's first message to indicate an error.
+     */
+    public void setErrorMessage (String pMessage) {setFirstMessage("ERROR: " + pMessage);}
 }

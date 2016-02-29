@@ -5,6 +5,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.GyroSensor;
@@ -86,6 +87,7 @@ public class BigBerthaHardware extends OpMode {
     private Servo servoBucket;
     private Servo servoSpinner, servoLeftSpinner, servoRightSpinner;
 
+    protected CompassSensor compass;
     /*protected UltrasonicSensor sonar;
     protected GyroSensor gyro;
     protected ColorSensor color;
@@ -470,6 +472,14 @@ public class BigBerthaHardware extends OpMode {
             servoMan = null;
         }
         //------------Sensors------------because no u
+        try {
+            compass = hardwareMap.compassSensor.get("compass");
+        } catch (Exception opModeException) {
+            setWarningMessage("compass");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            compass = null;
+        }
+
         /*try {
             sonar = hardwareMap.ultrasonicSensor.get ("sonar");
         } catch (Exception opModeException) {
@@ -499,6 +509,12 @@ public class BigBerthaHardware extends OpMode {
             setWarningMessage("color2");
             DbgLog.msg (opModeException.getLocalizedMessage());
             color2 = null;
+        }*/
+        compass.setMode(CompassSensor.CompassMode.CALIBRATION_MODE);
+        /*try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
         }*/
     }
     //------------Warnings------------
@@ -533,7 +549,14 @@ public class BigBerthaHardware extends OpMode {
         warningMessage += opModeExceptionMessage;
     }
     //------------OpMode Methods------------
-    @Override public void start() {} //The system calls this member once when the OpMode is enabled.
+    @Override public void start() {
+        compass.setMode(CompassSensor.CompassMode.MEASUREMENT_MODE);
+        /*try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }*/
+    } //The system calls this member once when the OpMode is enabled.
     @Override public void loop () {} //The system calls this member repeatedly while the OpMode is running.
     @Override public void stop () {} //The system calls this member once when the OpMode is disabled.
     //------------Clip Power------------
@@ -549,6 +572,19 @@ public class BigBerthaHardware extends OpMode {
     private float[] array = {0.00f, 0.05f, 0.09f, 0.10f, 0.12f, 0.15f, 0.18f, 0.24f
             , 0.30f, 0.36f, 0.43f, 0.50f, 0.60f, 0.72f, 0.85f, 1.00f, 1.00f};
 
+    private float[] array2 = {0.00f, 0.05f, 0.10f, 0.15f, 0.20f, 0.24f, 0.29f, 0.34f
+            , 0.38f, 0.43f, 0.47f, 0.51f, 0.56f, 0.60f, 0.63f, 0.67f
+            , 0.71f, 0.74f, 0.77f, 0.80f, 0.83f, 0.86f, 0.88f, 0.90f
+            , 0.92f, 0.94f, 0.96f, 0.97f, 0.98f, 0.99f, 1.00f, 1.00f, 1.00f};
+    private float[] array3 = {0.00f, 0.00f, 0.00f, 0.01f, 0.02f, 0.03f, 0.04f, 0.06f
+            , 0.08f, 0.10f, 0.12f, 0.14f, 0.17f, 0.20f, 0.23f, 0.26f
+            , 0.29f, 0.33f, 0.37f, 0.40f, 0.44f, 0.49f, 0.53f, 0.57f
+            , 0.62f, 0.66f, 0.71f, 0.76f, 0.80f, 0.85f, 0.90f, 0.95f, 1.00f};
+    private float[] array4 = {0.00f, 0.00f, 0.00f, 0.01f, 0.02f, 0.03f, 0.04f, 0.06f
+            , 0.08f, 0.10f, 0.12f, 0.14f, 0.17f, 0.20f, 0.23f, 0.26f
+            , 0.29f, 0.33f, 0.37f, 0.40f, 0.44f, 0.49f, 0.53f, 0.57f
+            , 0.62f, 0.66f, 0.71f, 0.76f, 0.80f, 0.85f, 0.90f, 0.95f, 1.00f};
+
     float scaleMotorPower (float power) {
         power = clipMotor(power);
         int index = (int)(power * 16.0); // Get the corresponding index for the specified argument/parameter.
@@ -559,6 +595,17 @@ public class BigBerthaHardware extends OpMode {
         if (power < 0)
             return (float) format(-array[index]);
         return (float) format(array[index]);
+    }
+    float myScaleMotorPower (float power) {
+        power = clipMotor(power);
+        int index = (int)(power * 32.0); // Get the corresponding index for the specified argument/parameter.
+        if (index < 0)
+            index = -index;
+        else if (index > 32)
+            index = 32;
+        if (power < 0)
+            return (float) format(-array3[index]);
+        return (float) format(array3[index]);
     }
     float scaleServoPosition (float position) {
         position = clipServo(position);
@@ -627,6 +674,10 @@ public class BigBerthaHardware extends OpMode {
         rightPower = format(rightPower);
         backLeftPower = format(backLeftPower);
         backRightPower = format(backRightPower);
+        leftPower = clipMotor(leftPower);
+        rightPower = clipMotor(rightPower);
+        backLeftPower = clipMotor(backLeftPower);
+        backRightPower = clipMotor(backRightPower);
         if (motorLeftDrive != null)
             motorLeftDrive.setPower (leftPower);
         leftDriveValue = leftPower;

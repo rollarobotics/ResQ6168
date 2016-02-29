@@ -25,7 +25,13 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
             game1config = 0;
         if (gamepad1.guide) {
             if (game1config == 0) {
-                sweeperOff = aux1ScaleOff = fullDriveOff = fastDriveOff = slowDriveOff = chainHooksOff = climberOff = false;
+                //sweeperOff = false;
+                //aux1ScaleOff = false;
+                //fullDriveOff = false;
+                //fastDriveOff = false;
+                //slowDriveOff = false;
+                //chainHooksOff = false;
+                //climberOff = false;
                 game1config = 1;
                 try {
                     Thread.sleep(500);
@@ -33,22 +39,22 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                     Thread.currentThread().interrupt();
                 }
             } else if (game1config == 1) {
-                sweeperOff = true;
-                aux1ScaleOff = true;
-                driveOff = true;
-                backDriveOff = false;
-                chainHooksOff= true;
+                //sweeperOff = true;
+                //aux1ScaleOff = true;
+                //driveOff = true;
+                //backDriveOff = false;
+                //chainHooksOff= true;
                 game1config = 2;
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-            } else if (game1config == 2) {
-                sweeperOff = false;
-                aux1ScaleOff = false;
+            }/* else if (game1config == 2) {
+                //sweeperOff = false;
+                //aux1ScaleOff = false;
                 fullDriveOff = false;
-                chainHooksOff = true;
+                //chainHooksOff = true;
                 game1config = 3;
                 try {
                     Thread.sleep(500);
@@ -56,21 +62,21 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                     Thread.currentThread().interrupt();
                 }
             } else if (game1config == 3) {
-                sweeperOff = false;
-                aux1ScaleOff = true;
+                //sweeperOff = false;
+                //aux1ScaleOff = true;
                 fullDriveOff = false;
-                chainHooksOff = true;
+                //chainHooksOff = true;
                 game1config = 4;
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-            } else {
-                sweeperOff = true;
-                aux1ScaleOff = false;
-                fullDriveOff = false;
-                chainHooksOff = false;
+            } */else {
+                //sweeperOff = true;
+                //aux1ScaleOff = false;
+                //fullDriveOff = false;
+                //chainHooksOff = false;
                 game1config = 0;
                 try {
                     Thread.sleep(500);
@@ -79,7 +85,7 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 }
             }
         }
-        if (gamepad2.start)
+        /*if (gamepad2.start)
             game2config = 0;
         if (gamepad2.guide) {
             if (game2config == 0) {
@@ -111,12 +117,12 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                     Thread.currentThread().interrupt();
                 }
             }
-        }
+        }*/
         leftDrivePower = 0.0f;
         rightDrivePower = 0.0f;
         backLeftPower = 0.0f;
         backRightPower = 0.0f;
-        float leftArmPower = 0.0f;
+        /*float leftArmPower = 0.0f;
         float rightArmPower = 0.0f;
         float leftLiftPower = 0.0f;
         float rightLiftPower = 0.0f;
@@ -130,33 +136,52 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
         float liftUpScale = 0.0f;
         float liftDownScale = 0.0f;
         float chainHooksUpScale = 0.0f;
-        float chainHooksDownScale = 0.0f;
+        float chainHooksDownScale = 0.0f;*/
 
-        if (game1config == 0) {
-            if (gamepad1.left_trigger > 0) {
-                leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y);
-                backLeftPower = leftDrivePower;
-            }
-            if (gamepad1.right_trigger > 0) {
-                rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y);
-                backRightPower = rightDrivePower;
-            }
-        }
         if (game1config == 1) {
-            leftDrivePower = scaleMotorPower(gamepad1.left_trigger);
-            rightDrivePower = scaleMotorPower(gamepad1.right_trigger);
-            if (gamepad1.left_bumper)
-                leftDrivePower = -leftDrivePower;
-            if (gamepad1.right_bumper)
-                rightDrivePower = -rightDrivePower;
+            leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y);
+            rightDrivePower = scaleMotorPower(-gamepad1.right_stick_y);
+            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y);
+            backRightPower = scaleMotorPower(-gamepad1.right_stick_y);
         }
         if (game1config == 2) {
+            leftDrivePower = scaleMotorPower(gamepad1.left_trigger);
+            rightDrivePower = scaleMotorPower(gamepad1.right_trigger);
         }
-        if (game1config == 3) {
+        if (game1config == 0) {
+            float y = (-gamepad1.left_stick_y);
+            float x = (-gamepad1.left_stick_x);
+            leftDrivePower = y + 3*x/2;
+            rightDrivePower = y - 3*x/2;
+            backLeftPower = y + 3*x/2;
+            backRightPower = y - 3*x/2;
+            leftDrivePower -= 2*(gamepad1.right_stick_x);
+            rightDrivePower += 2*(gamepad1.right_stick_x);
+            backLeftPower += 2*(gamepad1.right_stick_x);
+            backRightPower -= 2*(gamepad1.right_stick_x);
+
+            /*leftDrivePower = y - 3*(gamepad1.right_stick_x)/2;
+            rightDrivePower = y + 3*(gamepad1.right_stick_x)/2;
+            backLeftPower = y - 3*(gamepad1.right_stick_x)/2;
+            backRightPower = y + 3*(gamepad1.right_stick_x)/2;
+            leftDrivePower += 2*x;
+            rightDrivePower -= 2*x;
+            backLeftPower -= 2*x;
+            backRightPower += 2*x;*/
         }
-        if (game1config == 4) {
-        }
-        if (game2config == 0) {
+        //if (game1config == 3) {}
+        //if (game1config == 4) {}
+
+        if (gamepad1.left_bumper)
+            leftDrivePower = -leftDrivePower;
+        if (gamepad1.right_bumper)
+            rightDrivePower = -rightDrivePower;
+        if (gamepad1.left_trigger > 0)
+            backLeftPower = -backLeftPower;
+        if (gamepad1.right_trigger > 0)
+            backRightPower = -backRightPower;
+
+        /*if (game2config == 0) {
             leftLiftPower = scaleMotorPower(-gamepad2.left_stick_y);
             rightLiftPower = scaleMotorPower(-gamepad2.right_stick_y);
             if (gamepad2.dpad_up)
@@ -283,11 +308,10 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                     Thread.currentThread().interrupt();
                 }
             }
-        }
-        if (game2config == 3) {
-        }// does this thing even work?
+        }*/
+        //if (game2config == 3) {}// does this thing even work?
 
-        if (fullDriveOff) {
+        /*if (fullDriveOff) {
             driveOff = true;
             backDriveOff = true;
         } else if (!fullDriveOff){
@@ -340,23 +364,9 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                 sweeperPosition = scaleServoPosition((gamepad1.right_trigger + 1) / 2);
                 backSweeperPosition = scaleServoPosition(-(gamepad1.left_trigger - 1) / 2);
             }
-        }
+        }*/
 
-        if (!leftDriveOff)
-            leftDrivePower = scaleMotorPower(-gamepad1.left_trigger);
-        if (!rightDriveOff)
-            rightDrivePower = scaleMotorPower(-gamepad1.right_trigger);
-        if (!backLeftOff)
-            backLeftPower = scaleMotorPower(-gamepad1.left_stick_y);
-        if (!backRightOff)
-            backRightPower = scaleMotorPower(-gamepad1.right_stick_y);
-
-        if (gamepad1.left_bumper)
-            leftDrivePower = -leftDrivePower;
-        if (gamepad1.right_bumper)
-            rightDrivePower = -rightDrivePower;
-
-        if (!leftFastDriveOff) {
+        /*if (!leftFastDriveOff) {
             if (gamepad1.left_stick_button) {
                 leftDrivePower = scaleMotorPower(-gamepad1.left_stick_y);
                 backLeftPower = leftDrivePower;//ebhfc\
@@ -444,17 +454,17 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
                     Thread.currentThread().interrupt();
                 }
             }
-        }
+        }*/
         // The setPower methods write the motor power values to the DcMotor
         // class, but the power levels aren't applied until this method ends.
-        setDrivePower(leftDrivePower, rightDrivePower, backLeftPower, backRightPower);
-        setChainHooksPower(chainHooksPower);
-        setLiftPower(leftLiftPower, rightLiftPower);
-        setSweeperPower(sweeperPower, backSweeperPower);
-        setSweeperPosition(sweeperPosition, backSweeperPosition);
-        setLiftArmPower(leftArmPower, rightArmPower);
+        setDrivePower(-leftDrivePower, -rightDrivePower, backLeftPower, backRightPower);
+        //setChainHooksPower(chainHooksPower);
+        //setLiftPower(leftLiftPower, rightLiftPower);
+        //setSweeperPower(sweeperPower, backSweeperPower);
+        //setSweeperPosition(sweeperPosition, backSweeperPosition);
+        //setLiftArmPower(leftArmPower, rightArmPower);
 
-        if (gamepad2.dpad_up) {
+        /*if (gamepad2.dpad_up) {
             double bucketPower = 0.8;
             double bucketPosition = 0.8;
             if (gamepad2.right_trigger > 0) {
@@ -481,7 +491,7 @@ public class BigBerthaLostWeightTeleOp extends BigBerthaTelemetry {
         else if (gamepad2.dpad_right)
             setManPosition(0.0); //0.0 is backward at full speed
         else
-            setManPosition(0.5); //0.5 is stopped
+            setManPosition(0.5); *///0.5 is stopped
         //------------Servo Motors------------
         // The mPosition methods write the motor power values to the Servo
         // class, but the positions aren't applied until this method ends.
