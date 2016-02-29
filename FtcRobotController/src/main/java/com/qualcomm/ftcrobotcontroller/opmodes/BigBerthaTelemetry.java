@@ -30,24 +30,47 @@ public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
         telemetry.addData("09" , "Init Sweeper Power: "    + getSweeperPower());
         telemetry.addData("10" , "Init Bucket Power: "     + getBucketPower());
         telemetry.addData("11" , "Init Spinner Power: "    + getSpinnerPower());*/
-        if (compass != null) {
-            telemetry.addData("1" , "Init Compass Calibration Failed: " + compass.calibrationFailed());
-            telemetry.addData("2" , "Init Compass Direction" + compass.getDirection());
+        if (acceleration != null)
+            telemetry.addData("01" , "Init Acceleration: " + acceleration.getAcceleration());
+        if (color != null) {
+            telemetry.addData("02", "Init Color alpha: " + color.alpha());
+            telemetry.addData("03", "Init Color argb: " + color.argb());
+            telemetry.addData("04", "Init Color blue: " + color.blue());
+            telemetry.addData("05", "Init Color green: " + color.green());
+            telemetry.addData("06", "Init Color red: " + color.red());
         }
-        /*telemetry.addData("12" , "Sonar: " + sonar.getUltrasonicLevel());
-        telemetry.addData("13" , "Gyro: " + gyro.getRotation());
-        telemetry.addData("14" , "Color alpha: " + color.alpha());
-        telemetry.addData("15" , "Color argb: " + color.argb());
-        telemetry.addData("16" , "Color blue: " + color.blue());
-        telemetry.addData("17" , "Color green: " + color.green());
-        telemetry.addData("18" , "Color red: " + color.red());
-        telemetry.addData("19" , "Color2 alpha: " + color2.alpha());
-        telemetry.addData("20" , "Color2 argb: " + color2.argb());
-        telemetry.addData("21" , "Color2 blue: " + color2.blue());
-        telemetry.addData("22" , "Color2 green: " + color2.green());
-        telemetry.addData("23" , "Color2 red: " + color2.red());*/
-
-        //telemetry.addData("15" , "Gyro2:" + gyro.);
+        /*if (color2 != null) {
+            telemetry.addData("19" , "Color2 alpha: " + color2.alpha());
+            telemetry.addData("20" , "Color2 argb: " + color2.argb());
+            telemetry.addData("21" , "Color2 blue: " + color2.blue());
+            telemetry.addData("22" , "Color2 green: " + color2.green());
+            telemetry.addData("23" , "Color2 red: " + color2.red());
+        }*/
+        if (compass != null) {
+            telemetry.addData("07" , "Init Compass Calibration Failed: " + compass.calibrationFailed());
+            telemetry.addData("08" , "Init Compass Direction: " + compass.getDirection());
+        }
+        if (motorController!= null)
+            telemetry.addData("09", "Init Motor Controller: " + motorController.getConnectionInfo());
+        if (gyro != null)
+            telemetry.addData("10", "Init Gyro: " + gyro.getRotation());
+        if (ir != null)
+            telemetry.addData("11", "Init IR Seeker: " + ir.getAngle());
+        if (light != null)
+            telemetry.addData("12" , "Init Light: " + light.getLightDetected());
+        if (servoController != null)
+            telemetry.addData("13" , "Init Servo Controller: " + servoController.getConnectionInfo());
+        if (touch != null)
+            telemetry.addData("14" , "Init Touch: " + touch.isPressed());
+        if (multi != null) {
+            telemetry.addData("15", "Init Touch Multiplexer: " + multi.getSwitches());
+            telemetry.addData("16", "Init Touch Port 1: " + multi.isTouchSensorPressed(1));
+            telemetry.addData("17", "Init Touch Port 2: " + multi.isTouchSensorPressed(2));
+            telemetry.addData("18", "Init Touch Port 2: " + multi.isTouchSensorPressed(3));
+            telemetry.addData("19", "Init Touch Port 4: " + multi.isTouchSensorPressed(4));
+        }
+        if (sonar != null)
+            telemetry.addData("20" , "Init Sonar: " + sonar.getUltrasonicLevel());
     }
     /**
      * Update the telemetry with current gamepad readings.
@@ -68,28 +91,63 @@ public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
         String game1 = gamepad1.toString();
         String game2 = gamepad2.toString();
         telemetry.addData("01" , "Robot:");
-        if (compass != null) {
-            telemetry.addData("011" , " ");
-            telemetry.addData("012" , "Init Compass Direction" + compass.getDirection());
-            telemetry.addData("013" , " ");
+        if (acceleration != null)
+            telemetry.addData("02" , "Init Acceleration: " + acceleration.getAcceleration());
+        if (color != null) {
+            telemetry.addData("03", "Init Color alpha: " + color.alpha());
+            telemetry.addData("04", "Init Color argb: " + color.argb());
+            telemetry.addData("05", "Init Color blue: " + color.blue());
+            telemetry.addData("06", "Init Color green: " + color.green());
+            telemetry.addData("07", "Init Color red: " + color.red());
         }
-        //telemetry.addData("011", "Sonar: " + sonar.getUltrasonicLevel());
-        telemetry.addData("02" , "Gamepad 1 Configuration: " + game1config);
-        telemetry.addData("03" ,  game1);
-        telemetry.addData("04" , "Gamepad 2 Configuration: " + game2config);
-        telemetry.addData("05" ,  game2);
-        telemetry.addData("06" , " ");
+        /*if (color2 != null) {
+            telemetry.addData("19" , "Color2 alpha: " + color2.alpha());
+            telemetry.addData("20" , "Color2 argb: " + color2.argb());
+            telemetry.addData("21" , "Color2 blue: " + color2.blue());
+            telemetry.addData("22" , "Color2 green: " + color2.green());
+            telemetry.addData("23" , "Color2 red: " + color2.red());
+        }*/
+        if (compass != null) {
+            telemetry.addData("08" , "Init Compass Direction: " + compass.getDirection());
+        }
+        if (motorController!= null)
+            telemetry.addData("09", "Init Motor Controller: " + motorController.getConnectionInfo());
+        if (gyro != null)
+            telemetry.addData("10", "Init Gyro: " + gyro.getRotation());
+        if (ir != null)
+            telemetry.addData("11", "Init IR Seeker: " + ir.getAngle());
+        if (light != null)
+            telemetry.addData("12" , "Init Light: " + light.getLightDetected());
+        if (servoController != null)
+            telemetry.addData("13" , "Init Servo Controller: " + servoController.getConnectionInfo());
+        if (touch != null)
+            telemetry.addData("14" , "Init Touch: " + touch.isPressed());
+        if (multi != null) {
+            telemetry.addData("15", "Init Touch Multiplexer: " + multi.getSwitches());
+            telemetry.addData("16", "Init Touch Port 1: " + multi.isTouchSensorPressed(1));
+            telemetry.addData("17", "Init Touch Port 2: " + multi.isTouchSensorPressed(2));
+            telemetry.addData("18", "Init Touch Port 2: " + multi.isTouchSensorPressed(3));
+            telemetry.addData("19", "Init Touch Port 4: " + multi.isTouchSensorPressed(4));
+        }
+        if (sonar != null)
+            telemetry.addData("20" , "Init Sonar: " + sonar.getUltrasonicLevel());
+
+        telemetry.addData("21" , "Gamepad 1 Configuration: " + game1config);
+        telemetry.addData("22" ,  game1);
+        telemetry.addData("23" , "Gamepad 2 Configuration: " + game2config);
+        telemetry.addData("24" ,  game2);
+        telemetry.addData("25" , " ");
         //telemetry.addData("07" , "Servo Position:");
         //telemetry.addData("08" , "Bucket Door Servo Position: "+ getBucketDoorPosition());
         //telemetry.addData("08" , "Climbers Servo Position: "   + getRightClimberPosition() + ", " + getLeftClimberPosition());
         //telemetry.addData("09" , "Hook Servo Position: "       + getHookPosition());
         //telemetry.addData("10" , "Man Servo Position: " + getManPosition());
         //telemetry.addData("11" , "Flag Servo Position: "       + getRightFlagPosition() + ", " + getLeftFlagPosition());
-        telemetry.addData("12" , "Motor Power:");
-        telemetry.addData("13" , "Right Drive Power: "+ getRightDrivePower()+ ", " + getRightEncoderCount());
-        telemetry.addData("14" , "Left Drive Power: " + getLeftDrivePower() + ", " + getLeftEncoderCount() + ", " + leftDrivePower);
-        telemetry.addData("15" , "Back Right Power: " + getBackRightPower() + ", " + getRightEncoderCount());
-        telemetry.addData("16" , "Back Left Power: "  + getBackLeftPower()  + ", " + getLeftEncoderCount());
+        telemetry.addData("26" , "Motor Power:");
+        telemetry.addData("27" , "Right Drive Power: "+ getRightDrivePower()+ ", " + getRightEncoderCount());
+        telemetry.addData("28" , "Left Drive Power: " + getLeftDrivePower() + ", " + getLeftEncoderCount() + ", " + leftDrivePower);
+        telemetry.addData("29" , "Back Right Power: " + getBackRightPower() + ", " + getRightEncoderCount());
+        telemetry.addData("30" , "Back Left Power: "  + getBackLeftPower()  + ", " + getLeftEncoderCount());
         /*telemetry.addData("17" , "Right Arm Power: "  + getRightArmPower()  + ", " + getLiftArmEncoderCount());
         telemetry.addData("18" , "Left Arm Power: "   + getLeftArmPower()   + ", " + getLiftArmEncoderCount());
         telemetry.addData("19" , "Right Lift Power: " + getRightLiftPower() + ", " + getLiftEncoderCount());

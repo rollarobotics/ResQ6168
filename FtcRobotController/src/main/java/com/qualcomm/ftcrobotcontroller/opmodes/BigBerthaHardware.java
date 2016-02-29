@@ -4,13 +4,20 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.AccelerationSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
+import com.qualcomm.robotcore.hardware.IrSeekerSensor;
+import com.qualcomm.robotcore.hardware.LED;
+import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoController;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.TouchSensorMultiplexer;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.Range;
 import java.text.DecimalFormat;
@@ -87,12 +94,20 @@ public class BigBerthaHardware extends OpMode {//my bad
     private Servo servoBucket;
     private Servo servoSpinner, servoLeftSpinner, servoRightSpinner;
 
-    protected CompassSensor compass;
-    /*protected UltrasonicSensor sonar;
-    protected GyroSensor gyro;
+    protected AccelerationSensor acceleration;
     protected ColorSensor color;
-    protected ColorSensor color2;*/
+    //protected ColorSensor color2;
+    protected CompassSensor compass;
+    protected DcMotorController motorController;
+    protected GyroSensor gyro;
+    protected IrSeekerSensor ir;
+    protected LightSensor light;
+    protected ServoController servoController;
+    protected TouchSensor touch;
+    protected TouchSensorMultiplexer multi;
+    protected UltrasonicSensor sonar;
 
+    protected LED led;
 
     //------------Virtual Values of Motors and Servos for Testing Code Without Robot------------
     protected float leftDrivePower;
@@ -473,26 +488,11 @@ public class BigBerthaHardware extends OpMode {//my bad
         }
         //------------Sensors------------because no u
         try {
-            compass = hardwareMap.compassSensor.get("compass");
+            acceleration = hardwareMap.accelerationSensor.get("acceleration");
         } catch (Exception opModeException) {
-            setWarningMessage("compass");
+            setWarningMessage("acceleration");
             DbgLog.msg(opModeException.getLocalizedMessage());
-            compass = null;
-        }
-
-        /*try {
-            sonar = hardwareMap.ultrasonicSensor.get ("sonar");
-        } catch (Exception opModeException) {
-            setWarningMessage("sonar");
-            DbgLog.msg (opModeException.getLocalizedMessage());
-            sonar = null;
-        }
-        try {
-            gyro = hardwareMap.gyroSensor.get ("gyro");
-        } catch (Exception opModeException) {
-            setWarningMessage("gyro");
-            DbgLog.msg (opModeException.getLocalizedMessage());
-            gyro = null;
+            acceleration = null;
         }
         try {
             color = hardwareMap.colorSensor.get ("color");
@@ -502,7 +502,7 @@ public class BigBerthaHardware extends OpMode {//my bad
             DbgLog.msg (opModeException.getLocalizedMessage());
             color = null;
         }
-        try {
+        /*try {
             color2 = hardwareMap.colorSensor.get ("color2");
             color2.enableLed(false);
         } catch (Exception opModeException) {
@@ -510,6 +510,70 @@ public class BigBerthaHardware extends OpMode {//my bad
             DbgLog.msg (opModeException.getLocalizedMessage());
             color2 = null;
         }*/
+        try {
+            compass = hardwareMap.compassSensor.get("compass");
+        } catch (Exception opModeException) {
+            setWarningMessage("compass");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            compass = null;
+        }
+        try {
+            motorController = hardwareMap.dcMotorController.get("motorController");
+        } catch (Exception opModeException) {
+            setWarningMessage("motorController");
+            DbgLog.msg(opModeException.getLocalizedMessage());
+            motorController = null;
+        }
+        try {
+            gyro = hardwareMap.gyroSensor.get ("gyro");
+        } catch (Exception opModeException) {
+            setWarningMessage("gyro");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            gyro = null;
+        }
+        try {
+            ir = hardwareMap.irSeekerSensor.get ("ir");
+        } catch (Exception opModeException) {
+            setWarningMessage("ir");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            ir = null;
+        }
+        try {
+            light = hardwareMap.lightSensor.get ("light");
+            light.enableLed(true);
+        } catch (Exception opModeException) {
+            setWarningMessage("light");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            light = null;
+        }
+        try {
+            servoController = hardwareMap.servoController.get ("servoController");
+        } catch (Exception opModeException) {
+            setWarningMessage("servoController");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            servoController = null;
+        }
+        try {
+            touch = hardwareMap.touchSensor.get ("touch");
+        } catch (Exception opModeException) {
+            setWarningMessage("touch");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            touch = null;
+        }
+        try {
+            multi = hardwareMap.touchSensorMultiplexer.get ("multi");
+        } catch (Exception opModeException) {
+            setWarningMessage("multi");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            multi = null;
+        }
+        try {
+            sonar = hardwareMap.ultrasonicSensor.get ("sonar");
+        } catch (Exception opModeException) {
+            setWarningMessage("sonar");
+            DbgLog.msg (opModeException.getLocalizedMessage());
+            sonar = null;
+        }
         compass.setMode(CompassSensor.CompassMode.CALIBRATION_MODE);
         /*try {
             Thread.sleep(500);
