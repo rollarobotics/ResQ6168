@@ -20,7 +20,7 @@ import java.text.NumberFormat;
  * @author SSI Robotics and revised by Shane McEnaney
  * @version 2015-08-13-20-04-----2015-12-01
  */
-public class BigBerthaHardware extends OpMode {
+public class BigBerthaHardware extends OpMode {//my bad
     //------------Private Variables------------
     private boolean warningGenerated = false;
     private String warningMessage;
