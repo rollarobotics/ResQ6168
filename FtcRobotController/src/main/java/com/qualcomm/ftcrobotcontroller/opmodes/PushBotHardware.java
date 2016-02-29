@@ -103,6 +103,22 @@ public class PushBotHardware extends OpMode
 
             v_motor_right_drive = null;
         }
+
+        //
+        // Connect the arm motor.
+        //
+        try
+        {
+            v_motor_left_arm = hardwareMap.dcMotor.get ("left_arm");
+        }
+        catch (Exception p_exeception)
+        {
+            m_warning_message ("left_arm");
+            DbgLog.msg (p_exeception.getLocalizedMessage ());
+
+            v_motor_left_arm = null;
+        }
+
         //
         // Connect the servo motors.
         //
@@ -374,7 +390,7 @@ public class PushBotHardware extends OpMode
     {
         if (v_motor_left_drive != null)
         {
-            v_motor_left_drive.setChannelMode
+            v_motor_left_drive.setMode
                 ( DcMotorController.RunMode.RUN_USING_ENCODERS
                 );
         }
@@ -393,7 +409,7 @@ public class PushBotHardware extends OpMode
     {
         if (v_motor_right_drive != null)
         {
-            v_motor_right_drive.setChannelMode
+            v_motor_right_drive.setMode
                 ( DcMotorController.RunMode.RUN_USING_ENCODERS
                 );
         }
@@ -430,10 +446,10 @@ public class PushBotHardware extends OpMode
     {
         if (v_motor_left_drive != null)
         {
-            if (v_motor_left_drive.getChannelMode () ==
+            if (v_motor_left_drive.getMode () ==
                 DcMotorController.RunMode.RESET_ENCODERS)
             {
-                v_motor_left_drive.setChannelMode
+                v_motor_left_drive.setMode
                     ( DcMotorController.RunMode.RUN_WITHOUT_ENCODERS
                     );
             }
@@ -453,10 +469,10 @@ public class PushBotHardware extends OpMode
     {
         if (v_motor_right_drive != null)
         {
-            if (v_motor_right_drive.getChannelMode () ==
+            if (v_motor_right_drive.getMode () ==
                 DcMotorController.RunMode.RESET_ENCODERS)
             {
-                v_motor_right_drive.setChannelMode
+                v_motor_right_drive.setMode
                     ( DcMotorController.RunMode.RUN_WITHOUT_ENCODERS
                     );
             }
@@ -494,7 +510,7 @@ public class PushBotHardware extends OpMode
     {
         if (v_motor_left_drive != null)
         {
-            v_motor_left_drive.setChannelMode
+            v_motor_left_drive.setMode
                 ( DcMotorController.RunMode.RESET_ENCODERS
                 );
         }
@@ -513,7 +529,7 @@ public class PushBotHardware extends OpMode
     {
         if (v_motor_right_drive != null)
         {
-            v_motor_right_drive.setChannelMode
+            v_motor_right_drive.setMode
                 ( DcMotorController.RunMode.RESET_ENCODERS
                 );
         }

@@ -1,31 +1,59 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
+
+//------------------------------------------------------------------------------
+//
+// PushBotAuto
+//
 /**
  * Provide a basic autonomous operational mode that uses the left and right
  * drive motors and associated encoders implemented using a state machine for
- * Big Bertha.
+ * the Push Bot.
  *
  * @author SSI Robotics
  * @version 2015-08-01-06-01
  */
 public class PushBotAuto extends PushBotTelemetry
+
 {
+    //--------------------------------------------------------------------------
+    //
+    // PushBotAuto
+    //
     /**
      * Construct the class.
      *
      * The system calls this member when the class is instantiated.
      */
     public PushBotAuto ()
+
     {
-        // Initialize base classes and class members.
+        //
+        // Initialize base classes.
+        //
         // All via self-construction.
+
+        //
+        // Initialize class members.
+        //
+        // All via self-construction.
+
     } // PushBotAuto
+
+    //--------------------------------------------------------------------------
+    //
+    // start
+    //
     /**
      * Perform any actions that are necessary when the OpMode is enabled.
+     *
      * The system calls this member once when the OpMode is enabled.
      */
     @Override public void start ()
+
     {
-        // Call the BigBerthaHardware (super/base class) start method.
+        //
+        // Call the PushBotHardware (super/base class) start method.
+        //
         super.start ();
 
         //
@@ -38,7 +66,6 @@ public class PushBotAuto extends PushBotTelemetry
     //--------------------------------------------------------------------------
     //
     // loop
-
     //
     /**
      * Implement a state machine that controls the robot during auto-operation.
