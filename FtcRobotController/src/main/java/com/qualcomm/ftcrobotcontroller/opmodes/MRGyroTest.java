@@ -70,7 +70,7 @@ public class MRGyroTest extends LinearOpMode {
     sensorGyro = hardwareMap.gyroSensor.get("gyro");
 
     // calibrate the gyro.
-    sensorGyro.calibrate();
+    /*sensorGyro.calibrate();
 
     // wait for the start button to be pressed.
     waitForStart();
@@ -103,6 +103,6 @@ public class MRGyroTest extends LinearOpMode {
       telemetry.addData("4. h", String.format("%03d", heading));
 
       Thread.sleep(100);
-    }
+    }*/
   }
 }
