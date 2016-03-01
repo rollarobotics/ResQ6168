@@ -40,7 +40,7 @@ public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
             telemetry.addData("04" , "Init Color blue: " + color.blue());
             telemetry.addData("05" , "Init Color green: " + color.green());
             telemetry.addData("06" , "Init Color red: " + color.red());
-            telemetry.addData("07" , "Init Color I2cAddress: " + getI2cAddress()); 
+            telemetry.addData("07" , "Init Color I2cAddress: " + color.getI2cAddress());
         }
         /*if (color2 != null) {
             telemetry.addData("19" , "Color2 alpha: " + color2.alpha());
@@ -104,7 +104,7 @@ public class BigBerthaTelemetry extends BigBerthaHardware//omg no u
             telemetry.addData("06" , "Loop Color blue: " + color.blue());
             telemetry.addData("07" , "Loop Color green: " + color.green());
             telemetry.addData("08" , "Loop Color red: " + color.red());
-            telemetry.addData("09" , "Loop Color I2cAddress: " + getI2cAddress()); 
+            telemetry.addData("09" , "Loop Color I2cAddress: " + color.getI2cAddress());
         }
         /*if (color2 != null) {
             telemetry.addData("19" , "Color2 alpha: " + color2.alpha());
